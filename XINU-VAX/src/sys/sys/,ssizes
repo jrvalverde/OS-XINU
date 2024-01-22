@@ -1,0 +1,264 @@
+       Sorted By Name			   Sorted By Size
+       ------ -- ----			   ------ -- ----
+      59     434    2503 ../h/arp.h	   9	  30	 213 nullpcb.c
+      23     114     676 ../h/bufpoo	  10	  43	 268 ../h/iospace.h
+      54     210    1536 ../h/cmd.h	  11	  27	 320 xdone.c
+     155     590    4074 ../h/conf.h	  13	  28	 308 userret.c
+      44     205    1121 ../h/coreX.	  13	  28	 312 ioerr.c
+      42     231    1452 ../h/date.h	  13	  28	 312 ionull.c
+     104     725    4496 ../h/deqna.	  14	  30	 340 getpid.c
+      54     292    1755 ../h/dgram.	  15	  56	 473 ovfloff.c
+      23     134     757 ../h/dir.h	  15	  57	 464 ovflon.c
+      54     343    2115 ../h/disk.h	  16	  68	 448 ../h/mark.h
+     235     435    3177 ../h/dispco	  16	 128	 830 ../h/hosts.h
+      76     511    3053 ../h/domain	  17	  33	 406 scount.c
+      20     119     726 ../h/dtc.h	  17	  45	 416 blkcopy.c
+      50     333    2060 ../h/ether.	  17	  45	 429 rfread.c
+      20     140     789 ../h/file.h	  18	  43	 471 getnet.c
+      42     250    1477 ../h/fserve	  18	  48	 456 blkequ.c
+      16     128     830 ../h/hosts.	  18	  54	 513 rwho.c
+      19     115     712 ../h/iblock	  19	  49	 465 vaxcons.c
+      26     166     985 ../h/icmp.h	  19	  60	 489 dot2ip.c
+      34     140    1020 ../h/io.h	  19	  95	 536 ../h/sem.h
+      46     141    1081 ../h/iodisp	  19	 112	 707 ../h/slu.h
+      10      43     268 ../h/iospac	  19	 115	 712 ../h/iblock.h
+      42     328    1847 ../h/ip.h	  20	  38	 430 close.c
+      80     496    3083 ../h/kernel	  20	  38	 430 init.c
+      32     236    1351 ../h/lfile.	  20	  42	 450 getc.c
+      33     144    1019 ../h/mach.h	  20	  48	 465 gettime.c
+      16      68     448 ../h/mark.h	  20	  53	 565 wakeup.c
+      33     135    1190 ../h/mem.h	  20	 119	 726 ../h/dtc.h
+      29     145     850 ../h/name.h	  20	 140	 789 ../h/file.h
+      61     393    2308 ../h/net.h	  20	 168	 942 ../h/sleep.h
+      33     106     705 ../h/networ	  21	  47	 465 putc.c
+      33     197    1166 ../h/ports.	  21	  47	 492 seek.c
+      72     393    2502 ../h/proc.h	  21	  49	 491 read.c
+     102     720    4415 ../h/procre	  21	  49	 495 write.c
+      28     129     862 ../h/q.h	  21	  52	 524 control.c
+      25     143     896 ../h/qbus.h	  22	  49	 460 rfputc.c
+      41     200    1199 ../h/rfile.	  22	  51	 484 rfgetc.c
+      67     438    2602 ../h/rwho.h	  22	  55	 528 namopen.c
+      19      95     536 ../h/sem.h	  22	  56	 518 open.c
+      38     201    1237 ../h/shell.	  22	  67	 588 netnum.c
+      20     168     942 ../h/sleep.	  23	  43	 517 getaddr.c
+      19     112     707 ../h/slu.h	  23	  51	 535 rfseek.c
+      91     620    3564 ../h/tty.h	  23	  55	 538 bpdump.c
+      33     206    1201 ../h/udp.h	  23	  65	 571 setdev.c
+      24     118     810 ../h/vcu.h	  23	 114	 676 ../h/bufpool.h
+      34     205    1216 ../h/xebec.	  23	 134	 757 ../h/dir.h
+      40      91    1128 adump.c	  24	  51	 524 getprio.c
+      65     165    1689 arp_in.c	  24	  55	 539 recvclr.c
+      38      98     930 arpfind.c	  24	  60	 555 rfwrite.c
+      31      79     695 arpinit.c	  24	  60	 573 remove.c
+      52     196    1291 ascdate.c	  24	  60	 590 dginit.c
+      17      45     416 blkcopy.c	  24	  71	 699 devdump.c
+      18      48     456 blkequ.c	  24	  82	 632 ttyopen.c
+      23      55     538 bpdump.c	  24	 118	 810 ../h/vcu.h
+      37      82     776 chprio.c	  25	  59	 595 procreg.c
+      48     103     949 ckmode.c	  25	 135	 829 ioint.s
+      38     186    1147 cksum.s	  25	 143	 896 ../h/qbus.h
+      55     320    2034 clkinit.c	  26	  55	 540 rfalloc.c
+      53     280    1863 clkint.s	  26	  66	 608 ready.c
+      20      38     430 close.c	  26	  72	 709 rfclose.c
+     206     529    3660 conf.c		  26	  81	 670 udpecho.c
+      21      52     524 control.c	  26	  98	 760 newqueue.c
+      90     403    2957 create.c	  26	 166	 985 ../h/icmp.h
+      35     220    1387 ctxsw.s	  27	  55	 533 setnok.c
+      24      71     699 devdump.c	  27	  58	 583 nammap.c
+      28      60     566 dgalloc.c	  27	  59	 523 test.c
+      31      71     665 dgclose.c	  27	  69	 592 receive.c
+      39      83     743 dgcntl.c	  27	  76	 672 resume.c
+      31      69     775 dgdump.c	  28	  59	 627 signal.c
+      24      60     590 dginit.c	  28	  60	 566 dgalloc.c
+      28      61     564 dgmcntl.c	  28	  61	 564 dgmcntl.c
+      52     125    1145 dgmopen.c	  28	  73	 616 getname.c
+      45     134     979 dgparse.c	  28	  73	 722 rfdump.c
+      67     178    1602 dgread.c	  28	 104	 755 insert.c
+      45     143    1159 dgwrite.c	  28	 129	 862 ../h/q.h
+     206     814    4415 doprnt.c	  29	  72	 690 rfio.c
+      19      60     489 dot2ip.c	  29	  75	 703 rfinit.c
+      55     146    1296 ethinit.c	  29	  76	 661 ttygetc.c
+      63     195    1606 ethinter.c	  29	  80	 726 rename.c
+      48     122    1099 ethread.c	  29	  83	 837 netdump.c
+      31      79     752 ethrstrt.c	  29	 145	 850 ../h/name.h
+      53     157    1374 ethstrt.c	  30	  99	 815 qmapinit.c
+      32      75     724 ethwrite.c	  30	 125	 943 netutil.s
+      38     106     952 ethwstrt.c	  31	  63	 600 nqalloc.c
+      31      67     672 freebuf.c	  31	  65	 666 preset.c
+      46     129    1129 freemem.c	  31	  65	 670 pdelete.c
+      23      43     517 getaddr.c	  31	  67	 672 freebuf.c
+      31      67     677 getbuf.c	  31	  67	 677 getbuf.c
+      20      42     450 getc.c		  31	  69	 775 dgdump.c
+      37     106     920 getitem.c	  31	  71	 665 dgclose.c
+      38     115     973 getmem.c	  31	  77	 733 ttyputc.c
+      28      73     616 getname.c	  31	  79	 695 arpinit.c
+      18      43     471 getnet.c	  31	  79	 752 ethrstrt.c
+      49     144    1190 getpath.c	  32	  69	 675 signaln.c
+      14      30     340 getpid.c	  32	  75	 724 ethwrite.c
+      24      51     524 getprio.c	  32	  76	 632 udpnxtp.c
+      44     146    1033 getstk.c	  32	  78	 749 vcuputc.c
+      20      48     465 gettime.c	  32	  81	 718 sleep10.c
+      42     118     962 getutim.c	  32	  83	 701 ndump.c
+      47     212    1380 halt.s		  32	  92	 909 ipsend.c
+      39     103     942 icmp_in.c	  32	 236	1351 ../h/lfile.h
+      20      38     430 init.c		  33	  66	 574 sleep.c
+     174     726    5482 initialize.	  33	  72	 708 wait.c
+      28     104     755 insert.c	  33	 104	 910 udpsend.c
+      34      96     782 insertd.c	  33	 106	 705 ../h/network.h
+      47     208    1661 interrupt.s	  33	 135	1190 ../h/mem.h
+      13      28     312 ioerr.c	  33	 144	1019 ../h/mach.h
+      52     159    1479 ioinit.c	  33	 197	1166 ../h/ports.h
+      25     135     829 ioint.s	  33	 206	1201 ../h/udp.h
+      13      28     312 ionull.c	  34	  73	 645 poolinit.c
+      85     306    2122 ip2name.c	  34	  75	 895 naminit.c
+      63     157    1333 ip_in.c	  34	  81	 732 pcount.c
+      32      92     909 ipsend.c	  34	  81	 764 sdelete.c
+      56     137    1200 kill.c		  34	  83	 751 unmount.c
+      88     341    2899 kprintf.c	  34	  92	 816 netout.c
+     291    1699   11032 lowcore.s	  34	  93	 795 send.c
+      40      82     836 mark.c		  34	  96	 782 insertd.c
+      46     152    1333 mdump.c	  34	  96	 840 suspend.c
+      36     105    1079 mkarp.c	  34	 140	1020 ../h/io.h
+      42     108    1030 mkpool.c	  34	 205	1216 ../h/xebec.h
+      51     139    1123 mount.c	  35	  74	 715 sreset.c
+      34      75     895 naminit.c	  35	  76	 722 sendf.c
+      27      58     583 nammap.c	  35	 220	1387 ctxsw.s
+      22      55     528 namopen.c	  36	  98	 842 netinit.c
+      37      89     885 namrepl.c	  36	 105	1079 mkarp.c
+      32      83     701 ndump.c	  37	  82	 776 chprio.c
+      29      83     837 netdump.c	  37	  89	 885 namrepl.c
+      52     114    1127 netin.c	  37	 100	 833 sndrarp.c
+      36      98     842 netinit.c	  37	 106	 920 getitem.c
+      22      67     588 netnum.c	  38	  98	 930 arpfind.c
+      34      92     816 netout.c	  38	 106	 952 ethwstrt.c
+      30     125     943 netutil.s	  38	 115	 973 getmem.c
+      26      98     760 newqueue.c	  38	 186	1147 cksum.s
+      31      63     600 nqalloc.c	  38	 201	1237 ../h/shell.h
+       9      30     213 nullpcb.c	  39	  83	 743 dgcntl.c
+      22      56     518 open.c		  39	 103	 942 icmp_in.c
+      15      56     473 ovfloff.c	  39	 109	 974 ptclear.c
+      15      57     464 ovflon.c	  39	 115	 929 recvtim.c
+     416    1737   13336 panic.s	  40	  82	 836 mark.c
+      34      81     732 pcount.c	  40	  91	1128 adump.c
+      43     105     925 pcreate.c	  40	  97	 865 unsleep.c
+      31      65     670 pdelete.c	  40	 118	 917 pinit.c
+      40     118     917 pinit.c	  41	 105	 990 vcuoin.c
+      34      73     645 poolinit.c	  41	 131	1070 queue.c
+      74     187    2081 prdump.c	  41	 200	1199 ../h/rfile.h
+      53     151    1242 preceive.c	  42	 102	 980 rarp_in.c
+      31      65     666 preset.c	  42	 108	1030 mkpool.c
+      25      59     595 procreg.c	  42	 113	 996 ttyoin.c
+      56     147    1248 psend.c	  42	 118	 962 getutim.c
+      39     109     974 ptclear.c	  42	 231	1452 ../h/date.h
+      21      47     465 putc.c		  42	 250	1477 ../h/fserver.h
+      76     214    1783 qdump.c	  42	 328	1847 ../h/ip.h
+      30      99     815 qmapinit.c	  43	  97	 885 rfcntl.c
+      41     131    1070 queue.c	  43	 100	 892 rfopen.c
+      42     102     980 rarp_in.c	  43	 105	 925 pcreate.c
+      21      49     491 read.c		  44	 146	1033 getstk.c
+      26      66     608 ready.c	  44	 205	1121 ../h/coreX.h
+      27      69     592 receive.c	  45	 114	 995 rfsend.c
+      24      55     539 recvclr.c	  45	 134	 979 dgparse.c
+      39     115     929 recvtim.c	  45	 143	1159 dgwrite.c
+      24      60     573 remove.c	  46	 129	1129 freemem.c
+      29      80     726 rename.c	  46	 141	1081 ../h/iodisp.h
+      56     202    1629 resched.c	  46	 152	1333 mdump.c
+      27      76     672 resume.c	  47	 208	1661 interrupt.s
+      26      55     540 rfalloc.c	  47	 212	1380 halt.s
+      26      72     709 rfclose.c	  48	 103	 949 ckmode.c
+      43      97     885 rfcntl.c	  48	 122	1099 ethread.c
+      28      73     722 rfdump.c	  49	 118	1097 screate.c
+      22      51     484 rfgetc.c	  49	 144	1190 getpath.c
+      29      75     703 rfinit.c	  50	 116	1022 ssclock.c
+      29      72     690 rfio.c		  50	 333	2060 ../h/ether.h
+      83     179    1568 rfmkpac.c	  51	 139	1123 mount.c
+      43     100     892 rfopen.c	  52	 114	1127 netin.c
+      22      49     460 rfputc.c	  52	 125	1145 dgmopen.c
+      17      45     429 rfread.c	  52	 159	1479 ioinit.c
+      23      51     535 rfseek.c	  52	 164	1417 route.c
+      45     114     995 rfsend.c	  52	 196	1291 ascdate.c
+      24      60     555 rfwrite.c	  53	 148	1374 rwhoind.c
+      52     164    1417 route.c	  53	 151	1242 preceive.c
+      18      54     513 rwho.c		  53	 157	1374 ethstrt.c
+      78     220    1981 rwhod.c	  53	 280	1863 clkint.s
+      53     148    1374 rwhoind.c	  54	 210	1536 ../h/cmd.h
+      17      33     406 scount.c	  54	 292	1755 ../h/dgram.h
+      49     118    1097 screate.c	  54	 343	2115 ../h/disk.h
+      34      81     764 sdelete.c	  55	 146	1296 ethinit.c
+      21      47     492 seek.c		  55	 259	1919 vcuinit.c
+      34      93     795 send.c		  55	 320	2034 clkinit.c
+      35      76     722 sendf.c	  56	 137	1200 kill.c
+      23      65     571 setdev.c	  56	 147	1248 psend.c
+      27      55     533 setnok.c	  56	 202	1629 resched.c
+      28      59     627 signal.c	  56	 272	1983 ttyinit.c
+      32      69     675 signaln.c	  59	 434	2503 ../h/arp.h
+      81     500    3061 sizmem.s	  60	 120	1100 vcucntl.c
+      33      66     574 sleep.c	  61	 393	2308 ../h/net.h
+      32      81     718 sleep10.c	  63	 157	1333 ip_in.c
+      37     100     833 sndrarp.c	  63	 195	1606 ethinter.c
+      35      74     715 sreset.c	  64	 127	1191 ttycntl.c
+      50     116    1022 ssclock.c	  65	 165	1689 arp_in.c
+      99     587    3616 startup.s	  67	 178	1602 dgread.c
+      34      96     840 suspend.c	  67	 438	2602 ../h/rwho.h
+      87     334    2568 tdump.c	  68	 208	1677 ttywrite.c
+      27      59     523 test.c		  69	 211	1703 vcuwrite.c
+      64     127    1191 ttycntl.c	  72	 393	2502 ../h/proc.h
+      29      76     661 ttygetc.c	  74	 187	2081 prdump.c
+     183     533    4694 ttyiin.c	  76	 214	1783 qdump.c
+      56     272    1983 ttyinit.c	  76	 511	3053 ../h/domain.h
+      42     113     996 ttyoin.c	  78	 220	1981 rwhod.c
+      24      82     632 ttyopen.c	  80	 496	3083 ../h/kernel.h
+      31      77     733 ttyputc.c	  81	 500	3061 sizmem.s
+      95     279    2032 ttyread.c	  83	 179	1568 rfmkpac.c
+      68     208    1677 ttywrite.c	  85	 306	2122 ip2name.c
+      26      81     670 udpecho.c	  87	 334	2568 tdump.c
+      32      76     632 udpnxtp.c	  88	 341	2899 kprintf.c
+      33     104     910 udpsend.c	  90	 403	2957 create.c
+      34      83     751 unmount.c	  91	 620	3564 ../h/tty.h
+      40      97     865 unsleep.c	  95	 279	2032 ttyread.c
+      13      28     308 userret.c	  99	 587	3616 startup.s
+      19      49     465 vaxcons.c	 102	 720	4415 ../h/procreg.h
+      60     120    1100 vcucntl.c	 104	 725	4496 ../h/deqna.h
+     178     511    4467 vcuiin.c	 155	 590	4074 ../h/conf.h
+      55     259    1919 vcuinit.c	 174	 726	5482 initialize.c
+      41     105     990 vcuoin.c	 178	 511	4467 vcuiin.c
+      32      78     749 vcuputc.c	 183	 533	4694 ttyiin.c
+      69     211    1703 vcuwrite.c	 206	 529	3660 conf.c
+      33      72     708 wait.c		 206	 814	4415 doprnt.c
+      20      53     565 wakeup.c	 235	 435	3177 ../h/dispconf.h
+      21      49     495 write.c	 291	1699   11032 lowcore.s
+      11      27     320 xdone.c	 416	1737   13336 panic.s
+   10461   37690  285078 total	       10461   37690  285078 total
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

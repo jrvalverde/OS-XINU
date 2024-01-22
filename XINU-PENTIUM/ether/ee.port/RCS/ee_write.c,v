@@ -1,0 +1,87 @@
+head	1.2;
+access;
+symbols;
+locks
+	lin:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	95.02.11.18.18.36;	author lin;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@/* ee_write.c - ee_write */
+
+#include <conf.h>
+#include <kernel.h>
+#include <network.h>
+
+/*#define DEBUG*/
+
+/*------------------------------------------------------------------------
+ * ee_write - write a single packet to an Intel EtherExpress
+ *------------------------------------------------------------------------
+ */
+int ee_write(pdev, pep, len)
+struct devsw	*pdev;
+struct ep	*pep;
+int		len;
+{
+    struct etdev	*ped;
+
+#ifdef DEBUG
+    kprintf("ee_write\n");
+#endif
+    
+    ped = (struct etdev *)pdev->dvioblk;
+    if (len > EP_MAXLEN) {
+	nif[ped->ed_ifnum].ni_odiscard++;
+	freebuf(pep);
+	return SYSERR;
+    }
+
+    /* subtract the local header */
+    len -= (int)&pep->ep_eh - (int)pep;
+    if (len < EP_MINLEN)
+	len = EP_MINLEN;
+    blkcopy(pep->ep_src, ped->ed_paddr, EP_ALEN);
+    pep->ep_len = len;
+    pep->ep_type = hs2net(pep->ep_type);
+    pep->ep_order &= ~EPO_NET;
+		
+    if (enq(ped->ed_outq, pep, 0) < 0) {
+	nif[ped->ed_ifnum].ni_odiscard++;
+	freebuf(pep);
+	return SYSERR;
+    }
+    ee_wstrt(ped);
+    return OK;
+}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d7 1
+a7 1
+#define DEBUG
+@

@@ -1,0 +1,4 @@
+.TH CONTROL 2CCC
+.SH USE INSTEAD
+.I ioctl(2)
+of the UNIX man pages.

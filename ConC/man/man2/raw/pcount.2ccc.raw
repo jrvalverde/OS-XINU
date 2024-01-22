@@ -1,0 +1,35 @@
+.TH PCOUNT 2CCC
+.SH NAME
+pcount \- return the number of messages currently waiting at a port
+.SH SYNOPSIS
+.nf
+.B p = pcount(portid)
+.B int p;
+.B int portid;
+.fi
+.SH DESCRIPTION
+.I Pcount
+returns the message count associated with port
+.I portid.
+If
+.I portid
+is invalid, -1 is returned and errno is set to CEBADPT.
+.PP
+A positive count p means that there are p messages available
+for processing. This count includes the count of messages explicitly in 
+the port and the count of the number of tasks which attempted
+to send messages to the queue but are blocked (because the 
+queue is full). A negative count p means that there are
+p tasks awaiting messages from the port.
+A zero count means that there are neither messages waiting nor
+tasks waiting to consume messages.
+.SH SEE ALSO
+pcreate(2CCC), pdelete(2CCC), preceive(2CCC), preset(2CCC), psend(2CCC)
+.SH BUGS
+The error return value of -1 is
+a legal port count.  The indication that an actual error occurred is
+given in errno.  For this reason, errno is set to
+zero inside
+.I pcount
+if no error occurred.  This is in opposition with the convention
+of system calls not reseting errno.

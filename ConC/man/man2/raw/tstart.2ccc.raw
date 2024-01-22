@@ -1,0 +1,66 @@
+.TH TSTART 2CCC
+.SH NAME
+tstart \- create a new task and make it ready to run
+.SH SYNOPSIS
+.B tid = tstart(caddr,nargs[,argument]*)
+.nf
+.B int tid;
+.B char *caddr;
+.B int nargs;
+.B long argument;	/* actually, type "machine word" */
+.fi
+.SH DESCRIPTION
+.I Tstart
+is a nice user interface for the 'resume(create( ... ))' calling sequence
+for tasks which do not require large stack space.
+It creates a new task that will begin execution at location
+.I caddr,
+with a default stack size of INITSTK (defined in <kernel.h>) words,
+initial priority being set to that of the task calling
+.I tstart,
+and identifying name START_NAME
+(defined in <kernel.h>).
+.I Caddr
+should be the address of a procedure or main program.
+The created task is
+.I resumed
+(see RESUME(2CCC)) and ready to run.
+The new task has its own stack, but shares global data
+with other tasks according to the scope rules of C.
+If the procedure attempts to return, its
+task will be terminated (see TKILL(2CCC)).
+.PP
+The caller can pass a variable number of arguments to the created
+task which are accessed through formal parameters.
+The integer
+.I nargs
+specifies how many argument values follow.
+.I Nargs
+values from the
+.I arguments
+list will be passed to the created task.
+The type and number of such arguments is not checked; each
+is treated as a single machine word.
+The user is cautioned against passing the address of any dynamically
+allocated datum to a task because such objects may be deallocated
+from the creator's run-time stack even though
+the created task retains a pointer.
+.SH RETURN VALUE
+If the creation is successful, the (nonnegative) task id of
+the new task is returned to the caller.
+If the arguments are incorrect, or if there are no free task
+slots, the value -1 is returned and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[CENOTASK]
+Task table is full.  No more tasks allowed.
+.TP 15
+[EINVAL]
+Invalid argument.
+.TP 15
+other
+Error set in
+.I getstk(2CCC)
+when trying to allocate stack.
+.SH SEE ALSO
+create(2CCC), getstk(2CCC), resume(2CCC), tkill(2CCC)

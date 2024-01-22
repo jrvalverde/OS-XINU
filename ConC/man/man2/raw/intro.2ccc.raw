@@ -1,0 +1,160 @@
+.TH INTRO 2CCC
+.UC 4
+.de en
+.HP
+\\$1  \\$2  \\$3
+.br
+..
+.SH NAME
+intro \- introduction to ConcurrenC system calls and error numbers
+.SH SYNOPSIS
+.B #include <errno.h>
+.SH DESCRIPTION
+This section describes all of the ConcurrenC system calls along with
+restrictions for the use of UNIX system calls.  Most
+of these calls have one or more error returns.
+An error condition is indicated by an otherwise impossible return
+value except in the case of
+.I pcount
+and
+.I scount.
+This is almost always \-1; the individual descriptions
+specify the details.
+.PP
+As with normal arguments, all return codes and values from
+functions are of type integer unless otherwise noted.
+An error number is also made available in the external
+variable
+.I errno,
+which is not cleared
+on successful calls (again with the exception of pcount and scount).
+Thus
+.I errno
+should be tested only after an error has occurred.
+.PP
+The following is a list of the added errors for ConcurrenC
+as given in
+.RI < errno.h >.
+.en 70 CENOTASK "Too many tasks
+This error occurs if a tasks cannot be created or started because
+the task table is full.
+.en 71 CENOPORT "Too many ports
+This error occurs if a port cannot be created because
+the port table is full.
+.en 72 CENOSEM "Too many semaphores
+This error occurs if a semaphore cannot be created because
+the semaphore table is full.
+.en 73 CEBADTID "Bad task id
+The task id given as an argument is invalid, either because it is
+out of range or that entry in the table is not in use.
+.en 74 CEBADPT "Bad port id
+The port id given as an argument is invalid, either because it is
+out of range or that entry in the table is not in use.
+.en 75 CEBADSEM "Bad semaphore id
+The semaphore id given as an argument is invalid, either because it is
+out of range or that entry in the table is not in use.
+.en 76 CEBADBP "Bad buffer pool id
+The buffer pool id given as an argument is invalid, either because it is
+out of range or that entry in the table is not in use.
+.en 77 CENOTALLOWED "Call not allowed in ConcurrenC
+The UNIX system or library routine called by the user is not available
+in ConcurrenC.
+.en 78 CEILLSIG "Signal not allowed in ConcurrenC
+The signal given by the user is reserved for ConcurrenC and not available
+for the user.
+.en 79 CEHASMSG "Task has message
+This is given if a task calls
+.I tsend(2CCC)
+and the task to which the message is being sent already has
+an outstanding message.
+.en 80 CENOTSUSP "Task not suspended
+This error is returned if a task tries to resume a task which is
+not suspended.
+.en 81 CENOTREADY "Task not on ready list
+This error is returned if a task tries to suspend a task which is
+neither on the ready list nor currently executing (i.e. itself).
+.SH RESTRICTIONS TO UNIX SYSTEM CALLS
+The following UNIX system calls are not available in ConcurrenC
+and will return an error:
+.sp
+.in 1.0i
+Oadvise, Ovfork, execve, fcntl, flock, fork, getitimer, profil,
+ptrace, select, sigblock, sigpause, sigsetmask, syscall, vhangup, and wait.
+.in 0.5i
+.PP
+The following UNIX system calls are changed a bit in ConcurrenC:
+.sp
+.in 1.0i
+getdtablesize, kill, killpg, and sigvec
+.in 0.5i
+.PP
+.I Getdtablesize
+returns 2 less than its UNIX counterpart.  Each of
+.I kill,
+.I killpg,
+and
+.I sigvec
+disallows signals SIGALRM, AIGVTALRM, SIGIO, and SIGILL.
+.SH LIST OF CONCURRENC FUNCTIONS
+.nf
+.I "Name      Appears on Page     Description"
+.sp
+chprio    chprio(2CCC)    - change priority of a task
+create    create(2CCC)    - create a task (don't resume it)
+freemem   freemem(2CCC)   - free a block of memory allocated with getmem
+freestk   freemem(2CCC)   - free a block of memory allocated with getstk
+getmem    getmem(2CCC)    - allocate a block of memory returning lowest addr
+getstk    getmem(2CCC)    - allocate a block of memory returning highest addr
+getprio   getprio(2CCC)   - get priority of a task
+gettid    gettid(2CCC)    - get task id of caller
+panic     panic(2CCC)     - print panic message and exit
+pcount    pcount(2CCC)    - get port count
+pcreate   pcreate(2CCC)   - create a port
+pdelete   pdelete(2CCC)   - delete a port
+preceive  preceive(2CCC)  - receive a message from a port
+preset    preset(2CCC)    - reset a port
+psend     psend(2CCC)     - send a message to a port
+resume    resume(2CCC)    - resume a task
+scount    scount(2CCC)    - get semaphore count
+screate   screate(2CCC)   - create a semaphore
+sdelete   sdelete(2CCC)   - delete a semaphore
+sleep     sleep(2CCC)     - sleep for an integral number of seconds
+sleep10   sleep(2CCC)     - sleep for an integral number of 1/10 seconds
+sreset    sreset(2CCC)    - reset a semaphore
+ssignal   ssignal(2CCC)   - signal a semaphore once
+ssignaln  ssignal(2CCC)   - signal a semaphore n times
+suspend   suspend(2CCC)   - suspend a task
+swait     swait(2CCC)     - wait on a semaphore
+tkill     tkill(2CCC)     - kill a task
+treceive  treceive(2CCC)  - reseive a personal message
+trecvclr  treceive(2CCC)  - receive a personal message if one is available
+tsend     tsend(2CCC)     - send a message to a specific task
+tsendf    tsend(2CCC)     - force a sending of a message to a specific task
+tstart    tstart(2CCC)    - create and start (resume) a task
+.fi
+.SH XINU COMPATIBILITY
+The following is a list of the other XINU system calls with
+a reference of what to use in ConcurrenC.
+.nf
+.I "Name                 Reference"
+.sp
+close              close(2) of the UNIX man pages
+control            ioctl(2) of the UNIX man pages
+getc               getc(3S) of the UNIX man pages
+getpid             gettid(2CCC)
+kill               tkill(2CCC)
+mark unmark        not available in ConcurrenC
+open               open(2) of the UNIX man pages
+putc               putc(3S) of the UNIX man pages
+read               read(2) of the UNIX man pages
+receive recvclr    treceive(2CCC) trecvclr
+seek               lseek(2) of the UNIX man pages
+send               tsend(2CCC)
+signal signaln     ssignal(2CCC) ssignaln
+wait               swait(2CCC)
+write              write(2) of the UNIX man pages
+.fi
+.SH SEE ALSO
+intro(2), intro(3), perror(3) of the UNIX man pages
+.br
+intro(3CCC) of the ConcurrenC man pages

@@ -1,0 +1,30 @@
+.TH TDUMP DEBUG
+.SH NAME
+tdump, tdumph, tdumpa \- dump appropriate run-time information about tasks
+.SH SYNOPSIS
+.B tdump()
+.sp
+.B tdumph()
+.sp
+.B tdumpa()
+.SH DESCRIPTION
+.I Tdump
+dumps information associated with entries in the task table which are
+currently in use.
+The information displayed include the tasks tid, state, name, priority,
+semaphore it is waiting on, its starting address, and a stack dump
+(see
+.I stdump(DEBUG)
+)
+of the task.  The contents of the ready list is
+then printed.
+.I Tdumph
+gives the same information, then halts when finished.
+.I Tdumpa
+dumps this information for the entire task table, whether or not the
+entry is in use or not.
+.SH SEE ALSO
+stdump(DEBUG)
+.SH BUGS
+The stack dump for the current task includes the frame for the call to
+.I tdump.

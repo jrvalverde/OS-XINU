@@ -1,0 +1,66 @@
+#
+# bootp configuration for new bootp daemon
+# Daemon and configuration written by Scott M. Ballew
+# Cypress Network Operations Center
+# Department of Computer Sciences, Purdue University
+#
+# first section defines generic name equivalences
+# these should be one per line and seperated by white space
+#
+matsu	matsu.out
+ginkgo	ginkgo.out
+
+#
+# a percent separates the first section from the next which contains the
+# machine definitions
+#
+
+%
+
+#
+# machine configurations
+#
+# field name meanings:
+#	bf	boot file name (relative to hd)
+#	gn	generic name (if not specified)
+#	gw	gateway list (default routes)
+#	ha	hardware address
+#	hd	home directory (for boot file)
+#	ht	hardware address type (i.e., ether, ether3, etc.)
+#	ip	IP address
+#	ls	LPR server list
+#	mt	machine type (i.e., sun3, lsi, mvax, etc.) (see NOTE)
+#	nm	subnet mask
+#	ns	domain name server list
+#	rs	RLP server list
+#	tp	template (similar to termcap tc but does not have to be last)
+#	to	time offset in seconds from UTC
+#	ts	time server list
+
+# for XINU machines, we use ls for the pageserver
+# for XINU machines, we use rs for the RFS server
+# the following two lines are just to swap in and out of the ginkgo def
+# for testing purposes
+#	rs=128.10.3.20:ls=128.10.2.9:
+#	rs=128.10.3.20:
+
+cs.dummy:\
+	:to=18000:
+
+subnet3.cs.dummy:\
+	:tp=cs.dummy:nm=0xffffff00:gw=128.10.3.8|128.10.3.112:\
+	:ts=128.10.2.3|128.211.1.1:\
+	:hd=/tftpboot:
+
+ds3100.subnet3.cs.dummy:\
+	:tp=subnet3.cs.dummy:mt=ds3100:\
+	:ns=128.10.3.20:
+
+ginkgo.cs.purdue.edu|ginkgo:\
+ 	:tp=ds3100.subnet3.cs.dummy:ht=ether:ha=08002B0ED46E:ip=128.10.3.55:\
+ 	:rs=128.10.3.54:ls=128.10.3.54:gn=ginkgo:
+
+matsu.cs.purdue.edu|matsu:\
+ 	:tp=ds3100.subnet3.cs.dummy:ht=ether:ha=08002B13CE61:ip=128.10.3.56:\
+ 	:rs=128.10.3.54:ls=128.10.3.54:gn=matsu:
+

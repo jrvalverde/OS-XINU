@@ -1,0 +1,49 @@
+# This is the database that contains information about the
+# microcomputers available for running Xinu.  The file describes
+# machine hardware, domain names, and classes (groups) of machines,
+# as well as the physical tty lines and downloader to use.  An
+# Internet address in dotted-decimal notation can be substituted for
+# the domain name if you're not using domain name software.
+#
+# Part 1: tty lines and machines to which they connect.  The
+#	  Ethernet downloader is usually edl.XXX, where XXX
+#	  gives the machine type.  Internet addresses in dotted
+#	  decimal notation can be substituted for domain names.
+#
+#tty	    domain name		cputype  downloader	uploader
+#
+UVAX.1	xinu1.unknown		UVAX-I	 edl.vax	eul.vax
+UVAX.2	xinu2.unknown	 	UVAX-I	 edl.vax	eul.vax
+UVAX.3	xinu3.unknown	 	UVAX-II	 edl.vax	eul.vax
+UVAX.4	xinu4.unknown	 	UVAX-II	 edl.vax	eul.vax
+UVAX.5	xinu5.unknown	 	UVAX-II	 edl.vax	eul.vax
+UVAX.6	xinu6.unknown	 	UVAX-II	 edl.vax	eul.vax
+UVAX.7	xinu7.unknown	 	UVAX-II	 edl.vax	eul.vax
+UVAX.8	xinu8.unknown	 	UVAX-II	 edl.vax	eul.vax
+#
+# Notice percent-sign separator on next line...
+%
+# Part 2: class names and tty to which they correspond.  Note that
+#	  it is possible to put a physical machine in multiple
+#	  classes.  We chose to index class UV2 starting at 3 to
+#	  make it easier for users to associate machines in class
+#	  UV2 with those in class UVAX.
+#
+#class index	tty	timeout	arguments(optional)
+#
+UVAX	1	UVAX.1	10	" "
+UVAX	2	UVAX.2	10	" "
+UVAX	3	UVAX.3	10	" "
+UVAX	4	UVAX.4	10	" "
+UVAX	5	UVAX.5	10	" "
+UVAX	6	UVAX.6	10	" "
+UVAX	7	UVAX.7	10	" "
+UVAX	8	UVAX.8	10	" "
+UV1	1	UVAX.1	10	" "
+UV1	2	UVAX.2	10	" "
+UV2	3	UVAX.3	10	" "
+UV2	4	UVAX.4	10	" "
+UV2	5	UVAX.5	10	" "
+UV2	6	UVAX.6	10	" "
+UV2	7	UVAX.7	10	" "
+UV2	9	UVAX.8	10	" "

@@ -1,0 +1,28 @@
+Xinu directory is /usr/Xinu
+Installing source file ../man/man1/Makefile.RAW
+Installing source file ../man/man2/Makefile.RAW
+Installing source file ../man/man3/Makefile.RAW
+Installing source file ../man/man0/Makefile.RAW
+Installing source file ../man/man4/Makefile.RAW
+Installing source file ../src/sys/sys/Makefile.RAW
+Installing source file ../src/sys/sys/naminit.c.RAW
+Installing source file ../src/cmd/fs/fsd.c.RAW
+Installing source file ../src/cmd/fs/Makefile.RAW
+Installing source file ../src/cmd/download/vax/h/ethdown.h.RAW
+Installing source file ../src/cmd/download/vax/h/vaxdl.h.RAW
+Installing source file ../src/cmd/download/vax/h/vdownload.h.RAW
+Installing source file ../src/cmd/download/vax/eload/src/Makefile.RAW
+Installing source file ../src/cmd/download/vax/src/Makefile.RAW
+Installing source file ../src/cmd/download/cmd/Makefile.RAW
+Installing source file ../src/cmd/download/h/download.h.RAW
+Installing source file ../src/cmd/download/h/getdev.h.RAW
+Installing source file ../src/cmd/download/h/upload.h.RAW
+Installing source file ../src/cmd/download/lib/Makefile.RAW
+Installing source file ../src/cmd/Makefile.RAW
+Installing source file ../src/cmd/pm/Makefile.RAW
+Installing source file ../src/lib/libvxc/Makefile.RAW
+Finished installing Xinu source files.
+
+To complete installation, change to directory
+../src and type  ./Makeall  (you may want to
+run it in background and go out for coffee).

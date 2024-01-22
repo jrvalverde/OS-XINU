@@ -1,0 +1,6 @@
+.TH SETEXIT 3
+.SH NOTE
+.I Setexit
+and
+.I reset
+are not available in ConcurrenC.

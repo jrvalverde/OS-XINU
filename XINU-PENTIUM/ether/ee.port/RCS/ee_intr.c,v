@@ -1,0 +1,160 @@
+head	1.2;
+access;
+symbols;
+locks
+	lin:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	95.02.11.18.18.36;	author lin;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@/* ee_intr.c - ee_intr */
+
+#include <conf.h>
+#include <kernel.h>
+#include <network.h>
+#include <ee.h>
+
+#define DEBUG
+
+/*------------------------------------------------------------------------
+ * ee_intr - handle an Intel EtherExpress16 device interrupt
+ *------------------------------------------------------------------------
+ */
+int ee_intr()
+{
+    struct etdev	*ped;
+    unsigned short	iobase, scb_status;
+    
+    ped = &ee[0];
+    iobase = ped->ed_pdev->dvcsr;
+
+    /* disable interrupt from 82586 */
+/*    outb(iobase+SIRQ, ped->ed_irq);*/
+    
+    ee_wait(iobase);
+    
+    scb_status = inw(iobase+SCB_STATUS);
+    
+#ifdef DEBUG
+    printf("ee_intr, scb_status=%X\n", scb_status);
+#endif
+
+    /*
+     * ACK 82586
+     */
+    ee_ack(iobase);
+        
+    /*
+     * Check if CU completes a TX command.
+     */
+    if (scb_status & SCBSTAT_CX) {
+	if (ee_xintr(ped, iobase) == SYSERR)
+	    return;
+    }
+
+    /*
+     * ee_demux can cause a context switch, so must re-enable board
+     * interrupt latch before calling it.
+     */
+/*    csr = ped->ed_pdev->dvcsr;*/
+/*    outb(csr+SIRQ, ped->ed_irq);*/
+/*    outb(csr+SIRQ, ped->ed_irq | SIRQ_IEN);*/
+
+    /* enable interrupt */
+/*    outb(iobase+SIRQ, ped->ed_irq);*/
+/*    outb(iobase+SIRQ, ped->ed_irq | SIRQ_IEN);*/
+    
+    if (scb_status & SCBSTAT_FR)
+	ee_demux(ped, iobase);
+}
+
+/*------------------------------------------------------------------------
+ * ee_xintr - handle a transmit interrupt on an Intel EtherExpress
+ *------------------------------------------------------------------------
+ */
+int ee_xintr(ped, iobase)
+struct etdev	*ped;
+unsigned short  iobase;
+{
+    unsigned short cbl_status;
+    
+    outw(iobase+RDPTR, ped->ed_txcbl);
+    cbl_status = inw(iobase);
+    
+#ifdef DEBUG
+    printf("ee_xintr, cbl status=%X\n", cbl_status);
+#endif
+
+    if (ped->ed_mcset) {
+	ped->ed_mcset = 0;
+	kprintf("MCAST???\n");
+	ped->ed_xpending--;
+    }
+    else if (cbl_status & CUCMD_COMPLETE) {
+	if (!(cbl_status & CUCMD_OK)) {
+	    kprintf("ee: tranmission error, CB status %x\n", cbl_status);
+	    nif[ped->ed_ifnum].ni_oerrors++;
+	    init_82586(ped);
+	    ped->ed_xpending = 0;
+	    return SYSERR;
+	}
+	
+	if (!ped->ed_xpending)
+	    kprintf("stray transmit interrupt\n");
+	else
+	    ped->ed_xpending--;
+	
+	outw(iobase+WRPTR, ped->ed_txcbl);
+        outw(iobase, 0);
+    }
+    
+    if (lenq(ped->ed_outq))
+	ee_wstrt(ped);
+    
+    return OK;
+}
+
+
+
+
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d23 1
+a23 1
+    outb(iobase+SIRQ, ped->ed_irq);
+d41 4
+a44 2
+    if (scb_status & SCBSTAT_CX)
+	ee_xintr(ped, iobase);
+d55 3
+a57 1
+    outb(iobase+SIRQ, ped->ed_irq | SIRQ_IEN);
+d88 3
+d104 2
+d107 4
+@

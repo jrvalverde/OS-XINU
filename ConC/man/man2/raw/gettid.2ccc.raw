@@ -1,0 +1,12 @@
+.TH GETTID 2CCC
+.SH NAME
+gettid \- return the task id of the currently running task
+.SH SYNOPSIS
+.B tid = gettid()
+.br
+.B int tid;
+.SH DESCRIPTION
+.I Gettid
+returns the task id of the currently executing task.
+It is necessary to be able to identify one's self in order to
+perform some operations (e.g., change one's scheduling priority).

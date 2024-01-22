@@ -1,0 +1,237 @@
+/bin/cc -O -c -I../h	adump.c
+/bin/cc -O -c -I../h	arp_in.c
+/bin/cc -O -c -I../h	arpfind.c
+/bin/cc -O -c -I../h	arpinit.c
+/bin/cc -O -c -I../h	ascdate.c
+/bin/cc -O -c -I../h	blkcopy.c
+/bin/cc -O -c -I../h	blkequ.c
+/bin/cc -O -c -I../h	bpdump.c
+/bin/cc -O -c -I../h	chprio.c
+/bin/cc -O -c -I../h	ckmode.c
+/lib/cpp -I../h cksum.s   	| as -o cksum.o
+/lib/cpp -I../h clkint.s   	| as -o clkint.o
+/bin/cc -O -c -I../h	clkinit.c
+/bin/cc -O -c -I../h	close.c
+/bin/cc -O -c -I../h	control.c
+/bin/cc -O -c -I../h	create.c
+/lib/cpp -I../h ctxsw.s   	| as -o ctxsw.o
+/bin/cc -O -c -I../h	devdump.c
+/bin/cc -O -c -I../h	dgalloc.c
+/bin/cc -O -c -I../h	dgclose.c
+/bin/cc -O -c -I../h	dgcntl.c
+/bin/cc -O -c -I../h	dgdump.c
+/bin/cc -O -c -I../h	dginit.c
+/bin/cc -O -c -I../h	dgmcntl.c
+/bin/cc -O -c -I../h	dgmopen.c
+/bin/cc -O -c -I../h	dgparse.c
+/bin/cc -O -c -I../h	dgread.c
+/bin/cc -O -c -I../h	dgwrite.c
+/bin/cc -O -c -I../h	doprnt.c
+/bin/cc -O -c -I../h	dot2ip.c
+/bin/cc -O -c -I../h	ethinit.c
+/bin/cc -O -c -I../h	ethinter.c
+/bin/cc -O -c -I../h	ethread.c
+/bin/cc -O -c -I../h	ethrstrt.c
+/bin/cc -O -c -I../h	ethstrt.c
+/bin/cc -O -c -I../h	ethwrite.c
+/bin/cc -O -c -I../h	ethwstrt.c
+/bin/cc -O -c -I../h	freemem.c
+/bin/cc -O -c -I../h	freebuf.c
+/bin/cc -O -c -I../h	getaddr.c
+/bin/cc -O -c -I../h	getbuf.c
+/bin/cc -O -c -I../h	getc.c
+/bin/cc -O -c -I../h	getitem.c
+/bin/cc -O -c -I../h	getmem.c
+/bin/cc -O -c -I../h	getname.c
+/bin/cc -O -c -I../h	getnet.c
+/bin/cc -O -c -I../h	getpath.c
+/bin/cc -O -c -I../h	getpid.c
+/bin/cc -O -c -I../h	getprio.c
+/bin/cc -O -c -I../h	getstk.c
+/bin/cc -O -c -I../h	gettime.c
+/bin/cc -O -c -I../h	getutim.c
+/lib/cpp -I../h halt.s   	| as -o halt.o
+/bin/cc -O -c -I../h	icmp_in.c
+/bin/cc -O -c -I../h	init.c
+/bin/cc -O -c -I../h	insert.c
+/bin/cc -O -c -I../h	insertd.c
+/lib/cpp -I../h interrupt.s   	| as -o interrupt.o
+/bin/cc -O -c -I../h	ioerr.c
+/bin/cc -O -c -I../h	ioinit.c
+/bin/cc -O -c -I../h	ionull.c
+/lib/cpp -I../h ioint.s   	| as -o ioint.o
+/bin/cc -O -c -I../h	ipsend.c
+/bin/cc -O -c -I../h	ip_in.c
+/bin/cc -O -c -I../h	ip2name.c
+/bin/cc -O -c -I../h	kill.c
+/bin/cc -O -c -I../h	kprintf.c
+/bin/cc -O -c -I../h	mark.c
+/bin/cc -O -c -I../h	mdump.c
+/bin/cc -O -c -I../h	mkarp.c
+/bin/cc -O -c -I../h	mkpool.c
+/bin/cc -O -c -I../h	mount.c
+/bin/cc -O -c -I../h	naminit.c
+/bin/cc -O -c -I../h	nammap.c
+/bin/cc -O -c -I../h	namopen.c
+/bin/cc -O -c -I../h	namrepl.c
+/bin/cc -O -c -I../h	ndump.c
+/bin/cc -O -c -I../h	netdump.c
+/bin/cc -O -c -I../h	netin.c
+/bin/cc -O -c -I../h	netinit.c
+/bin/cc -O -c -I../h	netnum.c
+/bin/cc -O -c -I../h	netout.c
+/lib/cpp -I../h netutil.s   	| as -o netutil.o
+/bin/cc -O -c -I../h	newqueue.c
+/bin/cc -O -c -I../h	nqalloc.c
+/bin/cc -O -c -I../h	nullpcb.c
+/bin/cc -O -c -I../h	open.c
+/bin/cc -O -c -I../h	ovfloff.c
+/bin/cc -O -c -I../h	ovflon.c
+/lib/cpp -I../h panic.s   	| as -o panic.o
+/bin/cc -O -c -I../h	pcreate.c
+/bin/cc -O -c -I../h	pcount.c
+/bin/cc -O -c -I../h	pdelete.c
+/bin/cc -O -c -I../h	pinit.c
+/bin/cc -O -c -I../h	poolinit.c
+/bin/cc -O -c -I../h	prdump.c
+/bin/cc -O -c -I../h	preceive.c
+/bin/cc -O -c -I../h	preset.c
+/bin/cc -O -c -I../h	procreg.c
+/bin/cc -O -c -I../h	psend.c
+/bin/cc -O -c -I../h	ptclear.c
+/bin/cc -O -c -I../h	putc.c
+/bin/cc -O -c -I../h	qdump.c
+/bin/cc -O -c -I../h	qmapinit.c
+/bin/cc -O -c -I../h	queue.c
+/bin/cc -O -c -I../h	rarp_in.c
+/bin/cc -O -c -I../h	read.c
+/bin/cc -O -c -I../h	ready.c
+/bin/cc -O -c -I../h	receive.c
+/bin/cc -O -c -I../h	recvclr.c
+/bin/cc -O -c -I../h	recvtim.c
+/bin/cc -O -c -I../h	remove.c
+/bin/cc -O -c -I../h	rename.c
+/bin/cc -O -c -I../h	resched.c
+/bin/cc -O -c -I../h	resume.c
+/bin/cc -O -c -I../h	rfalloc.c
+/bin/cc -O -c -I../h	rfclose.c
+/bin/cc -O -c -I../h	rfcntl.c
+/bin/cc -O -c -I../h	rfdump.c
+/bin/cc -O -c -I../h	rfgetc.c
+/bin/cc -O -c -I../h	rfinit.c
+/bin/cc -O -c -I../h	rfio.c
+/bin/cc -O -c -I../h	rfmkpac.c
+/bin/cc -O -c -I../h	rfopen.c
+/bin/cc -O -c -I../h	rfputc.c
+/bin/cc -O -c -I../h	rfread.c
+/bin/cc -O -c -I../h	rfseek.c
+/bin/cc -O -c -I../h	rfsend.c
+/bin/cc -O -c -I../h	rfwrite.c
+/bin/cc -O -c -I../h	route.c
+/bin/cc -O -c -I../h	rwho.c
+/bin/cc -O -c -I../h	rwhod.c
+/bin/cc -O -c -I../h	rwhoind.c
+/bin/cc -O -c -I../h	scount.c
+/bin/cc -O -c -I../h	screate.c
+/bin/cc -O -c -I../h	sdelete.c
+/bin/cc -O -c -I../h	seek.c
+/bin/cc -O -c -I../h	send.c
+/bin/cc -O -c -I../h	sendf.c
+/bin/cc -O -c -I../h	setdev.c
+/bin/cc -O -c -I../h	setnok.c
+(cd shell; make install)
+/bin/cc -O -c -I../../h	addarg.c
+/bin/cc -O -c -I../../h	login.c
+/bin/cc -O -c -I../../h	lexan.c
+/bin/cc -O -c -I../../h	shell.c
+/bin/cc -O -c -I../../h	x_bpool.c
+/bin/cc -O -c -I../../h	x_cat.c
+/bin/cc -O -c -I../../h	x_close.c
+/bin/cc -O -c -I../../h	x_cp.c
+/bin/cc -O -c -I../../h	x_create.c
+/bin/cc -O -c -I../../h	x_date.c
+/bin/cc -O -c -I../../h	x_devs.c
+/bin/cc -O -c -I../../h	x_dg.c
+/bin/cc -O -c -I../../h	x_echo.c
+/bin/cc -O -c -I../../h	x_exit.c
+/bin/cc -O -c -I../../h	x_help.c
+/bin/cc -O -c -I../../h	x_kill.c
+/bin/cc -O -c -I../../h	x_mem.c
+/bin/cc -O -c -I../../h	x_mount.c
+/bin/cc -O -c -I../../h	x_mv.c
+/bin/cc -O -c -I../../h	x_net.c
+/bin/cc -O -c -I../../h	x_ps.c
+/bin/cc -O -c -I../../h	x_reboot.c
+/bin/cc -O -c -I../../h	x_rf.c
+/bin/cc -O -c -I../../h	x_rm.c
+/bin/cc -O -c -I../../h	x_rls.c
+/bin/cc -O -c -I../../h	x_routes.c
+/bin/cc -O -c -I../../h	x_sleep.c
+/bin/cc -O -c -I../../h	x_snap.c
+/bin/cc -O -c -I../../h	x_unmou.c
+/bin/cc -O -c -I../../h	x_uptime.c
+/bin/cc -O -c -I../../h	x_who.c
+/bin/ld -r -o sh.o  addarg.o login.o lexan.o		 shell.o					 x_bpool.o x_cat.o x_close.o x_cp.o	 x_create.o x_date.o x_devs.o x_dg.o	 x_echo.o x_exit.o x_help.o x_kill.o	 x_mem.o x_mount.o x_mv.o x_net.o	 x_ps.o x_reboot.o x_rf.o x_rm.o x_rls.o	 x_routes.o x_sleep.o x_snap.o x_unmou.o	 x_uptime.o x_who.o
+cp sh.o ..
+/bin/cc -O -c -I../h	signal.c
+/bin/cc -O -c -I../h	signaln.c
+/lib/cpp -I../h sizmem.s   	| as -o sizmem.o
+/bin/cc -O -c -I../h	sleep.c
+/bin/cc -O -c -I../h	sleep10.c
+/bin/cc -O -c -I../h	sndrarp.c
+/bin/cc -O -c -I../h	sreset.c
+/bin/cc -O -c -I../h	ssclock.c
+/bin/cc -O -c -I../h	suspend.c
+/bin/cc -O -c -I../h	tdump.c
+/bin/cc -O -c -I../h	ttycntl.c
+/bin/cc -O -c -I../h	ttygetc.c
+/bin/cc -O -c -I../h	ttyiin.c
+/bin/cc -O -c -I../h	ttyinit.c
+/bin/cc -O -c -I../h	ttyoin.c
+/bin/cc -O -c -I../h	ttyopen.c
+/bin/cc -O -c -I../h	ttyputc.c
+/bin/cc -O -c -I../h	ttyread.c
+/bin/cc -O -c -I../h	ttywrite.c
+/bin/cc -O -c -I../h	udpecho.c
+/bin/cc -O -c -I../h	udpsend.c
+/bin/cc -O -c -I../h	udpnxtp.c
+/bin/cc -O -c -I../h	unmount.c
+/bin/cc -O -c -I../h	unsleep.c
+/bin/cc -O -c -I../h	userret.c
+/bin/cc -O -c -I../h	vaxcons.c
+/bin/cc -O -c -I../h	vcucntl.c
+/bin/cc -O -c -I../h	vcuiin.c
+/bin/cc -O -c -I../h	vcuinit.c
+/bin/cc -O -c -I../h	vcuoin.c
+/bin/cc -O -c -I../h	vcuputc.c
+/bin/cc -O -c -I../h	vcuwrite.c
+/bin/cc -O -c -I../h	wait.c
+/bin/cc -O -c -I../h	wakeup.c
+/bin/cc -O -c -I../h	write.c
+/bin/cc -O -c -I../h	xdone.c
+/bin/rm -f  libx.a
+/bin/ar cr libx.a	adump.o arp_in.o arpfind.o arpinit.o	 ascdate.o				 blkcopy.o blkequ.o bpdump.o		 chprio.o ckmode.o cksum.o clkint.o	 clkinit.o close.o 			 control.o create.o ctxsw.o 		 devdump.o				 dgalloc.o dgclose.o dgcntl.o dgdump.o	 dginit.o dgmcntl.o dgmopen.o dgparse.o	 dgread.o dgwrite.o 			 doprnt.o dot2ip.o			 ethinit.o ethinter.o			 ethread.o ethrstrt.o ethstrt.o		 ethwrite.o ethwstrt.o			 freemem.o freebuf.o getaddr.o		 getbuf.o getc.o				 getitem.o getmem.o getname.o getnet.o	 getpath.o getpid.o getprio.o getstk.o	 gettime.o getutim.o halt.o		 icmp_in.o				 init.o insert.o insertd.o		 interrupt.o				 ioerr.o ioinit.o ionull.o ioint.o	 ipsend.o ip_in.o ip2name.o		 kill.o kprintf.o			 mark.o mdump.o mkarp.o mkpool.o mount.o	 naminit.o nammap.o namopen.o namrepl.o	 ndump.o netdump.o netin.o		 netinit.o netnum.o netout.o netutil.o	 newqueue.o nqalloc.o nullpcb.o open.o	 ovfloff.o ovflon.o panic.o		 pcreate.o pcount.o pdelete.o pinit.o	 poolinit.o prdump.o preceive.o		 preset.o procreg.o psend.o		 ptclear.o putc.o			 qdump.o qmapinit.o queue.o		 rarp_in.o read.o			 ready.o	receive.o recvclr.o		 recvtim.o remove.o rename.o		 resched.o resume.o			 rfalloc.o rfclose.o rfcntl.o rfdump.o	 rfgetc.o rfinit.o rfio.o rfmkpac.o	 rfopen.o rfputc.o rfread.o rfseek.o	 rfsend.o rfwrite.o route.o		 rwho.o rwhod.o rwhoind.o		 scount.o screate.o sdelete.o seek.o	 send.o sendf.o setdev.o setnok.o sh.o	 signal.o signaln.o sizmem.o sleep.o	 sleep10.o sndrarp.o sreset.o		 ssclock.o suspend.o tdump.o		 ttycntl.o ttygetc.o ttyiin.o ttyinit.o	 ttyoin.o ttyopen.o ttyputc.o ttyread.o	 ttywrite.o				 udpecho.o udpsend.o udpnxtp.o		 unmount.o unsleep.o userret.o		 vaxcons.o				 vcucntl.o vcuiin.o vcuinit.o vcuoin.o	 vcuputc.o vcuwrite.o			 wait.o wakeup.o write.o xdone.o
+ranlib libx.a
+/lib/cpp -I../h lowcore.s   	| as -o lowcore.o
+/lib/cpp -I../h startup.s   	| as -o startup.o
+/bin/cc -O -c -I../h	initialize.c
+/bin/cc -O -c -I../h	conf.c
+/bin/ld -r -X lowcore.o startup.o initialize.o conf.o -o xinu.o
+/bin/cc -O -c -I../h	test.c
+/bin/ld -X -e start xinu.o test.o libx.a /usr/Xinu/lib/libvxc.a libx.a
+./Mknlist ,nm
+./Checkup
+Checking up...
+Checking for missing/extra .o files...
+145d144
+< sh
+Checking .c headers...
+Checking .s headers...
+Checking .h headers...
+Checkup done...
+size *.o a.out > ,sizes
+./Dosizes
+lint -n -I../h adump.c arp_in.c arpfind.c arpinit.c	 ascdate.c				 bpdump.c blkcopy.c			 blkequ.c chprio.c ckmode.c clkinit.c	 close.c	conf.c control.c		 create.c				 devdump.c				 dgalloc.c dgclose.c dgcntl.c dgdump.c	 dginit.c dgmcntl.c dgmopen.c dgparse.c	 dgread.c dgwrite.c			 doprnt.c dot2ip.c			 ethinit.c ethinter.c			 ethread.c ethrstrt.c ethstrt.c		 ethwrite.c ethwstrt.c			 freebuf.c freemem.c			 getaddr.c getbuf.c getc.c		 getitem.c 				 getmem.c getname.c getnet.c getpath.c	 getpid.c getprio.c getstk.c gettime.c	 getutim.c icmp_in.c			 init.c initialize.c insert.c insertd.c	 ioerr.c ioinit.c ionull.c		 ipsend.c ip_in.c ip2name.c		 kill.c kprintf.c			 mark.c mdump.c mkarp.c mkpool.c mount.c	 naminit.c nammap.c namopen.c namrepl.c	 ndump.c netdump.c netin.c		 netinit.c netnum.c netout.c		 newqueue.c nqalloc.c nullpcb.c open.c	 ovfloff.c ovflon.c			 pdelete.c pcreate.c pcount.c pinit.c	 poolinit.c prdump.c preceive.c		 preset.c procreg.c psend.c		 ptclear.c putc.c			 qdump.c qmapinit.c queue.c		 rarp_in.c				 read.c ready.c receive.c		 recvclr.c				 recvtim.c remove.c rename.c		 resched.c resume.c			 rfalloc.c rfclose.c rfcntl.c rfdump.c	 rfgetc.c rfinit.c rfio.c rfmkpac.c	 rfopen.c rfputc.c rfread.c rfseek.c	 rfsend.c rfwrite.c			 route.c rwho.c rwhod.c			 rwhoind.c 				 scount.c screate.c sdelete.c seek.c	 send.c sendf.c setdev.c setnok.c	 signal.c signaln.c sleep.c sleep10.c	 sndrarp.c sreset.c ssclock.c		 suspend.c tdump.c			 ttycntl.c ttygetc.c ttyiin.c ttyinit.c	 ttyoin.c ttyopen.c ttyputc.c ttyread.c	 ttywrite.c				 udpecho.c udpsend.c udpnxtp.c		 unmount.c unsleep.c userret.c 		 vaxcons.c				 vcucntl.c vcuiin.c vcuinit.c vcuoin.c	 vcuputc.c vcuwrite.c			 wait.c wakeup.c write.c xdone.c | ./Flint > ,lint
+/bin/cp libx.a /usr/Xinu/lib/libx.a
+/usr/bin/ranlib /usr/Xinu/lib/libx.a
+/bin/cp xinu.o /usr/Xinu/lib

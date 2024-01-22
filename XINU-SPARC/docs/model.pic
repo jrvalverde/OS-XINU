@@ -1,0 +1,136 @@
+.PS
+
+mawid = .8i
+smwid = mawid
+smht  = .5i
+lgwid = mawid
+lght = mawid
+dktwid = .4i
+dktht = .2i
+dkht = .3i
+dkdist = .2i
+lanlen = 5i
+linelen = .3i
+rmmpos1 = 1/6
+rmmpos2 = 5/6
+fspos = 1/2
+numcl = 3
+dotsize = .01i
+
+
+define machdiskless X
+	$3: box wid $1 ht $2 $4 $5 $6
+X
+
+define mach X
+	$3: box wid $1 ht $2 $4 $5 $6
+	move to $3.r
+	right
+	line right dkdist
+	Dk0: box invis wid dktwid ht dkht
+	ellipse wid dktwid ht dktht at 1/2 <Dk0.nw, Dk0.ne>
+	arc from Dk0.sw to Dk0.se wid dktwid ht dktht
+	line from Dk0.nw to Dk0.sw
+	line from Dk0.ne to Dk0.se
+	move to last line.c
+X
+
+define sm X
+	mach(smwid, smht, $1, $2, $3, $4)
+X
+
+define smdiskless X
+	machdiskless(smwid, smht, $1, $2, $3, $4)
+X
+
+define lg X
+	mach(lgwid, lght, $1, $2, $3, $4)
+X
+
+define lgdiskless X
+	machdiskless(lgwid, lght, $1, $2, $3, $4)
+X
+
+
+define mvtoclient X
+	move to $1/(numcl+2) <$2.l, $2.r>
+X
+
+define drawdots X
+	Cbox: box invis wid smwid*(2/3)
+	circle rad dotsize at Cbox.l
+	circle rad dotsize at Cbox.c
+	circle rad dotsize at Cbox.r
+X
+
+#---------------------------------------------------------------------------
+#			 Begin Picture
+#---------------------------------------------------------------------------
+
+Lan: line right lanlen
+"LAN" at (0,.1) + Lan.r
+
+move to rmmpos1 <Lan.l, Lan.r>
+up; line linelen
+	Rms: box wid 1.1i ht .9i
+	"Remote Memory" at 1/3 <Rms.n, Rms.c>
+	"Server" at 2/3 <Rms.n, Rms.c>
+	move to 3/8 <Rms.w, Rms.sw>
+	move right .1i 
+	box dotted wid .9i ht .4 "Very Large" "Memory"
+	move to Rms.r
+	right
+	line right dkdist
+	Dk0: box invis wid dktwid ht dkht
+	ellipse wid dktwid ht dktht at 1/2 <Dk0.nw, Dk0.ne>
+	arc from Dk0.sw to Dk0.se wid dktwid ht dktht
+	line from Dk0.nw to Dk0.sw
+	line from Dk0.ne to Dk0.se
+	move to last line.c
+
+
+move to fspos <Lan.l, Lan.r>
+up; line linelen
+lg(Fs, "File", "Server")
+
+move to rmmpos2 <Lan.l, Lan.r>
+up; line linelen
+	Rms: box wid 1.1i ht .9i
+	"Remote Memory" at 1/3 <Rms.n, Rms.c>
+	"Server" at 2/3 <Rms.n, Rms.c>
+	move to 3/8 <Rms.w, Rms.sw>
+	move right .1i 
+	box dotted wid .9i ht .4 "Very Large" "Memory"
+	move to Rms.r
+	right
+	line right dkdist
+	Dk0: box invis wid dktwid ht dkht
+	ellipse wid dktwid ht dktht at 1/2 <Dk0.nw, Dk0.ne>
+	arc from Dk0.sw to Dk0.se wid dktwid ht dktht
+	line from Dk0.nw to Dk0.sw
+	line from Dk0.ne to Dk0.se
+	move to last line.c
+
+dktwid = .3i
+dktht = .1i
+dkht = .2i
+dkdist = .1i
+
+mvtoclient(1, Lan)
+down; line linelen;
+smdiskless(Cl1, "Client")
+
+mvtoclient(2, Lan)
+move down linelen
+drawdots
+
+mvtoclient(3, Lan)
+down; line linelen;
+smdiskless(Cl2, "Client")
+
+mvtoclient(4, Lan)
+down; line linelen;
+sm(Cl4, "Client")
+
+
+.PE

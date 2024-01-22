@@ -1,0 +1,11 @@
+.TH REGEX 3
+.SH NOTE
+The routines in this package --
+.I re_comp
+and
+.I re_exec --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+regex(3) of the UNIX man pages

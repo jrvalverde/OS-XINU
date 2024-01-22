@@ -1,0 +1,5 @@
+.TH SEND 2CCC
+.SH USE INSTEAD
+.I tsend(2CCC)
+or
+.I tsendf.

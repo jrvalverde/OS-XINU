@@ -1,0 +1,14 @@
+.TH GETPROTOENT 3
+.SH NOTE
+The routines in this package --
+.I getprotoent,
+.I endprotoent,
+.I getprotobyname,
+.I getprotobynumber,
+and
+.I setprotoent --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+getprotoent(3N) of the UNIX man pages

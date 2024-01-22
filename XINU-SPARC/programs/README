@@ -1,0 +1,57 @@
+VM Xinu User Level Programs README - {Xinu-directory}/programs/README
+--------------------------------------------------------------------------
+
+This directory tree contains VM Xinu programs.  Moreover, it can be
+used as the root directory for VM Xinu.  That is, mount / on RFILSYS
+(or NFS) {THIS-DIR}, where {THIS-DIR} is the directory name this
+README file is in.  You can do this from the VM Xinu shell by typing
+the command
+
+	mount / NFS "{NFS-server-host}:{file-system}:{THIS-DIR}"
+or
+	mount / RFILSYS {THIS-DIR}	/* if you use RFS */
+
+if it is not already mounted.
+(Note: You can modify file src/sys/net/rfs/naminit.c to mount it for you.)
+
+To make the programs in this directory:
+
+1. Make the 3 libraries and install them by:
+	cd {THIS-DIR}/src/lib/unixsyscall
+	make install
+	cd {THIS-DIR}/src/lib/libxc
+	make install
+	cd {THIS-DIR}/src/lib/readline/src
+	make install
+
+2. Make each program and install it by:
+
+	cd {THIS-DIR}/src/new/{PROGNAME}
+		where {PROGNAME} is the program name
+	make install
+
+	Do this for each program
+
+3. To write your own program:
+	Write your program just as you would a unix program. You may
+	use many of the normal unix system calls.  You may also call
+	the normal xinu system calls (all xinu system calls begin with
+	an x (i.e. xsuspend, xresume, xsend, xreceive, etc) to avoid
+	confusion with unix system call names).  Then link them with
+	the 2 libraries mentioned above. 
+
+
+NOTE: 	The unixsyscall library is a unix simulation library that emulates
+	some of the unix kernel calls.  The libxc library is a small
+	public domain subset of the normal C library.  This is usually
+	enough to write simple programs like the ones found in this
+	directory.
+
+	If you have Sun source code for the normal C library, we
+	encourage you to take parts (in particular the stdio routines
+	and the general routines (gen)) and compile them into a little
+	more substantial C library.  However, do not attempt to use
+	the entire "normal" C library because it makes unix kernel
+	calls that are not supported by our unix simulation library
+	unixsyscall.a (it also may expect a floating point unit).
+

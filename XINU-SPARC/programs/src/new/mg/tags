@@ -1,0 +1,349 @@
+CCHR	chrdef.h	/^#define CCHR(x)		((x) ^ 0x40)	\/* CCHR('?') == DEL /
+CHARMASK	chrdef.h	/^#define	CHARMASK(c)	((unsigned char) (c))$/
+CompressDir	chdir.c	/^static CompressDir(dir)$/
+INIT	macro.c	/^#define INIT(i) = (i)$/
+ISCTRL	chrdef.h	/^#define ISCTRL(c)	((cinfo[CHARMASK(c)]&_C)!=0)$/
+ISDIGIT	chrdef.h	/^#define	ISDIGIT(c)	((cinfo[CHARMASK(c)]&_D)!=0)$/
+ISEOSP	chrdef.h	/^#define ISEOSP(c)	((cinfo[CHARMASK(c)]&_P)!=0)$/
+ISLOWER	chrdef.h	/^#define ISLOWER(c)	((cinfo[CHARMASK(c)]&_L)!=0)$/
+ISUPPER	chrdef.h	/^#define ISUPPER(c)	((cinfo[CHARMASK(c)]&_U)!=0)$/
+ISWORD	chrdef.h	/^#define ISWORD(c)	((cinfo[CHARMASK(c)]&_W)!=0)$/
+KEYMAPE	kbd.h	/^#define KEYMAPE(NUM)	{\\$/
+MALLOCROUND	sysdef.h	/^#define MALLOCROUND(m)	(m+=7,m&=~7)	\/* round up to/
+MakeEnvString	chdir.c	/^char *MakeEnvString(key, val)$/
+Mmain	main.c	/^main(argc, argv)$/
+Mregex	regex.c	/^main ()$/
+OFFSET	line.c	/^#define OFFSET(type,member) ((char *)&(((type *)0)/
+PATFETCH	regex.c	/^#define PATFETCH(c) \\$/
+PATFETCH_RAW	regex.c	/^#define PATFETCH_RAW(c) \\$/
+PATPUSH	regex.c	/^#define PATPUSH(ch) (*b++ = (char) (ch))$/
+ROUND2	keymap.c	/^#define ROUND2(x) (x<128?(x<64?32:64):(x<256?128:2/
+SIGN_EXTEND_CHAR	regex.c	/^#define SIGN_EXTEND_CHAR(x) (x)$/
+SYNTAX	regex.c	/^#define SYNTAX(c) re_syntax_table[c]$/
+TOLOWER	chrdef.h	/^#define TOLOWER(c)	((c)+0x20)$/
+TOUPPER	chrdef.h	/^#define TOUPPER(c)	((c)-0x20)$/
+abort	ttyio.c	/^#define abort()	(exit(1))$/
+addline	buffer.c	/^addline(bp, text) register BUFFER *bp; char *text;/
+adjustname	fileio.c	/^char *adjustname(fn)$/
+alloca	alloca.c	/^alloca (size)			\/* returns pointer to storage *\/$/
+anycb	buffer.c	/^anycb(f) {$/
+apropos_command	help.c	/^apropos_command(f, n)$/
+back1page	basic.c	/^back1page(f, n)$/
+backchar	basic.c	/^backchar(f, n)$/
+backdel	random.c	/^backdel(f, n)$/
+backisearch	search.c	/^backisearch(f, n)$/
+backline	basic.c	/^backline(f, n)$/
+backpage	basic.c	/^backpage(f, n)$/
+backsearch	search.c	/^backsearch(f, n)$/
+backsrch	search.c	/^backsrch() {$/
+backword	word.c	/^backword(f, n)$/
+balance	match.c	/^static balance()$/
+bclear	buffer.c	/^bclear(bp) register BUFFER *bp; {$/
+bcmp_translate	regex.c	/^bcmp_translate (s1, s2, len, translate)$/
+bfind	buffer.c	/^bfind(bname, cflag) register char *bname; {$/
+bindfound	help.c	/^static VOID bindfound() {$/
+bindkey	extend.c	/^bindkey(mapp, fname, keys, kcount)$/
+bindtokey	extend.c	/^bindtokey(f, n)$/
+blinkparen	modes.c	/^blinkparen(f, n)$/
+bsmap	kbd.c	/^bsmap(f, n)$/
+bufferinsert	buffer.c	/^bufferinsert(f, n)$/
+buffsave	file.c	/^buffsave(bp) BUFFER *bp; {$/
+capword	word.c	/^capword(f, n)$/
+changedir	dir.c	/^changedir(f, n)$/
+changemode	modes.c	/^static int changemode(f, n, mode)$/
+charcost	tty.c	/^charcost (s) char *s; {$/
+chdir	chdir.c	/^chdir(dir)$/
+cntmatchlines	re_search.c	/^cntmatchlines(f, n) {$/
+cntnonmatchlines	re_search.c	/^cntnonmatchlines(f, n) {$/
+complete_function	keymap.c	/^complete_function(fname, c)$/
+complt	echo.c	/^static int complt(flags, c, buf, cpos)$/
+copy	fileio.c	/^copy(frname, toname)$/
+copyregion	region.c	/^copyregion(f, n)$/
+countmatches	re_search.c	/^countmatches(cond)$/
+ctrlg	main.c	/^ctrlg(f, n)$/
+d_copy	dired.c	/^d_copy(f, n)$/
+d_del	dired.c	/^d_del(f, n)$/
+d_expunge	dired.c	/^d_expunge(f, n)$/
+d_ffotherwindow	dired.c	/^d_ffotherwindow(f, n)$/
+d_findfile	dired.c	/^d_findfile(f, n)$/
+d_makename	fileio.c	/^d_makename(lp, fn)$/
+d_otherwindow	dired.c	/^d_otherwindow(f, n)$/
+d_rename	dired.c	/^d_rename(f, n)$/
+d_undel	dired.c	/^d_undel(f, n)$/
+d_undelbak	dired.c	/^d_undelbak(f, n)$/
+deblank	random.c	/^deblank(f, n)$/
+define_key	extend.c	/^define_key(f, n)$/
+definemacro	macro.c	/^definemacro(f, n)$/
+delbword	word.c	/^delbword(f, n)$/
+delfword	word.c	/^delfword(f, n)$/
+delmatchlines	re_search.c	/^delmatchlines(f, n) {$/
+delnonmatchlines	re_search.c	/^delnonmatchlines(f, n) {$/
+delwhite	random.c	/^delwhite(f, n)$/
+delwind	window.c	/^delwind(f, n)$/
+desckey	help.c	/^desckey(f, n)$/
+digit_argument	kbd.c	/^digit_argument(f, n)$/
+dired	dired.c	/^dired(f, n)$/
+dired_	fileio.c	/^BUFFER *dired_(dirname)$/
+dirinit	dir.c	/^dirinit()$/
+displaymatch	match.c	/^static VOID displaymatch(clp, cbo)$/
+do_meta	kbd.c	/^do_meta(f, n)$/
+dobind	extend.c	/^static int dobind(curmap, p, unbind)$/
+doin	kbd.c	/^doin()$/
+doscan	kbd.c	/^PF	doscan(map, c)$/
+edinit	main.c	/^edinit() {$/
+eerase	echo.c	/^eerase() {$/
+eformat	echo.c	/^eformat(fp, ap)$/
+enlargewind	window.c	/^enlargewind(f, n)$/
+eputc	echo.c	/^eputc(c)$/
+eputi	echo.c	/^eputi(i, r)$/
+eputl	echo.c	/^eputl(l, r)$/
+eputs	echo.c	/^eputs(s)$/
+eq	search.c	/^eq(bc, pc)$/
+eread	echo.c	/^eread(va_alist)$/
+ereply	echo.c	/^ereply(va_alist)$/
+error	regex.c	/^error (string)$/
+evalbuffer	extend.c	/^evalbuffer(f, n)$/
+evalexpr	extend.c	/^evalexpr(f, n)$/
+evalfile	extend.c	/^evalfile(f, n)$/
+ewprintf	echo.c	/^ewprintf(va_alist)$/
+excline	extend.c	/^excline(line)$/
+executemacro	macro.c	/^executemacro(f, n)$/
+extend	extend.c	/^extend(f, n)$/
+eyesno	echo.c	/^eyesno(sp) char *sp; {$/
+eyorn	echo.c	/^eyorn(sp) char *sp; {$/
+fakec	tty.c	/^fakec(c)$/
+fastgetc	fastgetc.c	/^int fastgetc(ffp)$/
+fbackupfile	fileio.c	/^fbackupfile(fn) char *fn; {$/
+ffclose	fileio.c	/^ffclose() {$/
+ffgetline	fileio.c	/^ffgetline(buf, nbuf, nbytes)$/
+ffputbuf	fileio.c	/^ffputbuf(bp)$/
+ffropen	fileio.c	/^ffropen(fn) char *fn; {$/
+ffwopen	fileio.c	/^ffwopen(fn) char *fn; {$/
+fileinsert	file.c	/^fileinsert(f, n)$/
+filesave	file.c	/^filesave(f, n)$/
+filevisit	file.c	/^filevisit(f, n)$/
+filewrite	file.c	/^filewrite(f, n)$/
+fillmode	modes.c	/^fillmode(f, n)$/
+fillpara	paragraph.c	/^fillpara(f, n)$/
+fillword	paragraph.c	/^fillword(f, n)$/
+find_stack_direction	alloca.c	/^find_stack_direction (\/* void *\/)$/
+findbind	help.c	/^static VOID findbind(funct, ind, map)$/
+findbuffer	file.c	/^findbuffer(fname)$/
+finishmacro	macro.c	/^finishmacro(f, n)$/
+fixmap	extend.c	/^static VOID fixmap(curmap, mp, mt)$/
+forw1page	basic.c	/^forw1page(f, n)$/
+forwchar	basic.c	/^forwchar(f, n)$/
+forwdel	random.c	/^forwdel(f, n)$/
+forwisearch	search.c	/^forwisearch(f, n)$/
+forwline	basic.c	/^forwline(f, n)$/
+forwpage	basic.c	/^forwpage(f, n)$/
+forwsearch	search.c	/^forwsearch(f, n)$/
+forwsrch	search.c	/^forwsrch() {$/
+forwword	word.c	/^forwword(f, n)$/
+function_name	keymap.c	/^char *function_name(fpoint)$/
+getcolpos	random.c	/^getcolpos() {$/
+getgoal	basic.c	/^getgoal(dlp) register LINE *dlp; {$/
+getkbd	ttydef.h	/^#define getkbd()	(ttgetc())$/
+getkey	kbd.c	/^int getkey(flag)$/
+getpwnam	fileio.c	/^#define getpwnam(x)	(0)$/
+getregion	region.c	/^getregion(rp) register REGION *rp; {$/
+gettermtype	sysdef.h	/^#define	gettermtype()	getenv("TERM")	\/* determine /
+getwd	getwd.c	/^char *getwd()$/
+getxtra	echo.c	/^getxtra(lp1, lp2, cpos, wflag) register LIST *lp1,/
+gotobob	basic.c	/^gotobob(f, n)$/
+gotobol	basic.c	/^gotobol(f, n)$/
+gotobop	paragraph.c	/^gotobop(f, n)$/
+gotoeob	basic.c	/^gotoeob(f, n)$/
+gotoeol	basic.c	/^gotoeol(f, n)$/
+gotoeop	paragraph.c	/^gotoeop(f, n)$/
+gotoline	basic.c	/^gotoline(f, n)$/
+h2vax	ls.c	/^#define h2vax(x) (unsigned) ((unsigned) ((x)>>8) +/
+hash	display.c	/^hash(vp) register VIDEO *vp; {$/
+help_help	help.c	/^help_help(f, n)$/
+indent	random.c	/^indent(f, n)$/
+indentmode	modes.c	/^indentmode(f, n)$/
+init_syntax_once	regex.c	/^init_syntax_once ()$/
+insert	extend.c	/^insert(f, n)$/
+insert_jump	regex.c	/^insert_jump (op, from, to, current_end)$/
+insertfile	file.c	/^insertfile(fname, newname) char fname[], newname[]/
+inword	word.c	/^inword() {$/
+is_cpush	search.c	/^is_cpush(cmd) register int cmd; {$/
+is_dspl	search.c	/^is_dspl(prompt, flag) char *prompt; {$/
+is_find	search.c	/^is_find(dir) register int dir; {$/
+is_lpush	search.c	/^is_lpush() {$/
+is_peek	search.c	/^is_peek() {$/
+is_pop	search.c	/^is_pop() {$/
+is_prompt	search.c	/^is_prompt(dir, flag, success) {$/
+is_undo	search.c	/^is_undo(pptr, dir) register int *pptr; register in/
+isearch	search.c	/^isearch(dir) {$/
+isetmark	basic.c	/^isetmark()$/
+itor	buffer.c	/^static RSIZE itor(buf, width, num)$/
+itos	file.c	/^static char *itos(bufp, num)$/
+justone	random.c	/^justone(f, n) {$/
+kdelete	line.c	/^kdelete() {$/
+keyname	cinfo.c	/^char *keyname(cp, k)$/
+kgrow	line.c	/^kgrow(back) {$/
+killbuffer	buffer.c	/^killbuffer(f, n)$/
+killline	random.c	/^killline(f, n) {$/
+killmatches	re_search.c	/^killmatches(cond)$/
+killpara	paragraph.c	/^killpara(f, n)$/
+killregion	region.c	/^killregion(f, n)$/
+kinsert	line.c	/^kinsert(c, dir) {$/
+kremove	line.c	/^kremove(n) {$/
+lalloc	line.c	/^lalloc(used) register int used; {$/
+lallocx	line.c	/^lallocx(used)$/
+lback	def.h	/^#define lback(lp)	((lp)->l_bp)$/
+lchange	line.c	/^lchange(flag) register int flag; {$/
+ldelete	line.c	/^ldelete(n, kflag) RSIZE n; {$/
+ldelnewline	line.c	/^ldelnewline() {$/
+lforw	def.h	/^#define lforw(lp)	((lp)->l_fp)$/
+lfree	line.c	/^lfree(lp) register LINE *lp; {$/
+lgetc	def.h	/^#define lgetc(lp, n)	(CHARMASK((lp)->l_text[(n)]))/
+linsert	line.c	/^linsert(n, c)$/
+listbuffers	buffer.c	/^listbuffers(f, n)$/
+llength	def.h	/^#define llength(lp)	((lp)->l_used)$/
+lnewline	line.c	/^lnewline()$/
+load	extend.c	/^load(fname) char *fname; {$/
+local_ls	ls.c	/^int local_ls(bp, dname)$/
+localbind	extend.c	/^localbind(f, n)$/
+localunbind	extend.c	/^localunbind(f, n)$/
+lowerregion	region.c	/^lowerregion(f, n)$/
+lowerword	word.c	/^lowerword(f, n)$/
+lputc	def.h	/^#define lputc(lp, n, c) ((lp)->l_text[(n)]=(c))$/
+lreplace	line.c	/^lreplace(plen, st, f)$/
+ltext	def.h	/^#define ltext(lp)	((lp)->l_text)$/
+makebkfile	file.c	/^makebkfile(f, n)$/
+makelist	buffer.c	/^makelist() {$/
+makename	file.c	/^makename(bname, fname) char bname[]; char fname[];/
+map_name	keymap.c	/^char *map_name(map)$/
+modeline	display.c	/^modeline(wp) register WINDOW *wp; {$/
+name_fent	keymap.c	/^static	name_fent(fname, flag)$/
+name_function	keymap.c	/^PF	name_function(fname)$/
+name_map	keymap.c	/^KEYMAP *name_map(name)$/
+name_mode	keymap.c	/^MAPS *name_mode(name)$/
+negative_argument	kbd.c	/^negative_argument(f, n)$/
+newline	random.c	/^newline(f, n)$/
+nextwind	window.c	/^nextwind(f, n)$/
+notabmode	modes.c	/^notabmode(f, n)$/
+notmodified	buffer.c	/^notmodified(f, n)$/
+onlywind	window.c	/^onlywind(f, n)$/
+openline	random.c	/^openline(f, n)$/
+overwrite	modes.c	/^overwrite(f, n)$/
+pagenext	basic.c	/^pagenext(f, n)$/
+panic	ttyio.c	/^panic(s) char *s; {$/
+parsetoken	extend.c	/^parsetoken(s)$/
+petersfunc	re_search.c	/^petersfunc(f, n) {$/
+popbuf	buffer.c	/^popbuf(bp) register BUFFER *bp; {$/
+popbuftop	buffer.c	/^popbuftop(bp)$/
+poptobuffer	buffer.c	/^poptobuffer(f, n)$/
+poptofile	file.c	/^poptofile(f, n)$/
+prefixregion	region.c	/^prefixregion(f, n)$/
+prevwind	window.c	/^prevwind(f, n)$/
+print_buf	regex.c	/^print_buf (bufp)$/
+printchar	regex.c	/^printchar (c)$/
+putpad	ttydef.h	/^#define	putpad(str, num)	tputs(str, num, ttputc)$/
+queryrepl	search.c	/^queryrepl(f, n)$/
+quit	main.c	/^quit(f, n)$/
+quote	kbd.c	/^quote(f, n)$/
+re_backsearch	re_search.c	/^re_backsearch(f, n) {$/
+re_backsrch	re_search.c	/^re_backsrch() {$/
+re_comp	regex.c	/^re_comp (s)$/
+re_compile_fastmap	regex.c	/^re_compile_fastmap (bufp)$/
+re_compile_pattern	regex.c	/^re_compile_pattern (pattern, size, bufp)$/
+re_doreplace	re_search.c	/^re_doreplace(plen, st, f)$/
+re_exec	regex.c	/^re_exec (s)$/
+re_forwsearch	re_search.c	/^re_forwsearch(f, n) {$/
+re_forwsrch	re_search.c	/^re_forwsrch() {$/
+re_match	regex.c	/^re_match (pbufp, string, size, pos, regs)$/
+re_match_2	regex.c	/^re_match_2 (pbufp, string1, size1, string2, size2,/
+re_queryrepl	re_search.c	/^re_queryrepl(f, n) {$/
+re_readpattern	re_search.c	/^re_readpattern(prompt) char *prompt; {$/
+re_search	regex.c	/^re_search (pbufp, string, size, startpos, range, r/
+re_search_2	regex.c	/^re_search_2 (pbufp, string1, size1, string2, size2/
+re_searchagain	re_search.c	/^re_searchagain(f, n) {$/
+readin	file.c	/^readin(fname) char *fname; {$/
+readpattern	search.c	/^readpattern(prompt) char *prompt; {$/
+realocmap	extend.c	/^static KEYMAP *realocmap(curmap)$/
+refresh	window.c	/^refresh(f, n)$/
+remap	extend.c	/^static int remap(curmap, c, funct, pref_map)$/
+reposition	window.c	/^reposition(f, n)$/
+rescan	kbd.c	/^rescan(f, n)$/
+savebuffers	buffer.c	/^savebuffers(f, n)$/
+searchagain	search.c	/^searchagain(f, n)$/
+selfinsert	kbd.c	/^selfinsert(f, n)$/
+set_default_mode	modes.c	/^set_default_mode(f, n)$/
+setcasefold	re_search.c	/^setcasefold(f, n) {$/
+setfillcol	paragraph.c	/^setfillcol(f, n) {$/
+setgoal	basic.c	/^setgoal() {$/
+setmark	basic.c	/^setmark(f, n)$/
+setprefix	region.c	/^setprefix(f, n)$/
+setscores	display.c	/^setscores(offs, size) {$/
+setsize	region.c	/^setsize(rp, size) register REGION *rp; register RS/
+setttysize	tty.c	/^static setttysize() {$/
+showall	help.c	/^static	int showall(ind, map)$/
+showbuffer	buffer.c	/^showbuffer(bp, wp, flags) register BUFFER *bp; reg/
+showcpos	random.c	/^showcpos(f, n)$/
+showcwdir	dir.c	/^showcwdir(f, n)$/
+showmatch	match.c	/^showmatch(f, n)$/
+showversion	version.c	/^showversion(f, n)$/
+shrinkwind	window.c	/^shrinkwind(f, n)$/
+skipwhite	extend.c	/^skipwhite(s)$/
+sortlist	ls.c	/^sortlist(list, count)$/
+space_to_tabstop	random.c	/^space_to_tabstop(f, n)$/
+spawncli	spawn.c	/^spawncli(f, n) {$/
+splitwind	window.c	/^splitwind(f, n)$/
+startupfile	fileio.c	/^startupfile(suffix)$/
+store_jump	regex.c	/^store_jump (from, opcode, to)$/
+swapmark	basic.c	/^swapmark(f, n)$/
+traceback	display.c	/^VOID traceback(offs, size, i, j) {$/
+ttbeep	tty.c	/^ttbeep() {$/
+ttclose	ttyio.c	/^ttclose() {$/
+ttcolor	tty.c	/^ttcolor(color) register int color; {$/
+ttcooked	ttyio.c	/^ttcooked() {$/
+ttdell	tty.c	/^ttdell(row, bot, nchunk)$/
+tteeol	tty.c	/^tteeol() {$/
+tteeop	tty.c	/^tteeop() {$/
+ttflush	ttyio.c	/^ttflush() {$/
+ttgetc	ttyio.c	/^ttgetc() {$/
+ttinit	tty.c	/^ttinit() {$/
+ttinsl	tty.c	/^ttinsl(row, bot, nchunk) {$/
+ttmove	tty.c	/^ttmove(row, col) {$/
+ttnowindow	tty.c	/^ttnowindow()$/
+ttopen	ttyio.c	/^ttopen() {$/
+ttputc	ttyio.c	/^ttputc(c)$/
+ttraw	ttyio.c	/^ttraw() {$/
+ttresize	tty.c	/^ttresize() {$/
+tttidy	tty.c	/^tttidy() {$/
+ttwait	ttyio.c	/^int ttwait()$/
+ttwindow	tty.c	/^ttwindow(top, bot)$/
+ttykeymapinit	ttydef.h	/^#define ttykeymapinit() {}$/
+ttykeymaptidy	ttykbd.c	/^ttykeymaptidy()$/
+twiddle	random.c	/^twiddle(f, n)$/
+typeahead	ttyio.c	/^typeahead() {$/
+ucopy	display.c	/^ucopy(vvp, pvp) register VIDEO *vvp; register VIDE/
+uline	display.c	/^VOID uline(row, vvp, pvp) VIDEO *vvp; VIDEO *pvp; /
+unbindtokey	extend.c	/^unbindtokey(f, n)$/
+ungetkey	kbd.c	/^VOID	ungetkey(c)$/
+universal_argument	kbd.c	/^universal_argument(f, n)$/
+unlinkdir	dired.c	/^#define unlinkdir(x)	(0)$/
+update	display.c	/^update() {$/
+updext	display.c	/^updext(currow, curcol)$/
+upmodes	file.c	/^upmodes(bp) register BUFFER *bp; {$/
+upperregion	region.c	/^upperregion(f, n)$/
+upperword	word.c	/^upperword(f, n)$/
+usebuffer	buffer.c	/^usebuffer(f, n)$/
+vax2h	ls.c	/^#define vax2h(x) (unsigned) ((unsigned) ((x)>>8) +/
+veread	echo.c	/^static veread(fp, buf, nbuf, flag, ap) char *fp; c/
+vteeol	display.c	/^vteeol() {$/
+vtinit	display.c	/^vtinit() {$/
+vtmove	display.c	/^vtmove(row, col) {$/
+vtputc	display.c	/^vtputc(c) register int c; {$/
+vtpute	display.c	/^vtpute(c)$/
+vtputs	display.c	/^vtputs(s) register char *s; {$/
+vttidy	display.c	/^vttidy() {$/
+wallchart	help.c	/^wallchart(f, n)$/
+wpopup	window.c	/^wpopup() {$/
+writeout	file.c	/^writeout(bp, fn) register BUFFER *bp; char *fn; {$/
+xfree	chdir.c	/^#define xfree(x)	free(x)$/
+xmalloc	xmalloc.c	/^void *xmalloc(size)$/
+yank	random.c	/^yank(f, n)$/

@@ -1,0 +1,222 @@
+
+	VM Xinu (version 8.1) for Sun-4 -- install.README
+	-------------------------------------------------
+
+Installation Details
+--------------------
+
+This is file {Xinu-directory}/xinu/install/README.  It contains
+instructions for installing the Xinu software and recompiling
+it.  These instructions instructions must be followed:
+(a) after the distribution tape has been read in, or
+(b) after the Xinu directory has been moved.
+
+This file tells you how to reconfigure the system, recompile the
+kernel and all the servers, start the servers, and then download the
+operating system kernel and boot it.
+
+
+Step 1: Reconfiguring The System
+--------------------------------
+	To reconfigure the system you will need to edit the file
+
+	     {Xinu-directory}/xinu/src/sys/h/netconf.default.h
+
+	At the bottom of the file are the internet addresses for the
+	various servers that the VM Xinu kernel will try and contact
+	(see {Xinu-directory}/xinu/README for more information).  If
+	you do not know the addresses of the various servers, ask your
+	local networking guru.  The addresses you will need to know are:
+
+		GATEWAY_DEFAULT	 - gateway for your network
+		TSERVER_DEFAULT  - time server
+		NSERVER_DEFAULT  - domain name server
+		MYIPADDR_DEFAULT - IP address of the host running Xinu
+
+	You will also need to decide on a place to run the remote file
+	server and the page server (they run as unix processes on suns
+	or vaxes), then set the remaining two addresses in the
+	Configuration file:
+
+		RSERVER_DEFAULT	 - remote file server address
+		PGSERVER_DEFAULT - page server address
+
+	If you use NFS for paging and file storage,
+
+		RSERVER_DEFAULT	 - NFS file server address for file storage
+		PGSERVER_DEFAULT - NFS file server address for swap space
+
+
+	One other file you will probably like to change is
+	{Xinu-directory}/xinu/src/sys/net/rfs/naminit.c which
+	initializes the xinu namespace to map onto the remote file
+	system and other devices.  You should change the lines:
+
+	mount("xinu/",	RFILSYS,	"/usr/xinu8/xinu/");
+	mount("/",	RFILSYS,	"/usr/xinu8/programs/");
+
+			to
+
+	mount("xinu/",	RFILSYS,	"{Xinu-directory}/xinu/");
+	mount("/",	RFILSYS,	"{Xinu-directory}/programs/");
+
+		        or
+
+	mount("xinu/", NFS, "{NFS-host}:{file-system}:{Xinu-directory}/xinu/");
+	mount("/",     NFS, "{NFS-host}:{file-system}:{Xinu-directory}/programs/");
+
+	(of course you should enter the xinu directory instead of
+	{Xinu-directory} in the above lines).  This will make the xinu
+	remote file system look much like a normal file system.
+
+	If you use NFS for paging (the default way), edit the file  
+	sys/h/nfspgio.h to specify the swap directory. The user-ID and
+	group-ID for accessing NFS files are set to "nobody" by default
+	in the sys/conf/Configuration file. Thus, you need to make the swap
+	directory world-readable and world-writable. Or you can change
+	the IDs in the sys/conf/Configuration file. 
+
+	You can also mount file systems using the shell command "mount".
+
+
+Step 2: Compiling the System:
+-----------------------------
+	Change to the source directory and execute the script
+	that rebuilds binaries:
+
+		cd {Xinu-directory}/xinu/src
+        	Makeall > make.out&
+
+	We suggest that you run it in background, as it 
+	may take more than 20 minutes on a SUN 4 SPARC
+	Also be warned that there are numerous programs in
+	the cross-development software that produce warning
+	messages when recompiled.  You do not need to be
+	superuser; only directories under {Xinu-directory}/xinu
+	are affected.
+
+
+Step 3: Setting Your PATH
+-------------------------
+	Add {Xinu-directory}/xinu/bin to your "path" so you can
+	execute	commands that are found there:
+
+	C-shell users type:
+
+		set path=( $path {Xinu-directory}/xinu/bin )
+		rehash
+
+	Bourne shell users type:
+
+		PATH=$PATH:{Xinu-directory}/xinu/bin
+		export PATH
+
+	To make Xinu commands accessible after your next
+	login, you must change the path assignment in your
+	.profile or .cshrc files.
+
+
+Step 4: Starting The Network Servers
+------------------------------------
+	(You can skip this section if you use NFS for paging and file storage.)
+
+	You need to start two servers, the Remote File Server (fs),
+	and the Page Server (psv).  You must run each server on
+	the machine you specified in the kernel "Configuration"
+	file in Step 1.  To run the servers, simply login to the machine
+	you want to run each server on and type
+
+		{Xinu-directory}/xinu/bin/fs
+
+				or
+
+		{Xinu-directory}/xinu/bin/psv -nd 4000 -lf psv.logfile
+
+	to start the remote file server or the page server (respectively).
+	See the manual pages for more details on options to these
+	programs.  We suggest that you use the "-nd" option for the
+	"psv" program which will limit the amount of memory it tries
+	to gobble up (-nd 4000 is usually a good setting).  Also note,
+	you may want to use the -p option to specify the UDP port,
+	especially if your /etc/services (or yellow pages services)
+	do not have the xinu remote file server UDP port or the xinu
+	page server UDP port listed for use with getservbyname().
+
+	Note: When you compiled the system in Step 2 above, the
+	"fs" and "psv" programs were also compiled, and so they
+	will be SUN 3/50 binaries.  If you want to run them on a vax
+	or another architecture, you must recompile them for
+	that architecture.  This can be done by running
+	"make install" in {Xinu-directory}/xinu/src/cmd/fs and
+	{Xinu-directory}/xinu/src/cmd/psv from the machine on which
+	you intend to run the server.
+
+
+Step 5: Connecting To The Backend Machine
+-----------------------------------------
+	Try the command "odt" (found in {Xinu-directory}/xinu/bin). It
+	connects your keyboard to serial line A so that
+	keystrokes go to the back end sun, and it's output
+	comes to your screen:
+
+		odt
+
+	To get the attention of the backend Sun, type backslash (\)
+	followed by null (CONTROL @).  The Sun will stop
+	execution and print a prompt (">").  You
+	are now talking to the Sun's monitor program.
+	(consult the vendor's manual for additional
+	information on the monitor commands).
+	To terminate the odt command, kill the
+	process with your normal interrupt character
+	(usually CONTROL-C or DELETE).
+
+	Note: the odt in {Xinu-directory}/xinu/bin has been
+	obsoleted by "distributed odt".  See the directory
+	{Xinu-directory}/xinu/contrib/distodt  for more
+	details.  You can use either one, however, distributed
+	odt is much more powerful.
+
+
+Step 6: Running VM Xinu
+-----------------------
+	Change to the directory {Xinu-directory}/xinu/src/sys
+	and download the vm xinu kernel:
+
+		cd {Xinu-directory}/xinu/src/sys
+		cp vmxinu /tftpboot
+		odt
+		b        /* monitor command */
+
+	It should come up running VM-Xinu (Version 8.1)
+	Type any user name to login, then type ? to
+	get help using the shell.
+	Type CONTROL-c to kill the odt command.
+
+
+Step 7: Compiling User Level Programs
+-------------------------------------
+	Several user level programs have been provided which can
+	be found in the directory tree {Xinu-directory}/programs.
+	See the file {Xinu-directory}/programs/README for
+	information on how to compile these programs.  Two libraries
+	are provided to make program writing easier: a unix simulation
+	library, and a (very small) C library.  Using these two
+	libraries, users can write programs that look very much like
+	unix programs (or easily convert unix programs).
+
+
+Step 8: Running User Level Programs
+-----------------------------------
+	Use odt to connect to the backend sun and boot VM Xinu and login.
+	To run a user level program, type the name of the
+	file  containing the program (in a.out format) at the xinu
+	shell prompt.  The xinu shell will map the file name you typed
+	through the namespace and onto the remote file system.  The
+	shell will load the file into memory and create a new process
+	to execute the program.
+
+
+Suggestions
+-----------
+   Suggestions and reports of problems are welcomed.

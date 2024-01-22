@@ -1,0 +1,33 @@
+/* test.c - main */
+
+#include <conf.h>
+#include <kernel.h>
+#include <tty.h>
+
+/*------------------------------------------------------------------------
+ *  main  --  exercise panic, using console "C"
+ *------------------------------------------------------------------------
+ */
+main()
+{
+	int	*try;
+
+	kprintf ("testing panic...\n");
+#ifdef	UVAXII
+	kprintf("cpmbx = %x\n", (int)*((short *)0x200b801c));
+#endif
+	kprintf("about to test halting:\n");
+	halt();
+	kprintf("hit a key for _panic test:\n");
+	control(CONSOLE, TCMODER);
+	getc(CONSOLE);
+	panic ("testing out panic");
+	kprintf("hit a key to force bus error\n");
+	getc(CONSOLE);
+	try = (int *)0xfffff000;
+	*try = 0;
+	kprintf("hit a key to jump to 0\n");
+	getc(CONSOLE);
+	asm ("jmp	lowcore");
+	kprintf("testing all done...\n");
+}

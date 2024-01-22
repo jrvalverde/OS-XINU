@@ -1,0 +1,30 @@
+This is file {ConC-dir}/man/README
+
+This directory contains manual pages for the ConcurrenC system
+and restricted UNIX routines.  Here is a list of the contents
+of each sub-directory:
+
+	INTRO		- an over-all introduction to ConcurrenC.
+
+	man0		- an introduction of how to use the ConcurrenC system.
+
+	man1		- an introduction of how to compile a ConcurrenC
+			  program as well as explanations of the example
+			  programs found in {ConC-dir}/example.
+
+	man2		- ConcurrenC and restricted UNIX system calls.
+
+	man3		- ConcurrenC and restricted UNIX library routines.
+
+	mand (DEBUG)	- ConcurrenC debugging routines.
+
+The INTRO is found in file INTRO/INTRO.
+
+The manual pages for introductions and ConcurrenC routines are found
+in files manN/<page>.Nccc, where N is either 0, 1, 2, or 3.
+
+The manual pages for ConcurrenC debugging routines are found in files
+mand/<page>.d .
+
+The manual pages for restricted UNIX routines are found in files
+manN/<page>.N, where N is either 2 or 3.

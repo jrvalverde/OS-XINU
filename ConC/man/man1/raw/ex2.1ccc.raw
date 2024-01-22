@@ -1,0 +1,11 @@
+.TH EX2 1CCC
+.SH NAME
+ex2 - example program 2
+.SH DESCRIPTION
+.I Ex2
+prints out "hello world" like
+.I ex1(1CCC)
+does, but it starts a dummy task before the printf,
+so the output is passed though the io_server.
+.SH SEE ALSO
+ex2(1CCC), tstart(2CCC)

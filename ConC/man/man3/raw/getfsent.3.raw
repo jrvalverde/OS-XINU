@@ -1,0 +1,15 @@
+.TH GETFSENT 3
+.SH NOTE
+The routines in this package --
+.I getfsent,
+.I endfsent,
+.I getfsfile,
+.I getfsspec,
+.I getfstype,
+and
+.I setfsent --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+getfsent(3X) of the UNIX man pages

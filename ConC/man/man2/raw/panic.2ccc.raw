@@ -1,0 +1,23 @@
+.TH PANIC 2CCC
+.SH NAME
+panic \- abort processing due to severe error
+.SH SYNOPSIS
+.nf
+.B int panic(message)
+.B char *message;
+.fi
+.SH DESCRIPTION
+.I Panic
+will print the character string
+.I message
+on stdout, dump the machine registers and top few stack locations,
+and exit.
+It uses
+.I kprintf
+rather than
+.I printf,
+so it may be called anywhere in
+the kernel (e.g., from an interrupt routine that may be executed
+by the null task).
+.SH SEE ALSO
+kprintf(DEBUG), printf(3)

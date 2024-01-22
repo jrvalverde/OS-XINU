@@ -1,0 +1,4 @@
+.TH WRITE 2CCC
+.SH REFER TO
+.I write(2)
+of the UNIX man pages.

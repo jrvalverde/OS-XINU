@@ -1,0 +1,20 @@
+: ' makeall  --  make all of src/sys for Xinu (the kernel)'
+
+echo
+echo '*** Making altall'
+echo '      making devs'
+cd devs; make altall; cd ..
+echo '      making misc'
+cd misc; make altall; cd ..
+echo '      making net'
+cd net; make altall; cd ..
+echo '      making shell'
+cd shell; make altall; cd ..
+echo '      making sys'
+cd sys; make altall; cd ..
+echo '      making vm'
+cd vm; make altall; cd ..
+echo '      making .'
+make altall
+
+

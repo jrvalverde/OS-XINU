@@ -1,0 +1,31 @@
+.TH EX4 1CCC
+.SH NAME
+ex4 - example program 4
+.SH DESCRIPTION
+.I Ex4
+simulates the Dining Philosophers' problem.
+There are 5 philosophers whose mission in life is to
+meditate for a random amount of time, wait for a spot at the
+table, wait for the left fork, wait for the right fork,
+eat for a random amount of time, then relinquish the right and
+left forks and leave the table.  Each philosopher must have
+both forks before he can start eating, and there is only
+one fork between any two philosophers.  In order to
+avoid a deadlock situation, a maximum of 4 philosophers are
+allowed at the table at any one time.
+.PP
+The restriction of having only 4 philosophers at the table at a time
+and the restriction that a fork can be used by only 1 philosopher
+at a time is easily controlled using semaphores -- one for
+the table (initially count 4) and one for each of the five forks
+(initially count 1).
+.PP
+The main task creates the semaphores then starts each of the
+philosopher tasks, passing an id number to the task.
+The tasks then go about there business in parallel.
+.PP
+The output from this program should be self-explanitory
+(although is might go by pretty fast in spots).
+.SH BUGS
+The output doesn't look too pretty.  But how can you do it
+in an intelligible way ??

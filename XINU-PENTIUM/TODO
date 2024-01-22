@@ -1,0 +1,11 @@
+- stacktrace(pid) + shell command
+- replace dgparse with dnparse
+- user finger info from login
+- HZ for clock
+
+
+long term:
+- write kputc/kgetc from scratch
+- add maxmem computation and set kernel stack to last 64K of mem
+- add page fault handler to discover stack overflows
+- MSDOS fs handler + disk drivers

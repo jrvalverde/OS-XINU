@@ -1,0 +1,8 @@
+.TH SIGVEC 2
+.SH NOTE
+The signals SIGALRM, SIGVTALRM, SIGIO, and SIGILL are unavailable
+in ConcurrenC.  Using these signals will result in an error return.
+.PP
+Other than this, refer to
+.I sigvec(2)
+of the UNIX man pages.

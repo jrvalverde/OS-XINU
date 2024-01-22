@@ -1,0 +1,30 @@
+for i in $*
+do sed 's/^[ \t][ \t]*//;/^\/\*/d;/^$/d;s/\/\*.*//;s/[ \t]*$//' < $i	| \
+   awk '$1 == "#define"		{print $2}
+
+	$1 == "unsigned"	{if ($2 == "int") print $3
+				 else print $2}
+
+	$1 == "extern"		{if ($2 == "int") print $3
+				 if ($2 == "short") print $3
+				 if ($2 == "char") print $3
+				 if ($2 == "Bool") print $3
+				 if ($2 == "struct") print $3, $4 }
+
+	$1 == "struct"		{print $2, $3}
+
+	$1 == "typedef"		{print $3}
+
+	$1 == "int"	||		\
+	$1 == "char"	||		\
+	$1 == "Bool"	||		\
+	$1 == "short"		{print $2}
+
+	$1 == "unsigned"	{if ($2 == "int" || $2 == "short")
+					print $3
+				 else	print $2}'			| \
+   sed 's/^[)(\*;\[\]]*//;s/(.*)//;s/\[.*\]//'				| \
+   sed 's/[}{;)( ]*$//;s/[}{;()\]\[\*]//g'				| \
+   tr ' ' '\012' | sort | uniq  > $i.id
+done
+

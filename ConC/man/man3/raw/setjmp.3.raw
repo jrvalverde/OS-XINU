@@ -1,0 +1,6 @@
+.TH SETJMP 3
+.SH NOTE
+.I Setjmp
+and
+.I longjmp
+are not available in ConcurrenC.

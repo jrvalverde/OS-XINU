@@ -1,0 +1,58 @@
+==== .Cc "2" "An Overview of Network Hardware" 11
+==== .sX "network" "hardware" "11"
+==== .sX "hardware" "network" "11"
+==== .Sc "2.1" "Introduction" 11
+==== .Sc "2.2" "Two Approaches to Network Communication" 11
+==== .iX "circuit switching" " " "11"
+==== .iX "packet switching" " " "11"
+==== .iX "packet" " " "12"
+==== .iX "network" " " "12"
+==== .Sc "2.3" "Long-Haul and Local-Area Networks" 12
+==== .iX "long-haul network" " " "12"
+==== .iX "local area network" " " "12"
+==== .Sc "2.4" "Ethernet Packet-Switched Network Technology" 13
+==== .iX "Ethernet" " " "13"
+==== .iX "ether" " " "13"
+==== .iX "repeater" " " "13"
+==== .sX "Ethernet" "repeater" "13"
+==== .sX "Ethernet" "tap" "13"
+==== .sX "tap" "Ethernet" "13"
+==== .iX "transceiver" " " "13"
+==== .sX "Ethernet" "transceiver" "13"
+==== .iX "host inteface" " " "13"
+==== .sX "Ethernet" "host interface" "13"
+==== .Sc "2.5" "Properties of an Ethernet" 14
+==== .iX "bus" " " "14"
+==== .iX "broadcast" " " "14"
+==== .sX "Ethernet" "broadcast" "14"
+==== .iX "CSMA" " " "14"
+==== .iX "carrier sense" " " "14"
+==== .Sc "2.6" "Collision Detection and Recovery" 14
+==== .iX "collision" " " "14"
+==== .sX "Ethernet" "collision" "14"
+==== .iX "collision" " " "14"
+==== .iX "CSMA-CD" " " "14"
+==== .Bc "2.6.1" "Ethernet Capacity" 14
+==== .Sc "2.7" "Ethernet Addresses" 15
+==== .sX "Ethernet" "address" "15"
+==== .sX "address" "Ethernet" "15"
+==== .sX "address" "physical" "15"
+==== .sX "address" "broadcast" "15"
+==== .iX "multicast address" " " "15"
+==== .sX "address" "multicast" "15"
+==== .Sc "2.8" "Ethernet Frame Format" 16
+==== .sX "Ethernet" "frame" "16"
+==== .iX "preamble" " " "16"
+==== .sX "Ethernet" "preamble" "16"
+==== .iX "CRC" " " "16"
+==== .sX "Ethernet" "CRC" "16"
+==== .Sc "2.9" "DEQNA Ethernet Interface" 16
+==== .iX "DEQNA" " " "16"
+==== .Bc "2.9.1" "DEQNA CSR" 16
+==== .Bc "2.9.2" "The DEQNA CSR Bits" 17
+==== .Sc "2.10" "Format of DEQNA Command Lists" 18
+==== .sX "DEQNA" "command list" "18"
+==== .Sc "2.11" "Summary" 19
+==== .Ec 19
+==== LAST 19 -- Chap. 2 
+==== PAGES 9 -- Chap. 2 

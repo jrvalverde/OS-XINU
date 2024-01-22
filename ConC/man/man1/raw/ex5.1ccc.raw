@@ -1,0 +1,20 @@
+.TH EX5 1CCC
+.SH NAME
+ex5 - example program 5
+.SH DESCRIPTION
+.I Ex5
+shows the non-blocking nature of ConcurrenC I/O.
+Two tasks read from input, while one task reads a line from a file,
+prints the line, sleeps 5 seconds, and repeats this until the
+other two tasks exit (when they see 'quit' entered).
+The input tasks do not block the output/sleeping tasks while they
+are waiting for input.
+.PP
+The program looks for its input in a file ./data/ex5.in.  If it finds
+this file, the output will be echoed into file ./data/ex5.out.
+If ./data5/in is not found, the program looks for input in ./ex5.in.
+If this is found, the output will be echoed into file ./ex5.out.
+If neither of these input files are found, a message to this
+effect is printed and the program exits.
+.PP
+The program prints out more information about itself.

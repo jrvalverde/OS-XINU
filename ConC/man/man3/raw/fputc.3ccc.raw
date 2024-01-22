@@ -1,0 +1,6 @@
+.TH FPUTC 3CCC
+.SH REFER TO
+.I fputc
+in
+.I putc(3S)
+of the UNIX man pages.

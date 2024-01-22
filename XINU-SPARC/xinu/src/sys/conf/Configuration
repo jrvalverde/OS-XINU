@@ -1,0 +1,243 @@
+/* Configuration - (device configuration specifications) */
+
+/* "type" declarations for both real- and pseudo- devices */
+
+/* terminals connected by serial lines */
+tty: 
+	on SLU		-i ttyinit	-o ionull	-c ionull
+			-r ttyread	-w ttywrite	-s ioerr
+			-n ttycntl	-g ttygetc	-p ttyputc
+			-iint ioerr	-oint ioerr
+
+
+/* Ethernet using a LANCE interface */
+eth:
+	on LANCE	-i ethinit	-o ioerr	-c ioerr 
+			-r ethread	-w ethwrite	-s ioerr
+			-n ethcntl	-g ioerr	-p ioerr
+			-iint ethinter	-oint ethinter
+
+/* Datagram interface to network (master device) */
+dgm:
+	on ETH		-i ionull	-o dgmopen	-c ioerr 
+			-r ioerr	-w ioerr	-s ioerr
+			-n dgmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A datagram "connection"  (pseudo-device returned by dgm open) */
+dg:
+	on ETH		-i dginit	-o ioerr	-c dgclose
+			-r dgread	-w dgwrite	-s ioerr
+			-n dgcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* RPC master device */
+rpcm:
+	on UDP		-i rpcminit	-o rpcmopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n rpcmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr
+
+/* RPC slave device */
+rpc:
+	on UDP		-i rpcinit	-o ioerr	-c rpcclose
+			-r rpcread	-w rpcwrite	-s ioerr
+			-n rpccntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr
+
+/* NFS master device (open to get nfs slave device) */
+nfsm:
+	on UDP		-i nfsminit	-o nfsmopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n nfsmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* NFS (pseudo-device returned by nfsm open) */
+nfs:
+	on UDP		-i nfsinit	-o ioerr	-c nfsclose 
+			-r nfsread	-w nfswrite	-s nfsseek
+			-n nfscntl	-g nfsgetc	-p nfsputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Streams interface to network (master device) */
+tcpm:
+	on ETH		-i ionull	-o tcpmopen	-c ioerr 
+			-r ioerr	-w ioerr	-s ioerr
+			-n tcpmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A tcp "connection"  (pseudo-device returned by tcpm open) */
+tcp:
+	on ETH		-i tcpinit	-o ioerr	-c tcpclose
+			-r tcpread	-w tcpwrite	-s ioerr
+			-n tcpcntl	-g tcpgetc	-p tcpputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Remote file system master device (open to get rf device) */
+rfm:
+	on DGM		-i ioerr	-o rfopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n rfcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A remote file (pseudo-device returned by rfm open) */
+rf:
+	on DGM		-i rfinit	-o ioerr	-c rfclose 
+			-r rfread	-w rfwrite	-s rfseek
+			-n rfcntl	-g rfgetc	-p rfputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Name system (topmost level of name resolution mechanism) */
+nam:
+	on TOP		-i naminit	-o namopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n ioerr	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+
+/* Null device, like /dev/null in Unix */
+nulldev:
+	on PHY		-i ionull	-o nullopen	-c ionull
+			-r nullread	-w nullwrite	-s ioerr
+			-n nullcntl	-g nullgetc	-p ionull
+			-iint ioerr	-oint ioerr
+
+%
+
+/************************************************/
+/*						*/ 
+/*	Physical Device Definitions		*/
+/*						*/ 
+/************************************************/
+CONSOLE		is tty  on SLU		csr=037764020004 ivec=0160 ovec=0160
+					   /* 0xffd02004      0x70      0x70 */
+ETHER		is eth	on LANCE	csr=037764200000 ivec=0124 ovec=0124
+					   /* 0xffd10000    0x54  0x54 */
+
+
+/* Pseudo device for the abstract (file) name space */
+NAMESPACE	is nam	on TOP
+
+
+/* the 'null' device */
+NULLDEV		is nulldev on PHY
+
+
+
+/************************************************/
+/*						*/ 
+/*	     TCP network interface		*/
+/*						*/ 
+/************************************************/
+TCP		is tcpm	on ETH
+TCP[10]		is tcp	on ETH
+
+
+/************************************************/
+/*						*/ 
+/*	Xinu's Remote File System		*/
+/*						*/ 
+/************************************************/
+RFILSYS		is rfm	on DGM
+RFILE[4]	is rf	on DGM
+
+
+/************************************************/
+/*						*/ 
+/*	Datagram network interface		*/
+/*						*/ 
+/************************************************/
+UDP		is dgm	on ETH
+DGRAM[30]	is dg	on ETH
+
+
+/************************************************/
+/*						*/ 
+/*	RPC interface				*/
+/*						*/ 
+/************************************************/
+RPC		is rpcm	on UDP
+RPC[20]		is rpc	on UDP
+
+
+/************************************************/
+/*						*/ 
+/*	NFS interface				*/
+/*						*/ 
+/************************************************/
+NFS		is nfsm	on UDP
+NFS[15]		is nfs	on UDP
+
+
+%
+
+/* Configuration and Size Constants */
+
+#define	NPROC		30		/* number of user processes	*/
+#define	NSEM		512		/* number of semaphores		*/
+#define	MEMMARK				/* define if memory marking used*/
+#define	RTCLOCK				/* now have RTC support		*/
+#define	STKCHK				/* resched checks stack overflow*/
+#define	NETDAEMON			/* Ethernet network daemon runs	*/
+#define	NETBUFS		64		/* number of network buffers	*/
+
+#define	VERSION	"VM-Xinu (Version 8.1)" /* printed at startup */
+
+
+#define	NBPOOLS	50
+#define BPMAXN	512
+#define	BPMAXB	8500
+/****************************************************************/
+/* BPMAXB is an important number.  8500 was chosen so that 	*/
+/* everyone would be able to stick some sort of header on a	*/
+/* 8k buffer (8192) and still be less than this.  It is used	*/
+/* to determine the size of a net.lrgpool network buffer, as 	*/
+/* well as RPC buffering sizes, etc.				*/
+/*								*/
+/*		BE CAREFUL WHEN CHANGING IT			*/
+/****************************************************************/
+
+
+#define	TCPSBS	0x1000			/* TCP send buffer sizes	*/
+#define	TCPRBS	0x4000			/* TCP receive buffer sizes	*/
+
+#define	NPORTS	100
+
+#define	TIMERGRAN	1		/* timer granularity, secs/10	*/
+
+#define XSELECT		/* provide support for the xinu select call */
+
+#define CPUUSAGE	/* gather cpu-usage stats */
+#define PROFILING	/* execution profiling	*/
+#undef INTERRUPT_PROFILING	/* voluntary interrupt profiling	*/
+
+#define CLOCK_INTERRUPTS 256	/* interrupts/second */
+
+/****************************************************************/
+/*                                                              */
+/*                   PAGING INFORMATION                         */
+/*                                                              */
+/* NOTE: MUST choose either one to do paging.                   */
+/*                                                              */
+/*       We recommend using NFS pagging in this release.        */
+/*                                                              */
+/****************************************************************/
+#define NFS_PAGING		/* use NFS paging               */
+/*#define XPP_PAGING              /* use remote memory server     */
+
+#if !defined(NFS_PAGING) && !defined(XPP_PAGING)
+FATAL: must define either "XPP_PAGING" or "NFS_PAGING"
+#endif
+
+/* Authentication info for talking to Unix systems (RPC & NFS) */
+#define XINU_UID 32767
+#define XINU_GID 32767

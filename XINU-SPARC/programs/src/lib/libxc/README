@@ -1,0 +1,14 @@
+
+			README
+			------
+
+This directory contains a small subset of public domain unix C library
+routines.  They are designed to for use with the vmxinu operating
+system and they call routines found in vmxinu's "unix simulation
+library".
+
+We would use Unix's C library, however, it is not public domain.  In
+addition, the "unix simulation library" does not simulate all unix
+system calls, so some of Unix's C library would be useless anyway.
+
+

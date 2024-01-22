@@ -1,0 +1,10 @@
+#
+# Makefile to recompile ALL of VM Xinu after
+# you make a change to a file in a bottom level directory
+#
+
+all:
+	DIR=`basename \`/bin/pwd\``; cd ..; make $$DIR top
+
+altall:
+	DIR=`basename \`/bin/pwd\``; cd ..; make altall alttop

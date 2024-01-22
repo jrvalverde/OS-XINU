@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "gtar --exclude '*.o' --exclude '*.a' -c -f sparc.vmxinu8.1.tar ."
+gtar --exclude '*.o' --exclude '*.a' -c -f sparc.vmxinu8.1.tar .
+
+echo "compress sparc.vmxinu8.1.tar"
+compress sparc.vmxinu8.1.tar

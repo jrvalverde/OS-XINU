@@ -1,0 +1,67 @@
+.TH CREATE 2CCC
+.SH NAME
+create \- create a new task
+.SH SYNOPSIS
+.B tid = create(caddr,ssize,prio,name,nargs[,argument]*)
+.nf
+.B int tid;
+.B char *caddr;
+.B int ssize;
+.B int prio;
+.B char *name;
+.B int nargs;
+.B long argument;	/* actually, type "machine word" */
+.fi
+.SH DESCRIPTION
+.I Create
+creates a new task that will begin execution at location
+.I caddr,
+with a stack of
+.I ssize
+words, initial priority
+.I prio,
+and identifying name
+.I name.
+.I Caddr
+should be the address of a procedure or main program.
+The created task is left in the suspended state; it will
+not begin execution until started by a resume command.
+The new task has its own stack, but shares global data
+with other tasks according to the scope rules of C.
+If the procedure attempts to return, its
+task will be terminated (see TKILL(2CCC)).
+.PP
+The caller can pass a variable number of arguments to the created
+task which are accessed through formal parameters.
+The integer
+.I nargs
+specifies how many argument values follow.
+.I Nargs
+values from the
+.I arguments
+list will be passed to the created task.
+The type and number of such arguments is not checked; each
+is treated as a single machine word.
+The user is cautioned against passing the address of any dynamically
+allocated datum to a task because such objects may be deallocated
+from the creator's run-time stack even though
+the created task retains a pointer.
+.SH RETURN VALUE
+If the creation is successful, the (nonnegative) task id of
+the new task is returned to the caller.
+If the arguments are incorrect, or if there are no free task
+slots, the value -1 is returned and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[CENOTASK]
+Task table is full.  No more tasks allowed.
+.TP 15
+[EINVAL]
+Invalid argument.
+.TP 15
+other
+Error set in
+.I getstk(2CCC)
+when trying to allocate stack.
+.SH SEE ALSO
+getstk(2CCC), tkill(2CCC), tstart(2CCC)

@@ -1,0 +1,361 @@
+"adump.c", line 15:adump defined( adump.c(15) ), but never used
+"adump.c", line 20:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(20)
+"adump.c", line 25:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(25)
+"adump.c", line 30:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(30)
+"adump.c", line 37:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(37)
+"arp_in.c", line 36:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(36)
+"arp_in.c", line 45:write, arg. 2 used inconsistently	write.c(14)  ::  arp_in.c(45)
+"arp_in.c", line 56:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(56)
+"arp_in.c", line 62:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(62)
+"ascdate.c", line 14:ascdate defined( ascdate.c(14) ), but never used
+"ascdate.c", line 46:sprintf, arg. 3 used inconsistently	ascdate.c(46)  ::  ip2name.c(32)
+"ascdate.c", line 46:sprintf: variable # of args.	ascdate.c(46)  ::  ip2name.c(32)
+"blkcopy.c", line 13:blkcopy, arg. 1 used inconsistently	blkcopy.c(13)  ::  dgread.c(62)
+"blkcopy.c", line 13:blkcopy, arg. 2 used inconsistently	blkcopy.c(13)  ::  dgwrite.c(42)
+"bpdump.c", line 13:bpdump defined( bpdump.c(13) ), but never used
+"bpdump.c", line 20:kprintf: variable # of args.	kprintf.c(16)  ::  bpdump.c(20)
+"chprio.c", line 14:chprio defined( chprio.c(14) ), but never used
+"control.c", line 14:control, arg. 3 used inconsistently	control.c(14)  ::  getutim.c(27)
+"control.c", line 14:control, arg. 3 used inconsistently	control.c(14)  ::  ip2name.c(48)
+"control.c", line 14:control, arg. 3 used inconsistently	control.c(14)  ::  rfsend.c(26)
+"control.c", line 14:control, arg. 3 used inconsistently	control.c(14)  ::  rwhoind.c(23)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  getutim.c(27)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  ip2name.c(48)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  rfcntl.c(25)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  rfsend.c(26)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  rfsend.c(30)
+"control.c", line 14:control: variable # of args.	control.c(14)  ::  rwhoind.c(23)
+"create.c", line 20:create, arg. 1 used inconsistently	create.c(20)  ::  initialize.c(101)
+"create.c", line 20:create, arg. 1 used inconsistently	create.c(20)  ::  initialize.c(95)
+"create.c", line 20:create, arg. 1 used inconsistently	create.c(20)  ::  netin.c(23)
+"create.c", line 20:create, arg. 1 used inconsistently	create.c(20)  ::  rwho.c(14)
+"create.c", line 20:create, arg. 1 used inconsistently	create.c(20)  ::  rwho.c(15)
+"create.c", line 20:create: variable # of args.	create.c(20)  ::  netin.c(23)
+"create.c", line 20:create: variable # of args.	create.c(20)  ::  rwho.c(14)
+"create.c", line 20:create: variable # of args.	create.c(20)  ::  rwho.c(15)
+"create.c", line 33:getstk value declared inconsistently	getstk.c(13)  ::  create.c(33)
+"create.c", line 33:getstk value used inconsistently	getstk.c(13)  ::  create.c(33)
+"create.c", line 33:getstk, arg. 1 used inconsistently	getstk.c(13)  ::  create.c(33)
+"devdump.c", line 11:devdump defined( devdump.c(11) ), but never used
+"devdump.c", line 15:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(15)
+"devdump.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(16)
+"devdump.c", line 22:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(22)
+"dgdump.c", line 12:dgdump defined( dgdump.c(12) ), but never used
+"dgdump.c", line 22:kprintf: variable # of args.	kprintf.c(16)  ::  dgdump.c(22)
+"dgdump.c", line 28:kprintf: variable # of args.	kprintf.c(16)  ::  dgdump.c(28)
+"dgmcntl.c", line 12: warning: argument devptr unused in function dgmcntl
+"dgmopen.c", line 12: warning: argument devptr unused in function dgmopen
+"dgparse.c", line 39:_ctype_ used( dgparse.c(39) ), but not defined
+"dgread.c", line 51:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgread.c(51)
+"dgread.c", line 62:blkcopy, arg. 1 used inconsistently	blkcopy.c(13)  ::  dgread.c(62)
+"dgread.c", line 64:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgread.c(64)
+"dgwrite.c", line 26:getbuf value declared inconsistently	getbuf.c(14)  ::  dgwrite.c(26)
+"dgwrite.c", line 26:getbuf value used inconsistently	getbuf.c(14)  ::  dgwrite.c(26)
+"dgwrite.c", line 39:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgwrite.c(39)
+"dgwrite.c", line 42:blkcopy, arg. 2 used inconsistently	blkcopy.c(13)  ::  dgwrite.c(42)
+"doprnt.c", line 104:_prt8, arg. 1 used inconsistently	doprnt.c(172)  ::  doprnt.c(104)
+"doprnt.c", line 110:_prt16, arg. 1 used inconsistently	doprnt.c(192)  ::  doprnt.c(110)
+"doprnt.c", line 153:_prt10, arg. 1 used inconsistently	doprnt.c(153)  ::  doprnt.c(98)
+"doprnt.c", line 155: warning: c unused in function _prt10
+"doprnt.c", line 172:_prt8, arg. 1 used inconsistently	doprnt.c(172)  ::  doprnt.c(104)
+"doprnt.c", line 174: warning: c unused in function _prt8
+"doprnt.c", line 192:_prt16, arg. 1 used inconsistently	doprnt.c(192)  ::  doprnt.c(110)
+"doprnt.c", line 194: warning: c unused in function _prt16
+"doprnt.c", line 28: warning: digit1 unused in function _doprnt
+"doprnt.c", line 98:_prt10, arg. 1 used inconsistently	doprnt.c(153)  ::  doprnt.c(98)
+"ethinit.c", line 24:iosetvec, arg. 2 used inconsistently	ioinit.c(32)  ::  ethinit.c(24)
+"ethinit.c", line 24:iosetvec, arg. 3 used inconsistently	ioinit.c(32)  ::  ethinit.c(24)
+"ethinter.c", line 45:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ethinter.c(45)
+"ethinter.c", line 58:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ethinter.c(58)
+"ethread.c", line 25: warning: dqptr set but not used in function ethread
+"ethread.c", line 33:ethstrt, arg. 2 used inconsistently	ethstrt.c(14)  ::  ethread.c(33)
+"ethread.c", line 36:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethread.c(36)
+"ethrstrt.c", line 17:ethrstrt, arg. 2 used inconsistently	ethrstrt.c(17)  ::  ethstrt.c(38)
+"ethstrt.c", line 14:ethstrt, arg. 2 used inconsistently	ethstrt.c(14)  ::  ethread.c(33)
+"ethstrt.c", line 38:ethrstrt, arg. 2 used inconsistently	ethrstrt.c(17)  ::  ethstrt.c(38)
+"ethstrt.c", line 39:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethstrt.c(39)
+"ethwrite.c", line 29:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethwrite.c(29)
+"ethwstrt.c", line 19:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethread.c(36)
+"ethwstrt.c", line 19:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethstrt.c(39)
+"ethwstrt.c", line 19:ethwstrt, arg. 2 used inconsistently	ethwstrt.c(19)  ::  ethwrite.c(29)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(36)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(56)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  arp_in.c(62)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgread.c(51)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgread.c(64)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  dgwrite.c(39)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ethinter.c(45)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ethinter.c(58)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  icmp_in.c(23)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  icmp_in.c(36)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ip_in.c(41)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ip_in.c(61)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  rarp_in.c(40)
+"freebuf.c", line 14:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  route.c(41)
+"freemem.c", line 14:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  ip2name.c(55)
+"freemem.c", line 14:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  ip2name.c(83)
+"freemem.c", line 14:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  kill.c(35)
+"freemem.c", line 14:freemem, arg. 2 used inconsistently	freemem.c(14)  ::  kill.c(35)
+"freemem.c", line 20:end used( freemem.c(20) ), but not defined
+"getaddr.c", line 13:getaddr, arg. 1 used inconsistently	getaddr.c(13)  ::  getname.c(19)
+"getbuf.c", line 14:getbuf value declared inconsistently	getbuf.c(14)  ::  dgwrite.c(26)
+"getbuf.c", line 14:getbuf value declared inconsistently	getbuf.c(14)  ::  mkarp.c(20)
+"getbuf.c", line 14:getbuf value declared inconsistently	getbuf.c(14)  ::  netin.c(45)
+"getbuf.c", line 14:getbuf value declared inconsistently	getbuf.c(14)  ::  rwhod.c(55)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  dgwrite.c(26)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  mkarp.c(20)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(25)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(35)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(40)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(45)
+"getbuf.c", line 14:getbuf value used inconsistently	getbuf.c(14)  ::  rwhod.c(55)
+"getc.c", line 13:getc defined( getc.c(13) ), but never used
+"getmem.c", line 13:getmem value declared inconsistently	getmem.c(13)  ::  ip2name.c(21)
+"getmem.c", line 13:getmem value declared inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"getmem.c", line 13:getmem value declared inconsistently	getmem.c(13)  ::  pinit.c(25)
+"getmem.c", line 13:getmem value used inconsistently	getmem.c(13)  ::  ip2name.c(21)
+"getmem.c", line 13:getmem value used inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"getmem.c", line 13:getmem value used inconsistently	getmem.c(13)  ::  pinit.c(25)
+"getmem.c", line 13:getmem, arg. 1 used inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"getmem.c", line 13:getmem, arg. 1 used inconsistently	getmem.c(13)  ::  pinit.c(25)
+"getmem.c", line 18: warning: degenerate unsigned comparison
+"getname.c", line 19:getaddr, arg. 1 used inconsistently	getaddr.c(13)  ::  getname.c(19)
+"getname.c", line 20:ip2name, arg. 1 used inconsistently	ip2name.c(14)  ::  getname.c(20)
+"getpath.c", line 21: warning: apacptr unused in function getpath
+"getpath.c", line 41:write, arg. 2 used inconsistently	write.c(14)  ::  getpath.c(41)
+"getprio.c", line 13:getprio defined( getprio.c(13) ), but never used
+"getstk.c", line 13:getstk value declared inconsistently	getstk.c(13)  ::  create.c(33)
+"getstk.c", line 13:getstk value used inconsistently	getstk.c(13)  ::  create.c(33)
+"getstk.c", line 13:getstk, arg. 1 used inconsistently	getstk.c(13)  ::  create.c(33)
+"getutim.c", line 17: warning: len unused in function getutim
+"getutim.c", line 19: warning: now unused in function getutim
+"getutim.c", line 27:control, arg. 3 used inconsistently	control.c(14)  ::  getutim.c(27)
+"getutim.c", line 27:control: variable # of args.	control.c(14)  ::  getutim.c(27)
+"getutim.c", line 27:open, arg. 3 used inconsistently	open.c(15)  ::  getutim.c(27)
+"getutim.c", line 32:read, arg. 2 used inconsistently	read.c(14)  ::  getutim.c(32)
+"icmp_in.c", line 23:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  icmp_in.c(23)
+"icmp_in.c", line 32:cksum, arg. 1 used inconsistently	icmp_in.c(32)  ::  ipsend.c(29)
+"icmp_in.c", line 34:psend, arg. 2 used inconsistently	psend.c(15)  ::  icmp_in.c(34)
+"icmp_in.c", line 36:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  icmp_in.c(36)
+"initialize.c", line 101:create, arg. 1 used inconsistently	create.c(20)  ::  initialize.c(101)
+"initialize.c", line 116:sysinit returns value which is always ignored
+"initialize.c", line 81:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(81)
+"initialize.c", line 81:kprintf: variable # of args.	kprintf.c(16)  ::  initialize.c(81)
+"initialize.c", line 83:kprintf: variable # of args.	kprintf.c(16)  ::  initialize.c(83)
+"initialize.c", line 87:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(87)
+"initialize.c", line 89:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(89)
+"initialize.c", line 90:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(90)
+"initialize.c", line 95:create, arg. 1 used inconsistently	create.c(20)  ::  initialize.c(95)
+"ioinit.c", line 14:ioinit defined( ioinit.c(14) ), but never used
+"ioinit.c", line 32:iosetvec, arg. 2 used inconsistently	ioinit.c(32)  ::  ethinit.c(24)
+"ioinit.c", line 32:iosetvec, arg. 2 used inconsistently	ioinit.c(32)  ::  vcuinit.c(24)
+"ioinit.c", line 32:iosetvec, arg. 3 used inconsistently	ioinit.c(32)  ::  ethinit.c(24)
+"ioinit.c", line 32:iosetvec, arg. 3 used inconsistently	ioinit.c(32)  ::  vcuinit.c(24)
+"ip2name.c", line 14:ip2name, arg. 1 used inconsistently	ip2name.c(14)  ::  getname.c(20)
+"ip2name.c", line 21:getmem value declared inconsistently	getmem.c(13)  ::  ip2name.c(21)
+"ip2name.c", line 21:getmem value used inconsistently	getmem.c(13)  ::  ip2name.c(21)
+"ip2name.c", line 32:sprintf, arg. 3 used inconsistently	ascdate.c(46)  ::  ip2name.c(32)
+"ip2name.c", line 32:sprintf: variable # of args.	ascdate.c(46)  ::  ip2name.c(32)
+"ip2name.c", line 47:open, arg. 3 used inconsistently	open.c(15)  ::  ip2name.c(47)
+"ip2name.c", line 48:control, arg. 3 used inconsistently	control.c(14)  ::  ip2name.c(48)
+"ip2name.c", line 48:control: variable # of args.	control.c(14)  ::  ip2name.c(48)
+"ip2name.c", line 55:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  ip2name.c(55)
+"ip2name.c", line 83:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  ip2name.c(83)
+"ip_in.c", line 41:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ip_in.c(41)
+"ip_in.c", line 44:psend, arg. 2 used inconsistently	psend.c(15)  ::  ip_in.c(44)
+"ip_in.c", line 61:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  ip_in.c(61)
+"ipsend.c", line 29:cksum, arg. 1 used inconsistently	icmp_in.c(32)  ::  ipsend.c(29)
+"kill.c", line 35:freemem, arg. 1 used inconsistently	freemem.c(14)  ::  kill.c(35)
+"kill.c", line 35:freemem, arg. 2 used inconsistently	freemem.c(14)  ::  kill.c(35)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(81)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(87)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(89)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  initialize.c(90)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(35)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(37)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(39)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(44)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  ndump.c(22)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  ndump.c(30)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  netdump.c(18)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  prdump.c(41)
+"kprintf.c", line 16:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  tdump.c(82)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(20)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(25)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(30)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  adump.c(37)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  bpdump.c(20)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(15)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(16)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  devdump.c(22)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  dgdump.c(22)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  dgdump.c(28)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  initialize.c(81)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  initialize.c(83)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(35)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(39)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(40)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(44)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  ndump.c(24)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  ndump.c(30)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(17)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(20)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(26)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(41)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(52)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(55)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(56)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(59)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(64)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(68)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(72)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  qdump.c(74)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  resched.c(41)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  resched.c(47)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  rfdump.c(18)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  rfdump.c(26)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(57)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(59)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(66)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(81)
+"kprintf.c", line 16:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(86)
+"mdump.c", line 13:mdump defined( mdump.c(13) ), but never used
+"mdump.c", line 35:edata used( mdump.c(35) ), but not defined
+"mdump.c", line 35:etext used( mdump.c(35) ), but not defined
+"mdump.c", line 35:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(35)
+"mdump.c", line 35:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(35)
+"mdump.c", line 37:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(37)
+"mdump.c", line 39:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(39)
+"mdump.c", line 39:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(39)
+"mdump.c", line 40:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(40)
+"mdump.c", line 44:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  mdump.c(44)
+"mdump.c", line 44:kprintf: variable # of args.	kprintf.c(16)  ::  mdump.c(44)
+"mkarp.c", line 20:getbuf value declared inconsistently	getbuf.c(14)  ::  mkarp.c(20)
+"mkarp.c", line 20:getbuf value used inconsistently	getbuf.c(14)  ::  mkarp.c(20)
+"mkpool.c", line 28:getmem value declared inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"mkpool.c", line 28:getmem value used inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"mkpool.c", line 28:getmem, arg. 1 used inconsistently	getmem.c(13)  ::  mkpool.c(28)
+"namopen.c", line 12: warning: argument devptr unused in function namopen
+"ndump.c", line 15:ndump defined( ndump.c(15) ), but never used
+"ndump.c", line 22:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  ndump.c(22)
+"ndump.c", line 24:kprintf: variable # of args.	kprintf.c(16)  ::  ndump.c(24)
+"ndump.c", line 30:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  ndump.c(30)
+"ndump.c", line 30:kprintf: variable # of args.	kprintf.c(16)  ::  ndump.c(30)
+"netdump.c", line 12:netdump defined( netdump.c(12) ), but never used
+"netdump.c", line 17:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(17)
+"netdump.c", line 18:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  netdump.c(18)
+"netdump.c", line 20:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(20)
+"netdump.c", line 26:kprintf: variable # of args.	kprintf.c(16)  ::  netdump.c(26)
+"netin.c", line 23:create, arg. 1 used inconsistently	create.c(20)  ::  netin.c(23)
+"netin.c", line 23:create: variable # of args.	create.c(20)  ::  netin.c(23)
+"netin.c", line 25:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(25)
+"netin.c", line 27:read, arg. 2 used inconsistently	read.c(14)  ::  netin.c(27)
+"netin.c", line 35:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(35)
+"netin.c", line 40:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(40)
+"netin.c", line 45:getbuf value declared inconsistently	getbuf.c(14)  ::  netin.c(45)
+"netin.c", line 45:getbuf value used inconsistently	getbuf.c(14)  ::  netin.c(45)
+"nullpcb.c", line 9:nullpcb defined( nullpcb.c(9) ), but never used
+"open.c", line 15:open, arg. 3 used inconsistently	open.c(15)  ::  getutim.c(27)
+"open.c", line 15:open, arg. 3 used inconsistently	open.c(15)  ::  ip2name.c(47)
+"open.c", line 15:open, arg. 3 used inconsistently	open.c(15)  ::  rfsend.c(23)
+"open.c", line 15:open, arg. 3 used inconsistently	open.c(15)  ::  rwhoind.c(23)
+"open.c", line 15:open, arg. 3 used inconsistently	open.c(15)  ::  udpecho.c(18)
+"ovfloff.c", line 11:ovfloff defined( ovfloff.c(11) ), but never used
+"ovflon.c", line 11:ovflon defined( ovflon.c(11) ), but never used
+"pdelete.c", line 15:pdelete defined( pdelete.c(15) ), but never used
+"pinit.c", line 25:getmem value declared inconsistently	getmem.c(13)  ::  pinit.c(25)
+"pinit.c", line 25:getmem value used inconsistently	getmem.c(13)  ::  pinit.c(25)
+"pinit.c", line 25:getmem, arg. 1 used inconsistently	getmem.c(13)  ::  pinit.c(25)
+"prdump.c", line 13:prdump defined( prdump.c(13) ), but never used
+"prdump.c", line 22:prdumph defined( prdump.c(22) ), but never used
+"prdump.c", line 31:prdumpa defined( prdump.c(31) ), but never used
+"prdump.c", line 41:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  prdump.c(41)
+"prdump.c", line 41:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(41)
+"prdump.c", line 52:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(52)
+"prdump.c", line 55:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(55)
+"prdump.c", line 56:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(56)
+"prdump.c", line 59:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(59)
+"prdump.c", line 64:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(64)
+"prdump.c", line 68:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(68)
+"prdump.c", line 72:kprintf: variable # of args.	kprintf.c(16)  ::  prdump.c(72)
+"procreg.c", line 10: warning: argument reg unused in function mtpr
+"procreg.c", line 10: warning: argument val unused in function mtpr
+"procreg.c", line 22: warning: argument reg unused in function mfpr
+"psend.c", line 15:psend, arg. 2 used inconsistently	psend.c(15)  ::  icmp_in.c(34)
+"psend.c", line 15:psend, arg. 2 used inconsistently	psend.c(15)  ::  ip_in.c(44)
+"putc.c", line 14:putc defined( putc.c(14) ), but never used
+"qdump.c", line 15:qdump defined( qdump.c(15) ), but never used
+"qdump.c", line 24:qdumph defined( qdump.c(24) ), but never used
+"qdump.c", line 33:qdumpa defined( qdump.c(33) ), but never used
+"qdump.c", line 74:kprintf: variable # of args.	kprintf.c(16)  ::  qdump.c(74)
+"rarp_in.c", line 40:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  rarp_in.c(40)
+"read.c", line 14:read, arg. 2 used inconsistently	read.c(14)  ::  getutim.c(32)
+"read.c", line 14:read, arg. 2 used inconsistently	read.c(14)  ::  netin.c(27)
+"read.c", line 14:read, arg. 2 used inconsistently	read.c(14)  ::  rfsend.c(38)
+"receive.c", line 12:receive defined( receive.c(12) ), but never used
+"remove.c", line 15:remove defined( remove.c(15) ), but never used
+"rename.c", line 15:rename defined( rename.c(15) ), but never used
+"resched.c", line 41:kprintf: variable # of args.	kprintf.c(16)  ::  resched.c(41)
+"resched.c", line 47:kprintf: variable # of args.	kprintf.c(16)  ::  resched.c(47)
+"rfcntl.c", line 12: warning: argument devptr unused in function rfcntl
+"rfcntl.c", line 25:control: variable # of args.	control.c(14)  ::  rfcntl.c(25)
+"rfcntl.c", line 31:rfmkpac, arg. 5 used inconsistently	rfmkpac.c(19)  ::  rfcntl.c(31)
+"rfdump.c", line 13:rfdump defined( rfdump.c(13) ), but never used
+"rfdump.c", line 18:kprintf: variable # of args.	kprintf.c(16)  ::  rfdump.c(18)
+"rfdump.c", line 26:kprintf: variable # of args.	kprintf.c(16)  ::  rfdump.c(26)
+"rfmkpac.c", line 19:rfmkpac, arg. 5 used inconsistently	rfmkpac.c(19)  ::  rfcntl.c(31)
+"rfopen.c", line 12: warning: argument devptr unused in function rfopen
+"rfsend.c", line 23:open, arg. 3 used inconsistently	open.c(15)  ::  rfsend.c(23)
+"rfsend.c", line 26:control, arg. 3 used inconsistently	control.c(14)  ::  rfsend.c(26)
+"rfsend.c", line 26:control: variable # of args.	control.c(14)  ::  rfsend.c(26)
+"rfsend.c", line 30:control: variable # of args.	control.c(14)  ::  rfsend.c(30)
+"rfsend.c", line 33:write, arg. 2 used inconsistently	write.c(14)  ::  rfsend.c(33)
+"rfsend.c", line 38:read, arg. 2 used inconsistently	read.c(14)  ::  rfsend.c(38)
+"route.c", line 41:freebuf, arg. 1 used inconsistently	freebuf.c(14)  ::  route.c(41)
+"route.c", line 49:write, arg. 2 used inconsistently	write.c(14)  ::  route.c(49)
+"rwho.c", line 13:rwho defined( rwho.c(13) ), but never used
+"rwho.c", line 14:create, arg. 1 used inconsistently	create.c(20)  ::  rwho.c(14)
+"rwho.c", line 14:create: variable # of args.	create.c(20)  ::  rwho.c(14)
+"rwho.c", line 15:create, arg. 1 used inconsistently	create.c(20)  ::  rwho.c(15)
+"rwho.c", line 15:create: variable # of args.	create.c(20)  ::  rwho.c(15)
+"rwhod.c", line 55:getbuf value declared inconsistently	getbuf.c(14)  ::  rwhod.c(55)
+"rwhod.c", line 55:getbuf value used inconsistently	getbuf.c(14)  ::  rwhod.c(55)
+"rwhod.c", line 73:Shl used( rwhod.c(73) ), but not defined
+"rwhoind.c", line 23:control, arg. 3 used inconsistently	control.c(14)  ::  rwhoind.c(23)
+"rwhoind.c", line 23:control: variable # of args.	control.c(14)  ::  rwhoind.c(23)
+"rwhoind.c", line 23:open, arg. 3 used inconsistently	open.c(15)  ::  rwhoind.c(23)
+"seek.c", line 14:seek defined( seek.c(14) ), but never used
+"sendf.c", line 14:sendf defined( sendf.c(14) ), but never used
+"setdev.c", line 14:setdev defined( setdev.c(14) ), but never used
+"setnok.c", line 14:setnok defined( setnok.c(14) ), but never used
+"sndrarp.c", line 29:write, arg. 2 used inconsistently	write.c(14)  ::  sndrarp.c(29)
+"ssclock.c", line 14:stopclk defined( ssclock.c(14) ), but never used
+"ssclock.c", line 23:strtclk defined( ssclock.c(23) ), but never used
+"suspend.c", line 13:suspend defined( suspend.c(13) ), but never used
+"tdump.c", line 40:tdumph defined( tdump.c(40) ), but never used
+"tdump.c", line 57:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(57)
+"tdump.c", line 59:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(59)
+"tdump.c", line 66:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(66)
+"tdump.c", line 81:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(81)
+"tdump.c", line 82:kprintf, arg. 2 used inconsistently	kprintf.c(16)  ::  tdump.c(82)
+"tdump.c", line 86:kprintf: variable # of args.	kprintf.c(16)  ::  tdump.c(86)
+"ttycntl.c", line 16:ttycntl defined( ttycntl.c(16) ), but never used
+"ttyiin.c", line 15:ttyiin defined( ttyiin.c(15) ), but never used
+"ttyinit.c", line 16:ttyinit defined( ttyinit.c(16) ), but never used
+"ttyinit.c", line 53: warning: junk set but not used in function ttyinit
+"ttyoin.c", line 15:ttyoin defined( ttyoin.c(15) ), but never used
+"ttyopen.c", line 13: warning: argument mode unused in function ttyopen
+"ttywrite.c", line 17:ttywrite defined( ttywrite.c(17) ), but never used
+"udpecho.c", line 15:udpecho defined( udpecho.c(15) ), but never used
+"udpecho.c", line 18:open, arg. 3 used inconsistently	open.c(15)  ::  udpecho.c(18)
+"unmount.c", line 13:unmount defined( unmount.c(13) ), but never used
+"vaxcons.c", line 15:vaxcons defined( vaxcons.c(15) ), but never used
+"vcucntl.c", line 16: warning: argument addr unused in function vcucntl
+"vcuinit.c", line 24:iosetvec, arg. 2 used inconsistently	ioinit.c(32)  ::  vcuinit.c(24)
+"vcuinit.c", line 24:iosetvec, arg. 3 used inconsistently	ioinit.c(32)  ::  vcuinit.c(24)
+"vcuinit.c", line 52: warning: junk set but not used in function vcuinit
+"write.c", line 14:write, arg. 2 used inconsistently	write.c(14)  ::  arp_in.c(45)
+"write.c", line 14:write, arg. 2 used inconsistently	write.c(14)  ::  getpath.c(41)
+"write.c", line 14:write, arg. 2 used inconsistently	write.c(14)  ::  rfsend.c(33)
+"write.c", line 14:write, arg. 2 used inconsistently	write.c(14)  ::  route.c(49)
+"write.c", line 14:write, arg. 2 used inconsistently	write.c(14)  ::  sndrarp.c(29)

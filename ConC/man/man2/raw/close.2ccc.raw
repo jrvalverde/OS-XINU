@@ -1,0 +1,4 @@
+.TH CLOSE 2CCC
+.SH REFER TO
+.I close(2)
+of the UNIX man pages.

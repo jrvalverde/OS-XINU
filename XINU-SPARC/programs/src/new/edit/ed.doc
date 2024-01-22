@@ -1,0 +1,162 @@
+.nr HM 1.0i
+.nr LL 6.0i
+.nr PO 1.25i
+.ta 0.5i 1.0i 1.5i 2.0i 2.5i 3.0i 3.5i 4.0i 4.5i 5.0i
+.ps +4
+.ce
+\fBACM Programming Contest Editor\fR
+.sp
+.ps -1
+.ce
+Brief Command Summary
+.ps -3
+.sp 2
+.nf
+	Char	Command				Char	Command
+
+	h*	move 1 char left				l*	move 1 char right
+	b*	move 1 word left				w*	move 1 word right
+	k*	move 1 char up				j*	move 1 char down
+	^U*	move 1/2 page up				^F*	move 1/2 page down
+	0	go to beginning of line			$	go to end of line
+	B	go to beginning of file			E	go to end of file
+	x*	delete char 				d*	delete line
+	s	write out the file				q	quit the editor
+	i	enter insert mode				I	input a file
+	ESC	exit insert mode				g*	goto line
+	y*	yank some lines				p*	put yanked lines
+	/	search for a string			n	repeat last search
+	N	repeat last search, reversing direction
+	c	redraw the screen			S	status
+	u	oops! undo last o, x, X, i, I, or p	?	show this help				
+.sp 2
+.ps +3
+.ce
+Explanation of Commands
+.ps -3
+.sp 2
+.fi
+The Two Modes
+.sp
+There are two modes in the editor, the insert mode and the command mode.
+The commands listed above are active when in command mode.  When the
+editor is in insert mode, a message indicating so will be present in 
+the bottom window.  The commands marked with a * above may have a
+count prepended to them.  For example, to delete 5 lines of text the
+user could type \fB5X\fR.
+.sp
+Movement Commands
+.sp
+The commands \fBl\fR (el, not one), \fBd\fR, \fBu\fR, and \fBr\fR move
+the cursor one character left, down, up, and right, respectively.  The
+\fBL\fR and \fBR\fR commands move one word to the left or right.
+\fBe\fR and \fBb\fR move the cursor to the end or beginning of the
+current line, and \fBE\fR and \fBB\fR move to the bottom and top of
+the file, respectively.  \fBU\fR and \fBD\fR will scroll the screen up
+or down 1/2 a screenful.  The \fBg\fR (goto) command goes to the line
+number that is prepended to the command.
+.sp
+Commands that Change Text
+.sp
+The \fBi\fR command puts the editor into insert mode, and all text
+typed is placed into the file, with the exception of 4 control
+characters and the \fBESC\fR key.  \fB^IfR is mapped into spaces up
+until the next tab stop, \fB^Z\fR and \fB^C\fR are disabled, and a
+\fB^H\fR will delete the character to the left of the cursor and move
+the cursor one character to the left.  Typing a \fB^H\fR while at the
+beginning of a line in insert mode causes the current line to be
+melded with the previous line, and the editor remains in insert mode.
+The \fBESC\fR key is used to exit the insert mode.
+.sp
+While in command mode, typing an \fBx\fR will delete the character
+under the cursor, and a \fBX\fR deletes the current line.  The \fBI\fR
+command will prompt for a filename in the status window and then load
+the specified file immediately after the current line.
+.sp
+The \fBo\fR (oops) command will undo the last change to text, be that
+an insertion via \fBi\fR or \fBI\fR, a deletion via \fBx\fR or
+\fBX\fR, or a \fBp\fR (put) of yanked text.  Only the most recent of
+these may be undone; e.g. if one were to delete a line and insert a
+new line of text, an oops would undo the insertion but not the
+deletion.  Opps itself may be `opps'ed, e.g. if text is inserted and
+then uninserted with an opps, then it may be re-inserted with another oops.
+.sp
+Searching for Text
+.sp
+When the \fBs\fR (search) command is typed, the editor will prompt for
+a literal search string in the bottom window.  It will then search
+forward or backward for the string in the text.  The search will be
+delimited by line boundaries and the beginning/end of file.  There is
+no wildcarding in the pattern; matches must be exact.
+.sp
+The \fBn\fR (next) command searches for the text string entered for the last
+search, and in the same direction as the last search.  The \fBN\fR
+command reverses the direction of the search and then searches for the
+text string entered for the last search.  Thus, repeatedly applying
+the \fBN\fR command will toggle the position within the file back and forth 
+between two occurences of the search string.
+.sp
+Buffer Commands
+.sp
+The \fBy\fR (yank) and \fBp\fR (put) commands copy text into and out
+of a memory buffer.  The smallest block of text that can be moved is
+one line.  The \fBy\fR command can be prepended with the number of
+lines to be yanked (the default is 1).
+The \fBp\fR command loads the
+lines currently in the buffer immediately below the current line of
+text; the memory buffer is \fInot\fR cleared, so the same block of
+text may be put multiple times with only one yank.  Prepending an
+integer \fIn\fR to a put causes \fIn\fR copies of the block of text to
+be inserted after the current line.
+.sp
+Note that the delete and yank commands use two different buffers, so
+that deleting some lines and then yanking will not preclude undoing
+the deletion via opps.
+.sp
+Miscellaneous Commands
+.sp
+The \fBc\fR (redraw) command is useful if the screen somehow becomes
+mussed.  It will clear the screen and reprint the text.  The \fB?\fR
+(help) command will show the brief command summary above on the user's
+terminal.  Saving the file is accomplished via the \fBw\fR (write)
+command, and a \fBq\fR (quit) will exit the editor, after requesting
+confirmation if the file has been altered.  The \fBS\fR (status)
+command prints relevant information about file position in the bottom
+window.
+.sp 2
+.ps +3
+.ce
+Sundry Notes
+.ps -3
+.sp 2
+The ruler line that divides the editing and status windows has
+several references for FORTRAN users.  There is a C in column 1,
+a * in column 6, and a + in column 72.  It is also simple to determine
+line position using the S command.
+.sp
+The end of line character is not printed on the screen, but is
+held in memory.  The end of line character may be inserted or
+deleted.  So, to join a line and the following line, go to the
+end of line (e) and then use the delete character (x) command to
+delete the end of line.
+.sp
+There is no 'insert line' command.  This can be accomplished by moving
+to the beginning/end of line (b/e) and then issuing an insert 
+command (i) followed by a return.  This will insert the line before
+or after the current line.  In general, most desired commands
+can be built up from a sequence of the simple commands show here.
+.sp
+Whenever the editor cannot understand the command it has been
+given, it will beep and display a message in the status (bottom)
+window.  The top window is for editing, so all prompting of the
+user is done in the status window.
+.sp
+The current maximum line length is 79 characters.
+.sp
+Tabs are automatically expanded into spaces on input.
+.sp
+In this text, and in the editor, control characters are represented by
+^char, e.g. control-h = ^H.
+.sp
+Hitting ESC while in command mode causes the prepended command count
+to be reset to 1.

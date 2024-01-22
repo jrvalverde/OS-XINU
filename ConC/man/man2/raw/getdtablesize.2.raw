@@ -1,0 +1,10 @@
+.TH GETDTABLESIZE 2
+.SH NOTE
+.I Getdtablesize
+will return 2 less than what the UNIX getdtablesize
+will return.  This means that the descriptor table will have at least
+18 entries instead of 20.
+.PP
+Other than this, refer to
+.I getdtablesize(2)
+of the UNIX man pages.

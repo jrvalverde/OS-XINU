@@ -1,0 +1,48 @@
+==== .Cc "3" "Physical Transport" 21
+==== .iX "physical transport" " " "21"
+==== .Sc "3.1" "Introduction" 21
+==== .Sc "3.2" "Blocks and Frames" 21
+==== .iX "frame" " " "21"
+==== .sX "network" "interface" "21"
+==== .sX "interface" "network" "21"
+==== .iX "ETHER" " " "22"
+==== .iX "frame" " " "22"
+==== .iX "ETHER" " " "22"
+==== .Sc "3.3" "An Example Implementation Using Xinu" 22
+==== .Bc "3.3.1" "Ethernet and Interface Device Definitions" 22
+==== .iX "" " " "23"
+==== .Sc "3.4" "Ethernet Definitions" 25
+==== .iX "octet" " " "25"
+==== .iX "byte" " " "25"
+==== .iX "header" " " "25"
+==== .iX "packet" " " "25"
+==== .iX "" " " "26"
+==== .Sc "3.5" "Frame Format in Memory" 27
+==== .Bc "3.5.1" "The Ethernet Frame Type" 27
+==== .sX "frame" "type" "27"
+==== .sX "Ethernet" "frame type" "27"
+==== .Sc "3.6" "Ethernet Device Control Block" 27
+==== .sX "control block" "Ethernet" "27"
+==== .sX "Ethernet" "control block" "27"
+==== .Sc "3.7" "Upper-Half Input Routine" 28
+==== .sX "Ethernet" "input" "28"
+==== .sX "input" "Ethernet" "28"
+==== .iX "" " " "28"
+==== .iX "" " " "30"
+==== .Sc "3.8" "Upper-Half Output Routine" 31
+==== .sX "Ethernet" "output" "31"
+==== .sX "output" "Ethernet" "31"
+==== .iX "" " " "31"
+==== .iX "" " " "32"
+==== .Sc "3.9" "The Lower-Half Routines" 33
+==== .sX "Ethernet" "interrupt" "33"
+==== .sX "interrupt" "Ethernet" "33"
+==== .iX "" " " "34"
+==== .Sc "3.10" "Device and Driver Initialization" 36
+==== .sX "Ethernet" "initialization" "36"
+==== .sX "initialization" "Ethernet" "36"
+==== .iX "" " " "36"
+==== .Sc "3.11" "Summary" 38
+==== .Ec 38
+==== LAST 39 -- Chap. 3 
+==== PAGES 19 -- Chap. 3 

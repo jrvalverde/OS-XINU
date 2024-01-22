@@ -1,0 +1,6 @@
+#!/bin/sh
+
+H=/.menthe/home/lin/xinu/xinu/ether/ee
+
+echo "rcp $* lin@martini.cs:$H"
+rcp $* lin@martini.cs:$H

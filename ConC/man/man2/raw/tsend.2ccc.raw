@@ -1,0 +1,47 @@
+.TH TSEND 2CCC
+.SH NAME
+tsend, tsendf \- send a (one-word) message to a task
+.SH SYNOPSIS
+.nf
+.B int tsend(tid, msg)
+.B int tid;
+.B int msg;
+.sp
+.B int tsendf(tid, msg)
+.B int tid;
+.B int msg;
+.fi
+.SH DESCRIPTION
+In either form,
+.I tsend
+sends the one-word message
+.I msg
+to the task with id
+.I tid.
+A task may have at most one outstanding message that has
+not been received.
+.PP
+The form
+.I tsend
+returns an error if the task already has a message waiting,
+while the form
+.I tsendf
+will send the message to the task even if it means destroying
+an existing message that has not been received.
+.SH RETURN VALUE
+If the call is successful, 0 is returned.  Otherwise -1 is returned
+and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[CEBADTID]
+Invalid task id.
+.PP
+The following may be set by
+.I tsend:
+.TP 15
+[CEHASMSG]
+Task
+.I tid
+already has an outstanding message.
+.SH SEE ALSO
+preceive(2CCC), psend(2CCC), treceive(2CCC)

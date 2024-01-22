@@ -1,0 +1,232 @@
+head	1.2;
+access;
+symbols;
+locks
+	lin:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	95.02.11.18.18.36;	author lin;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@/* ee_demux.c - ee_demux */
+
+#include <conf.h>
+#include <kernel.h>
+#include <network.h>
+#include <ee.h>
+
+/*#define DEBUG*/
+
+/*------------------------------------------------------------------------
+ * ee_demux - demultiplex an input packet from an Intel EtherExpress
+ *------------------------------------------------------------------------
+ */
+int ee_demux(ped)
+struct etdev	*ped;
+{
+    struct ep	*pep, *ee_get();
+    unsigned short iobase, rfd_status, rbd, scb_status, tmp;
+    int		ifnum;
+
+    iobase = ped->ed_pdev->dvcsr;
+    
+#ifdef DEBUG
+/*    kprintf("ee_demux\n");*/
+#endif
+    
+    ifnum = ped->ed_ifnum;
+    if (ifnum < 0 || ifnum >= NIF)
+	return;
+
+    outw(iobase+RDPTR, ped->ed_rfd);
+    rfd_status = inw(iobase);	/* status */
+    tmp = inw(iobase);		/* command */
+    tmp = inw(iobase);		/* link */
+    rbd = inw(iobase);		/* rbd pointer */
+    
+    while (rfd_status & RFD_C) {
+	if (nif[ifnum].ni_state == NIS_UP)
+	    pep = ee_get(ped, iobase, rfd_status, rbd);	/* get frame */
+	else
+	    pep = 0;
+
+	/*
+	 * put the just received frame descriptor at the end
+	 */
+	outw(iobase+WRPTR, ped->ed_rfd);
+	outw(iobase, 0);		/* status	*/
+	outw(iobase, RFD_EL);		/* end of list	*/
+	
+	/*
+	 * modify the (previous) last frame descriptor
+	 */
+	outw(iobase+WRPTR, ped->ed_rfdend+2);
+	outw(iobase, 0);		/* command	*/
+
+	/*
+	 * update END frame pointer
+	 */
+	ped->ed_rfdend = ped->ed_rfd;
+	    
+	/*
+	 * the next one becomes the head
+	 */
+	outw(iobase+RDPTR, ped->ed_rfd+4);	/* next rfd */    
+	ped->ed_rfd = inw(iobase);
+
+	/*
+	 * modify SCB's rfa pointer
+	 */
+	outw(iobase+SCB_RFA, ped->ed_rfd);
+	
+	/*
+	 * ni_in can cause a context switch, so restart receive
+	 * unit, if necessary, here.
+	 */
+	scb_status = inw(iobase+SCB_STATUS);
+	if ((scb_status & SCBSTAT_RUR) == 0) {
+	    ee_wait(iobase);
+	    outw(iobase+SCB_COMMAND, SCBCMD_RUS);
+	    outb(iobase+CAC, 0);
+	    ee_wait(iobase);
+	    ee_ack(iobase);
+	}
+	if (pep) {
+#ifdef	NETMON
+	    nm_in(&nif[ifnum], pep, pep->ep_len);
+	    if (!ethmatch(&nif[ifnum], pep->ep_dst, pep->ep_len))
+		freebuf(pep);
+	    else
+#endif	/* NETMON */
+		ni_in(&nif[ifnum], pep, pep->ep_len);
+	}
+
+	/*
+	 * check next RFD
+	 */
+	outw(iobase+RDPTR, ped->ed_rfd);
+	rfd_status = inw(iobase);	/* status */
+    }
+}
+
+
+/*-------------------------------------------------------------------------
+ * ee_get - get frame 
+ *-------------------------------------------------------------------------
+ */
+struct ep *ee_get(ped, iobase, rfd_status, rbd)
+struct etdev	*ped;
+unsigned short iobase, rfd_status, rbd;
+{
+    struct ep	*pep;
+    int		ifnum = ped->ed_ifnum, count, i;
+    char   *p;
+    unsigned short rbd_status, rbd_next, rbd_buflo, rbd_bufhi;
+
+#ifdef DEBUG
+/*	kprintf("ee_get: rfd_status=%x, rbd=%d\n", rfd_status, rbd);*/
+#endif
+    if ((rfd_status & RFD_OK) == 0) {
+	nif[ifnum].ni_idiscard++;
+#ifdef DEBUG
+	kprintf("ee_get: recvd bad frame (rfd status=%x)\n", rfd_status);
+#endif
+	return 0;
+    }
+    
+    pep = (struct ep *)nbgetbuf(Net.netpool);
+    if (pep == 0) {
+	if (ifnum >= 0 && ifnum < NIF)
+	    nif[ifnum].ni_idiscard++;
+#ifdef DEBUG
+	kprintf("ee_get: no buffer\n");
+#endif
+	return 0;
+    }
+    
+    /* receive buffer descriptor */
+    outw(iobase+RDPTR, rbd);
+    rbd_status = inw(iobase);
+    rbd_next = inw(iobase);
+    rbd_buflo = inw(iobase);
+    rbd_bufhi = inw(iobase);
+#ifdef DEBUG
+/*    kprintf("rbd_status=%x, rbd_next=%x, rbd_buflo=%x, rbd_bufhi=%x\n",*/
+/*	   rbd_status, rbd_next, rbd_buflo, rbd_bufhi);*/
+#endif
+    
+    if (!(rbd_status & RBD_VALID)) {
+	freebuf(pep);
+#ifdef DEBUG
+	kprintf("ee_get: invalid frame (rbd_status=%x)\n", rbd_status);
+#endif	
+	return 0;
+    }
+
+    count = rbd_status & RBD_COUNT_MASK;
+#ifdef DEBUG
+	kprintf("ee_get: rbd count=%d\n", count);
+#endif  
+    pep->ep_len = count;
+    if (pep->ep_len - sizeof(struct eh) > EP_DLEN) {
+	kprintf("ee%d: packet too large (%d)\n", pep->ep_len);
+	nif[ifnum].ni_idiscard++;
+	freebuf(pep);
+	return 0;
+    }
+
+    /* copy frame from receive buffer */
+    outw(iobase+RDPTR, rbd_buflo);
+    p = (char *)&pep->ep_eh;
+    for (i = 0; i < pep->ep_len; i++, p++) {
+	*p = inb(iobase);
+    }
+	
+    pep->ep_type = net2hs(pep->ep_type);
+    pep->ep_order = EPO_NET;
+#ifdef DEBUG
+/*    pdump(pep);*/
+#endif
+    return pep;
+}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d8 1
+a8 1
+#define DEBUG
+d18 1
+a18 1
+    unsigned short iobase = ped->ed_pdev->dvcsr, rfd_status, rbd, scb_status;
+d21 2
+d33 2
+d93 6
+d116 3
+d144 2
+a145 2
+    kprintf("rbd_status=%x, rbd_next=%x, rbd_buflo=%x, rbd_bufhi=%x\n",
+	   rbd_status, rbd_next, rbd_buflo, rbd_bufhi);
+@

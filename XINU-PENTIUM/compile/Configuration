@@ -1,0 +1,252 @@
+/* Configuration - (device configuration specifications) */
+
+/* "type" declarations for both real- and pseudo- devices */
+
+/* PC keyboard and monitor (normally console device) */
+
+kbmon:
+	on HARDWARE	-i kbminit	-o ionull	-c ionull
+			-r kbmread	-w kbmwrite	-s ioerr
+			-n kbmcntl	-g kbmgetc	-p kbmputc
+			-iint kbmint	-oint ioerr
+
+serial:
+	on HARDWARE	-i cominit	-o ionull	-c ionull
+			-r ionull	-w comwrite	-s ioerr
+			-n comcntl	-g comgetc	-p computc
+			-iint comint	-oint ioerr
+
+/* tty pseudo-devices */
+tty:
+	on HARDWARE	-i ttyinit	-o ttyopen	-c ionull 
+			-r ttyread	-w ttywrite	-s ioerr
+			-n ttycntl	-g ttygetc	-p ttyputc
+			-iint ttyiin
+
+/* Ethernet using SMC Ultra interface */
+/*
+eth:
+	on ULTRA	-i ue_init	-o ioerr	-c ioerr 
+			-r ioerr	-w ue_write	-s ioerr
+			-n ue_cntl	-g ioerr	-p ioerr
+			-iint ue_intr	-oint ue_intr
+*/
+
+/* Ethernet using Intel EtherExpress16 interface */
+eth:
+	on EXPRESS	-i ee_init	-o ioerr	-c ioerr 
+			-r ee_read	-w ee_write	-s ioerr
+			-n ee_cntl	-g ioerr	-p ioerr
+			-iint ee_intr	-oint ee_intr
+
+/* "Othernet" using a Ethernet interface */
+/*oth:
+	on ETHER	-i othinit	-o ioerr	-c ioerr 
+			-r ioerr	-w othwrite	-s ioerr
+			-n ioerr	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr
+*/
+
+
+/* Datagram interface to network (master device) */
+dgm:
+	on ETH		-i ionull	-o dgmopen	-c ioerr 
+			-r ioerr	-w ioerr	-s ioerr
+			-n dgmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A datagram "connection"  (pseudo-device returned by dgm open) */
+dg:
+	on ETH		-i dginit	-o ioerr	-c dgclose
+			-r dgread	-w dgwrite	-s ioerr
+			-n dgcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Streams interface to network (master device) */
+tcpm:
+	on ETH		-i ionull	-o tcpmopen	-c ioerr 
+			-r ioerr	-w ioerr	-s ioerr
+			-n tcpmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A tcp "connection"  (pseudo-device returned by tcpm open) */
+tcp:
+	on ETH		-i tcpinit	-o ioerr	-c tcpclose
+			-r tcpread	-w tcpwrite	-s ioerr
+			-n tcpcntl	-g tcpgetc	-p tcpputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Remote file system master device (open to get rf device) */
+rfm:
+	on DGM		-i ioerr	-o rfopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n rfcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* A remote file (pseudo-device returned by rfm open) */
+rf:
+	on DGM		-i rfinit	-o ioerr	-c rfclose 
+			-r rfread	-w rfwrite	-s rfseek
+			-n rfcntl	-g rfgetc	-p rfputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+
+/* Name system (topmost level of name resolution mechanism) */
+nam:
+	on TOP		-i naminit	-o namopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n ioerr	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+%
+
+/* The physical PC keyboard and monitor */
+
+CONSOLE		is tty  	on HARDWARE
+SERIAL0		is serial	on HARDWARE	csr 0x3f8 ivec 36
+SERIAL1		is serial	on HARDWARE	csr 0x2f8 ivec 35
+KBMON		is kbmon	on HARDWARE	ivec=33
+TTY0		is tty		on HARDWARE
+TTY1		is tty		on HARDWARE
+TTY2		is tty		on HARDWARE
+
+/* Physical ethernet raw packet interface */
+ETHER		is eth	on EXPRESS	csr=0x250 ivec=37
+
+/*
+OTHER1	is oth on ETHER 
+OTHER2	is oth on ETHER
+*/
+
+
+/* Datagram network interface (master pseudo-device) */
+
+UDP	is dgm	on ETH
+
+/* Pseudo-device slots for datagram "connections" */
+
+DGRAM0		is dg	on ETH
+DGRAM1		is dg	on ETH
+DGRAM2		is dg	on ETH
+DGRAM3		is dg	on ETH
+DGRAM4		is dg	on ETH
+DGRAM5		is dg	on ETH
+DGRAM6		is dg	on ETH
+DGRAM7		is dg	on ETH
+DGRAM8		is dg	on ETH
+DGRAM9		is dg	on ETH
+DGRAMA		is dg	on ETH
+DGRAMB		is dg	on ETH
+DGRAMC		is dg	on ETH
+DGRAMD		is dg	on ETH
+DGRAME		is dg	on ETH
+DGRAMF		is dg	on ETH
+
+/* TCP network interface (master pseudo-device) */
+
+TCP	is tcpm	on ETH
+
+/* Pseudo-device slots for TCP "connections" */
+
+TCP0		is tcp	on ETH
+TCP1		is tcp	on ETH
+TCP2		is tcp	on ETH
+TCP3		is tcp	on ETH
+TCP4		is tcp	on ETH
+TCP5		is tcp	on ETH
+TCP6		is tcp	on ETH
+TCP7		is tcp	on ETH
+TCP8		is tcp	on ETH
+TCP9		is tcp	on ETH
+TCPA		is tcp	on ETH
+TCPB		is tcp	on ETH
+TCPC		is tcp	on ETH
+TCPD		is tcp	on ETH
+TCPE		is tcp	on ETH
+TCPF		is tcp	on ETH
+
+/* Remote file system interface (master pseudo-device) */
+
+RFILSYS		is rfm	on DGM
+
+/* Pseudo-device slots for remote files */
+
+RFILE1		is rf	on DGM
+RFILE2		is rf	on DGM
+RFILE3		is rf	on DGM
+RFILE4		is rf	on DGM
+
+
+/* Pseudo device for the abstract (file) name space */
+
+NAMESPACE	is nam	on TOP
+
+
+%
+
+/* Configuration and Size Constants */
+
+#define	LITTLE_ENDIAN	0x1234
+#define	BIG_ENDIAN	0x4321
+
+#define	BYTE_ORDER	LITTLE_ENDIAN
+
+#define	CONTACT     "dds@cs.purdue.edu"	/* administrative contact	*/
+#define	LOCATION    "PC Lab"		/* Host's physical location	*/
+
+#define	NPROC	    50			/* number of user processes	*/
+#define	NSEM	    100			/* number of semaphores		*/
+#define	MEMMARK				/* define if memory marking used*/
+#define	RTCLOCK				/* now have RTC support		*/
+#define	STKCHK				/* resched checks stack overflow*/
+#define	NETDAEMON			/* Ethernet network daemon runs	*/
+/*#define NETMON			/* define for network monitor	*/
+/*#define OSPF				/* define if using OSPF		*/
+/*#define RIP				/* define if using RIP		*/
+/*#define MULTICAST*/			/* define if using multicasting	*/
+
+#ifdef	OSPF
+#define	MULTICAST			/* OSPF uses multicasting	*/
+#endif	/* OSPF */
+
+#define	DEFAULT_IPADDR1	"128.211.1.243" /* my IP address		*/
+#define	DEFAULT_ROUTER	"128.211.1.250" /* default router		*/
+#define	DEFAULT_TSERVER	"128.211.1.10:37"/* Time server address		*/
+#define	DEFAULT_RSERVER	"128.10.15.64:2001"/* Remote file server address*/
+#define	DEFAULT_NSERVER	"128.211.1.10:53"  /* Domain Name server address*/
+#define	DEFAULT_NETMASK	 0xffffff00	/* default subnet mask		*/
+#ifdef WIRELESS
+#define	DEFAULT_WIRELESSIP "128.211.1.99" /* wrieless I/F IP address	*/
+#endif
+
+#define TSERVERPORT    37
+#define RSERVERPORT  2001
+#define NSERVERPORT    53
+
+#define	BINGID	9			/* Othernet simlated net param. */
+
+#define	SMALLMTU	400		/* for OTHER2; sim. small MTU	*/
+
+#define	BPMAXB	8192			/* max buffer size for mkpool	*/
+#define BPMAXN	128			/* max # buffers in a buf pool	*/
+
+#define	TCPSBS	4096			/* TCP send buffer sizes	*/
+#define	TCPRBS	8192			/* TCP receive buffer sizes	*/
+
+#define	NPORTS	100
+
+#define	TIMERGRAN	1		/* timer granularity, secs/10	*/
+
+#define	NAREA		1		/* max number of OSPF Areas	*/
+
+#ifndef	Noth
+#define	Noth	0
+#endif	!Noth
+#ifndef	Ndg
+#define	Ndg	0
+#endif

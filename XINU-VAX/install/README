@@ -1,0 +1,124 @@
+Installation Details
+------------ -------
+
+This is file {Xinu-directory}/install/README.  It contains
+instructions for installing the Xinu software and recompiling
+it.  These instructions instructions must be followed:
+(a) after the distribution tape has been read in, or
+(b) after the Xinu directory has been moved.
+
+**************************************************************
+***                     4.2bsd Users                       ***
+*** NOTE: if you are still running 4.2bsd, you must remove ***
+*** all .o files and libraries before doing anything else. ***
+*** To do so, type the following:                          ***
+***                                                        ***
+***             cd {Xinu-directory}/install                ***
+***             ./Install 4.2                              ***
+**************************************************************
+
+Installation involves changing references to {Xinu-directory}
+in all source files and then recompiling them.
+
+Step 1:	Execute shell script "Install" in this directory to
+        climb around the tree and create final versions	of
+	the source files.
+
+		cd {Xinu-directory}/install
+		./Install
+
+Step 2:	Change to the source directory and execute the
+	script that rebuilds binaries:
+
+		cd {Xinu-directory}/src
+        	Makeall > make.out &
+
+	If you have installed Xinu in other than /usr/Xinu, this
+	program takes about one hour on a VAX 780 (Hence, we suggest
+	that you run it in background).  Also be warned that there
+	are numerous programs in the cross-development software that
+	produce warning	messages when recompiled.  You do not need to
+	be superuser; only directories under {Xinu-directory} are
+	affected. 
+
+Step 3:	Add {Xinu-directory}/bin to your "path" so you can execute
+	commands that are found there:
+
+	C-shell users type:
+
+		set path=( $path {Xinu-directory}/bin )
+
+	Bourne shell users type:
+
+		PATH=$PATH:{Xinu-directory}/bin
+		export PATH
+
+	To make Xinu commands accessible after your next login, you
+	must change the path assignment in your .profile or .cshrc
+	files.
+
+
+Step 4:	Try the command "odt" in {Xinu-directory}/bin. It connects
+	your keyboard to a MicroVAX.
+
+		odt
+
+	To get the attention of the MicroVAX, type backslash followed
+	by null (CONTROL @).  The MicroVAX will stop execution and
+	print a prompt (>>>).  You are now talking to the MicroVAX's
+	console mode (consult the vendor's manual for additional
+	information on console commands).  To terminate the odt command,
+	kill the odt process with your normal interrupt character
+	(usually CONTROL-C or DELETE).
+
+Step 5: Change to the Xinu source directory and download the test
+	program:
+
+		cd {Xinu-directory}/src/sys/sys
+		download -a5 -cUVAX 
+		odt
+
+	It will print the Xinu login prompt.  Type a login, then
+	type "?" to get a list of Xinu commands.  Type CONTROL-c
+	or DEL to kill the odt command.
+
+Step 6:	You are ready to experiment with Xinu itself.  Change to
+	the source directory and modify the configuration for your
+	MicroVAX.  You should modify the definitions that specify
+	the Internet addresses of your time server, remote file
+	server, domain name server, and network gateway.  See
+	{Xinu-directory}/README for more information on network
+	addresses.
+
+		cd {Xinu-directory}/src/sys/sys
+		...edit file "Configuration"...
+		make a.out
+		download -a4 -cUVAX
+		odt
+
+	Note that because recompiling the Xinu sources may take
+	considerable time.  It is advisable to run make in the
+	background with output (and error messages) directed to
+	a file.
+
+	Make will recompile the Xinu sources, rebuild file "xinu.o",
+	and rebind library "libx.a".  However, it leaves the new
+	versions in source directory.  Make also compiles file
+	"test.c" and binds it with the new library to form file
+	"a.out".  When you are satisfied that the new version works,
+	run "make install" to copy the new version into the public
+	library directory, {Xinu-directory}/lib, where other users
+	may access it with /bin/ld or /bin/cc.
+
+	Other arguments can be used with make.  For details see the
+	file "Makefile".  Two that particularly useful ones are
+	"everything" that runs several scripts designed to test source
+	program formats, and "d" that runs "download -a4 ; odt" after
+	remaking a.out.  Thus, you normally run "make d" after a
+	change to recompile, download, and test the system.
+
+
+Suggestions
+-----------
+
+   Suggestions and reports of problems are welcomed.

@@ -1,0 +1,36 @@
+.TH KPRINTF DEBUG
+.SH NAME
+kprintf, kprintf_serv \- unbuffered uninterrupted formatted output
+.SH SYNOPSIS
+.B kprintf(format
+.RB [ ,
+arg ] ...
+.B )
+.br
+.B char *format;
+.sp
+.B kprintf_serv(format
+.RB [ ,
+arg ] ...
+.B )
+.br
+.B char *format;
+.SH DESCRIPTION
+In either form,
+.I kprintf
+writes formatted output to stdout without buffering the result.
+It does this while having interrupts disabled, so it can be called
+anywhere in a user's program or as a debugging aid for ConcurrenC
+system routines.
+.PP
+The form
+.I kprintf
+is for the main process of the ConcurrenC system, while
+.I kprint_serv
+is for the io_server process.  These are different because different
+interrupts are disabled in each.
+.SH SEE ALSO
+printf(3S) of the UNIX man pages
+.SH BUGS
+There is a maximum length of 1000 characters which can be printed out
+at one time.

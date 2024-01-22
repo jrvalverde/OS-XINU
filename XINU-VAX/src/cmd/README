@@ -1,0 +1,13 @@
+This is README in {Xinu directory}/src/cmd.
+
+To make and install all commands, run
+
+	./Makeall
+
+Notes
+-----
+
+   If you are not running Berkeley 4.2 UNIX or later, the archive
+format on your machine probably differs from the one used to build
+Xinu libraries.  The source, ar.c, has been included in this
+directory in case you need it.

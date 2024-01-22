@@ -1,0 +1,475 @@
+
+			   X I N U 
+			   -------
+
+   Xinu is a layered, process-based operating system.  A detailed
+description can be found in the text:
+
+	Comer, Douglas E., Operating System Design: The Xinu
+	  Approach, Prentice-Hall, 1984.
+
+	Comer, Douglas E., Operating System Design Vol 2:
+	  Internetworking with Xinu, Prentice-Hall, 1987.
+
+This directory contains version 8.1 of the software for the Sun-4
+SPARC architecture called VM Xinu.
+
+   To run VM Xinu, you will need at least 2 Sun-4 workstations.  The
+workstations are arranged in pairs, with the frontend machine serving
+as the editing and compiling machine, and the backend workstation
+being used to test the software.  Each pair of machines must be
+connected to the local network, and they must have an RS232 line
+connecting their two A serial ports.
+
+   The tar file contains source programs for both VM Xinu and the
+development system.  The tar file can be read into any directory.
+These programs do not need to be placed in system directories unless
+you want to do so.
+
+  Once downloaded, VM Xinu on the Sun-4 runs independently,
+communicating with the network servers over an Ethernet, using the
+standard DARPA Internet protocol suite TCP/IP.
+
+   This code assumes that you have some machines on your network which
+are capable of supplying the standard RARP, time, Sun Network File
+System (NFS), and Domain Name services.
+
+   We have attempted to keep most of the software identical to that
+published in the above text, only adding new code to support virtual
+memory, Sun NFS, Sun Remote Procedure Call (RPC).  Almost all of the
+higher level software is identical.  The low level software, in many
+cases, had to be rewritten to some extent.  At the very least, we have
+attempted to maintain the function of each source file, even if the
+code has been significantly changed.
+
+
+Acknowledgment
+--------------
+   VM Xinu for SPARC is a collective effort by students and faculty in the
+Purdue Internetworking and Systems Research Laboratory under the direction
+of Prof. Douglas Comer.
+
+   Many people have contributed to the Xinu project. Those who have
+made contributions to the virtual memory system and SPARC port
+include: Margaret Gaitatzes, Jim Griffioen, Gouben Li, John Lin, Andy
+Muckelbauer, Vic Norman, Shawn Ostermann, Vince Russo, Dave Stevens,
+and Raj Yavatkar.
+
+
+Copyright Notice
+----------------
+   See the README file in xinu8.1 directory.
+
+
+Installation
+------------
+   Choose a directory for the VM Xinu software.  You may put the VM Xinu
+software in any directory.  Throughout this document the directory
+into which you place VM Xinu is denoted {Xinu-directory}.
+
+   Make the VM Xinu directory and read in the tar file by typing the
+following commands:
+
+	mkdir {Xinu-directory}
+	cd {Xinu-directory}
+     
+then type
+	(copy sparc.vmxinu8.1.tar.Z to {Xinu-directory})
+        compress -d sparc.vmxinu8.1.tar.Z
+	tar xvf sparc.vmxinu8.1.tar
+
+   If you did not use /usr/xinu8.1 as {Xinu-directory} above, the we
+suggest that you make a symbolic link from /usr/xinu8.1 to the directory
+you chose as {Xinu-directory}.  You will need super user privilege to
+do so. This step is optional:
+
+	su
+	...supply super user password when asked...
+	ln -s {Xinu-directory} /usr/xinu8.1
+	CONTROL-d (to leave super user mode)
+
+
+
+
+System Configuration
+--------------------
+    Let me describe the configuration under which we run VM Xinu on the
+Sun-4.  The layout in the Xinu lab looks like this:
+
+
+	-----------------Department Ethernet---------------------
+	|						   	|
+	|							|
+	|							|
+	|    --------------            	     --------------	|
+	|    |		  |                  |            |	|
+	|    |	 Front	  |                  |   Back     |	|
+	|----|	  End     |====9600 baud=====|    End     |-----|
+	|    |	  Sun	  |      serial      |    Sun     |	|
+	|    |		  |                  |            |	|
+	|    --------------            	     --------------	|
+
+
+The front end Sun (F) is connected to the back end Sun (B) with both
+a 9600 bps serial line and a 10 Mbps ethernet.  F is a full Sun-3/50
+with keyboard, monitor, and in our case, a 78 Mbyte disk drive, although
+a diskless workstation will perform just as well.  B is a cpu box only;
+no keyboard, monitor, or disk.  B is configured to treat serial port
+A as its console for both input and output.
+
+We use a program called odt (an acronym from the LSI-11 "on-line
+debugging technique", which we have kept for historical reasons) that
+connects to serial port A on F and allows prom monitor commands
+and tty input to be sent to B via the serial line.  This works
+especially well if the user on F is running a windowing environment.
+
+
+Setup
+-----
+In order for the Suns to communicate as above, the backend Sun
+must consider serial port A to be its console device.  Neatly
+enough, if you boot a Sun-4 without a keyboard, it automatically
+does this, at least on input.  However, to work fully, the EEPROM
+needs to be changed so that B will automatically use the serial
+port as the console.  At this point, it is strongly recommended that
+you look in "Installing Unix on the Sun Workstation," Appendix D, "the
+PROM Monitor and the EEPROM."  It contains full reference for that
+which will only be passed over lightly here.
+
+To set up the backend Sun (you must do this part with a keyboard
+and monitor attached):
+
+1) hit L1-a	(should transfer control to the EEPROM monitor)
+2) type "q 1f[return]"	([return] is the return key)
+3) type "10[return]"
+4) type " [return]"	(space then return)
+
+Also, it speeds up the boot process if the back-end sun automatically
+uses the ethernet as the default boot device.  You will need to
+know whether your Sun uses the lance ethernet controller (le) or
+the intel ethernet controller (ie).
+
+1) hit L1-a
+2) type "q 18[return]"
+3) type "12[return]"	This code tells the Sun not to do
+			device polling, but to boot from
+			the device specified in the following
+			locations.
+4) type "69[return]"	Hex code for "i".  If your Sun uses
+			the lance ethernet, you need the hex
+			code for "l", which is 6c.
+5) type "0[return]"	Literal 0.
+6) type "0[return]"	Literal 0.
+7) type "0[return]"	Literal 0.
+8) type " [return]"	space return, exits programming of
+			EEPROM Monitor.
+
+This programs the back-end Sun to boot from device ie(0,0,0),
+or le(0,0,0) depending on the value entered above.
+
+So, on to booting.  B is put in prom monitor mode by sending
+a break down the serial line (a \^@ in odt does this).  The user
+then issues a boot instruction for B, which rarps over the ethernet
+to find its IP address, and then uses the tftp protocol which
+is stored in ROM to download the Xinu operating system from F,
+still using the ethernet.  B will also boot automatically after
+a power cycle.
+
+
+Boot setup
+----------
+    When a diskless sun boots, it tries to determine its IP address.
+To do this, it sends out a RARP packet, which is answered by any other
+machine which knows the IP address which corresponds to the Sun's
+physical address.  The booting sun will then request a boot file via
+TFTP from the FIRST machine which answered the RARP request.  In order
+for our boot sequence to work correctly, the front end Sun should have
+an entry for the back end sun in its file "/etc/ethers", which binds
+physical addresses to IP addresses, and it must also be running
+"rarpd".  The only file which the booting back end Sun can request is
+"/tftpboot/AABBCCDD", where AABBCCDD is the hex representation of the
+IP address of the back end Sun.  We make this file a symbolic link to
+the file "vmxinu" in the same directory.  For example, the /tftpboot
+directory for a front end Sun connected to a back end Sun with IP
+address 128.10.2.89 would look like:
+
+     lrwxrwxrwx  1 root        5 Sep  2 15:58 800A0259 -> vmxinu
+     -rwxr-xr--  1 lin        445288 Jan 11 16:47 vmxinu
+
+** Note that both files must be world readable.    
+
+Note: using yellow pages may cause difficulty in the above sequence.
+If you are running yellow pages, you should either turn yellow
+pages off (a drastic step) or put an entry for the back-end Sun
+in the /etc/ethers of your boot server.  However, the link in
+/tftpboot should still be present only on the front-end Sun.
+It is the presence of this file that determines who answers
+the RARP request.  
+
+
+Network Servers
+---------------
+   VM Xinu utilizes the services provided by several network servers
+such as the domain name server, the time server, a RARP server, a
+remote file server, and a page server.  The domain name server, time
+server, and RARP server are standard UNIX servers.  You will need to
+know the internet address and UDP port number of these servers when
+you configure the VM Xinu kernel.  Ask your local network guru to tell
+you internet addresses (in dotted decimal notation) for these servers.
+
+   You can put the information in the file sys/h/netconf.default.h, using
+"bootp" protocol, or input them during system startup. The default
+method is to obtain the information from sys/h/netconf.default.h. You can
+change the default method by modifying the file sys/net/net/netconfig.c.
+
+   VM Xinu requires a Remote File Server for file storage and a Page
+Server for VM paging. VM Xinu uses two kinds of page servers, Xinu
+Remote Memory Server and NFS server. The Remote Memory Server provides
+more efficient operation than NFS servers. In this release, we
+recommend that you use NFS for both file storage and paging because we
+tested the system using NFS. We plan to optimize and test the Remote
+Memory Server in later revisions.
+
+   In sys/conf/Configuration file, the default paging server is set to
+NFS. You may change it to use the Remote Memory Server if you choose
+to. If you use NFS for paging, make sure that you specify the swap
+directory in sys/h/nfspgio.h.  By default, the user-id and the group-id
+for accessing the swap directory is set to "nodody". So, make sure
+your swap directory is world readable and writable. Or, you can change
+them to different values in sys/conf/Configuration file.
+
+
+Remote File Server
+------------------
+(You can skip this section if your are running NFS)
+
+   The remote file server answers queries from the network and reads/writes
+files as directed.  The file server has the permissions of the user
+who starts it.  We recommend that you install a new user account
+(e.g., "xinu"), and always execute the file server as that user.
+Also, you should understand that the file server makes all
+world-readable files accessible over the network.  If you connect to
+the DARPA Internet, it makes world-readable files accessible from
+foreign sites.
+
+   The file server comes configured to use UDP port 2001.  Check with
+your local network guru to make sure 2001 is not in use, and if it is,
+choose a new port number for the file server.  Change the default port
+in the software in {Xinu-directory}/xinu/src/cmd/fs or just use the -p option
+when invoking fs.  You must also change the port number that the
+kernel uses - it can be found in file
+
+	{Xinu-directory}/xinu/src/sys/h/netconf.default.h
+
+Instructions to install/invoke the server can be found in the file
+
+	{Xinu-directory}/xinu/install/README
+
+
+Page Server
+-----------
+(You can skip this section if you use NFS for paging)
+
+   The page server provides backing storage for VM Xinu running on the
+diskless backend SUN-4.  The page server is capable of providing
+backing storage to several VM Xinu "clients" simultaneously.  When
+VM Xinu exhausts the local physical memory, it pages across the
+network to the page server.
+
+   The page server can be started as any user, however we suggest you
+start the page server as the "xinu" user.  The VM Xinu kernel comes
+configured to use UDP port 2020.  Check with you local network guru to
+make sure 2020 is not in use.  If it is, choose a new port number for
+the page serve, and change the port number in the file
+
+	{Xinu-directory}/xinu/src/sys/h/netconf.default.h
+
+The page server uses getservbyname("xinupageserver") to get the UDP
+port number to listen on.  Have your local networking guru install
+
+	xinupageserver 2020
+
+in your /etc/services (or yellow pages), before you start the page
+server.  Otherwise you can just use the page server's -p option to
+specify the UDP port to listen on.
+
+   The page server's -nd option (number of 1K data blocks) allows you
+to tell the page server how much virtual memory to use for backing
+storage.  We suggest using -nd 4000 so the server can store up to 4M
+bytes of data.  If you do not specify a -nd size, then the server will
+attempt grab as much virtual memory as possible to store data. 
+Note: If the system you run the page server on has a user
+heap size limit that is close to the systems swap space size,
+the system may slow down to a sluggish crawl.  The page server will grab
+all available swap space leaving almost none for the other processes in
+the system.
+
+
+Final Installation
+------------------
+   To complete installation you must customize the VM Xinu kernel
+configuration and recompile source programs that contain references to
+the Xinu directory.  Instructions to do this can be found in the file
+
+	cat {Xinu-directory}/xinu/install/README
+
+Follow the instructions found in this file to install and run VM Xinu.
+
+
+Try Running Xinu
+----------------
+   Once you have a network running a RARP server, time server, name server,
+remote file server, and page server, you can boot VM Xinu.  To download
+and run VM Xinu:
+
+	cd {Xinu-directory}/xinu/src/sys
+	cp vmxinu /tftpboot/vmxinu
+	odt
+	b            /* this is a SUN console command */
+	...you should get Xinu boot message and login prompt...
+	type any login
+	...you should get prompt with machine name in it...
+	...try commands such as the following...
+	ps
+	date
+	dg
+	help
+	mount
+	...try accessing remote files as follows...
+	nfsls /			(or rls / if you are running RFS)
+	cat > /tmp/junk
+	Hi there - this is a file
+	created from Xinu
+	CONTROL-D
+	cat /tmp/junk
+	...you should see what you just created...
+	...If you have compiled and mounted the user level programs
+	...correctly, then you should be able to run them to. Try
+	/bin/hello
+	/bin/calc 97 x 523
+
+
+Directories
+-----------
+   When the tape has been read, you will find a directory
+structure like this:
+
+1 .				Xinu-directory (usually /usr/xinu8)
+
+  2 /xinu			xinu kernel and servers
+
+    3 /include			kernel include files
+
+    3 /bin			cross-development software
+
+    3 /lib			kernel library files
+
+    3 /src			kernel and server source code
+      4 /cmd			cross-development and server source code
+      4 /lib			kernel library source code
+      4 /sys			xinu kernel source code
+        5 /sys			basic kernel routines
+        5 /h			kernel header files
+        5 /net			kernel network routines
+        5 /devs			kernel device drivers
+        5 /misc			misc kernel devices (debugging routines)
+        5 /vm			kernel virtual memory support
+        5 /shell		kernel shell routines
+        5 /conf			kernel Configuration information
+      4 /con			config program source code
+      4 /tools			misc tools source code
+      4 /makefiles		misc make files
+
+    3 /contrib			distributed odt, upload source code
+
+    3 /man			manual pages
+
+    3 /install			installation instructions
+
+  2 /programs			dynamically loaded user programs and root
+				of remote file system
+
+    3 /bin			executables
+
+    3 /include			user level header files
+
+    3 /src			source code
+      4 /new			new user level programs
+      4 /lib			library souce code
+        5 /unixsyscall		unix simulation library
+        5 /libxc		small c library
+
+    3 /lib			user libraries
+
+    3 /usr			/usr for remote file systems
+
+    3 /tmp			/tmp for remote file systems
+
+    3 /etc			/etc for remote file systems
+
+
+
+Differences between V7 Sun and V8 Sun (Sun VM Xinu)
+---------------------------------------------------
+   Obviously there are many differences between V7 Xinu and VM Xinu
+(V8).  The most glaring difference is the added virtual memory support.
+See the file {Xinu-directory}/docs/overview.doc for a description of the new
+features of VM Xinu.  Because of the large number of changes, I will
+briefly list things that have changed.  Please see the code for more
+details:
+
+	o added virtual memory support (see the
+	  {Xinu-directory}/xinu/src/sys/vm directory for new files)
+	o add several new shell commands to print out various virtual
+	  memory data structures
+	o clock now interrupts 100 times a second
+	o network buffer pool is now allocated in DMA space so
+	  that no copying occurs at the ethernet level.  This changes
+	  the semantics of ethread slightly.  Also fixed a few bugs in
+	  the ethernet interrupt handler
+	o changed the constant INTERNET to UDP  (for future merger
+	  with the TCP device in our next release).
+	o changed the shell to execute dynamic processes
+	o some shell commands are now (sort-of) useless (create, snap, reboot)
+	o changed system startup drastically
+	o added "address spaces" and "threads".  Processes in V7 Xinu
+	  are now called kernel "threads".  Address Spaces are
+	  protected from eachother.  Threads in the same address space
+	  share everything except their stack.  Each thread has 2
+	  stacks: a user stack and a kernel stack.
+	o added kernel and user mode
+	o added new kernel threads to support virtual memory
+	o added a page server for backing storage.
+        o added Sun NFS for file storage and VM paging.
+	o added Sun RPC and XDR support.
+        o added system configuration using Sun ROM monitor.
+	o added on-demand loading of the "a.out" image.
+	o enhanced TCP code.
+
+
+Problems or Questions
+---------------------
+   VM Xinu was designed and written by Jim Griffioen and Dr. Douglas
+Comer. Sun NFS and RPC were implemented by Shawn Ostermann. John Lin
+integrated Jim's VM system with Shawn's NFS implementation and made
+necessary changes to the VM code. Dave Stevens implemented TCP/IP.
+
+   This is a research version and represents on-going distributed
+systems research.  Reports of errors in the software or documentation
+are gratefully accepted. Please mail all comments and bug reports to:
+
+        Internet address:
+                jng@cs.purdue.edu
+                lin@cs.purdue.edu
+                comer@cs.purdue.edu
+        UUCP address:
+                {ucbvax,decvax,hplabs}!purdue!jng
+                {ucbvax,decvax,hplabs}!purdue!lin
+                {ucbvax,decvax,hplabs}!purdue!comer
+        Postal address:
+                Jim Griffioen
+                Department of Computer Science
+                Purdue University
+                West Lafayette, IN  47907
+                (317) 494-7836
+

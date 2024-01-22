@@ -1,0 +1,4 @@
+#! /bin/sh
+
+echo "cc -S -I../../h -DSUN3 -sun3 $*"
+cc -S -I../../h -DSUN3 -sun3 $*

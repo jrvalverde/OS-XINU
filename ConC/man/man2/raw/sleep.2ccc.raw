@@ -1,0 +1,38 @@
+.TH SLEEP 2CCC
+.SH NAME
+sleep, sleep10 \- go to sleep for a specified time
+.SH SYNOPSIS
+.nf
+.B int sleep(secs)
+.B int secs;
+.sp
+.B int sleep10(tenths)
+.B int tenths;
+.fi
+.SH DESCRIPTION
+In either form,
+.I sleep
+causes the current task to delay for a specified time and then
+resume.
+The form
+.I sleep
+expects the delay to be given in an integral number of seconds;
+it is most useful for longer delays.
+The form
+.I sleep10
+expects the delay to be given in an integral number of 1/10
+seconds; it is most useful for short delays.
+.PP
+Sleeping is not the same as hibernation (see SUSPEND(2CCC)).
+In particular, sleeping tasks cannot be awakened until they
+time out.
+.SH RETURN VALUE
+Both forms return -1 and errno is set to EINVAL if the argument is negative.
+Otherwise they delay for the specified time and return 0.
+.SH SEE ALSO
+suspend(2CCC)
+.SH BUGS
+The maximum sleep is 32767 seconds (about 546 minutes, or 9.1 hours).
+Sleep guarantees a lower bound on delay, but since the system may
+delay processing of
+interrupts at times, sleep cannot guarantee an upper bound.

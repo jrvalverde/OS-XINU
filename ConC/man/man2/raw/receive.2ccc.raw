@@ -1,0 +1,5 @@
+.TH RECEIVE 2CCC
+.SH USE INSTEAD
+.I treceive(2CCC)
+or
+.I trecvclr.

@@ -1,0 +1,12 @@
+.TH RUSERPASS 3
+.SH NOTE
+The routines in this package --
+.I ruserpass,
+.I mkpwclear,
+and
+.I mkpwunclear --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.PP
+The UNIX man pages for this could not be found.

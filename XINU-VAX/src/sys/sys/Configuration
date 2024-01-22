@@ -1,0 +1,161 @@
+/* Configuration - (device configuration specifications) */
+
+/* "type" declarations for both real- and pseudo- devices */
+
+/* terminals connected to vax console unit */
+tty:
+	on VCU		-i vcuinit	-o ttyopen	-c ionull
+			-r ttyread	-w vcuwrite	-s ioerr
+			-p vcuputc	-g ttygetc	-n vcucntl
+			-iint vcuiin	-oint vcuoin
+/* terminals connected by serial lines */
+	on SLU		-i ttyinit	-o ttyopen	-c ionull
+			-r ttyread	-w ttywrite	-s ioerr
+			-p ttyputc	-g ttygetc	-n ttycntl
+			-iint ttyiin	-oint ttyoin
+/* terminals connected to dhv11 8-channel serial device */
+/*
+	on DHV		-i dhvinit	-o ttyopen	-c ionull
+			-r ttyread	-w dhvwrite	-s ioerr
+			-p dhvputc	-g ttygetc	-n dhvcntl
+			-iint dhviin	-oint dhvoin
+*/
+/* Ethernet using a DEQNA interface */
+eth:
+	on DEQ		-i ethinit	-o ioerr	-c ioerr
+			-r ethread	-w ethwrite	-s ioerr
+			-n ioerr	-g ioerr	-p ioerr
+			-iint ethinter	-oint ethinter
+/* Datagram interface to network (master device) */
+dgm:
+	on ETH		-i ionull	-o dgmopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n dgmcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+/* A datagram "connection"  (pseudo-device returned by dgm open) */
+dg:
+	on ETH		-i dginit	-o ioerr	-c dgclose
+			-r dgread	-w dgwrite	-s ioerr
+			-n dgcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+/* Remote file system master device (open to get rf device) */
+rfm:
+	on DGM		-i ioerr	-o rfopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n rfcntl	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+/* A remote file (pseudo-device returned by rfm open) */
+rf:
+	on DGM		-i rfinit	-o ioerr	-c rfclose
+			-n rfcntl	-g rfgetc	-p rfputc
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+/* Name system (topmost level of name resolution mechanism) */
+nsys:
+	on TOP		-i naminit	-o namopen	-c ioerr
+			-r ioerr	-w ioerr	-s ioerr
+			-n ioerr	-g ioerr	-p ioerr
+			-iint ioerr	-oint ioerr	-csr 0
+			-ivec 0		-ovec 0
+%
+
+/* Device definitions starting with terminals */
+
+CONSOLE		is tty	on VCU			    ivec=0370 ovec=0374
+/*TTY1		is tty	on DHV		csr=0176500 ivec=0300 ovec=0304*/
+/*TTY2		is tty	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY3		is tty	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY4		is tty 	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY5		is tty 	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY6		is tty 	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY7		is tty 	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+/*TTY8		is tty 	on DHV		csr=0000000 ivec=0000 ovec=0000*/
+
+/* Physical ethernet raw packet interface */
+
+ETHER		is eth	on DEQ		csr=017774440 ivec=01400 ovec=01400
+
+/* Datagram network interface (master pseudo-device) */
+
+INTERNET	is dgm	on ETH
+
+/* Pseudo-device slots for datagram "connections" */
+DGRAM1		is dg	on ETH
+DGRAM2		is dg	on ETH
+DGRAM3		is dg	on ETH
+DGRAM4		is dg	on ETH
+DGRAM5		is dg	on ETH
+DGRAM6		is dg	on ETH
+
+/* Remote file system interface (master pseudo-device) */
+RFILSYS		is rfm	on DGM
+
+/* Pseudo-device slots for remote files */
+RFILE1		is rf	on DGM
+RFILE2		is rf	on DGM
+RFILE3		is rf	on DGM
+RFILE4		is rf	on DGM
+RFILE5		is rf	on DGM
+RFILE6		is rf	on DGM
+RFILE7		is rf	on DGM
+RFILE8		is rf	on DGM
+RFILE9		is rf	on DGM
+RFILE10		is rf	on DGM
+
+/* Pseudo device for the abstract (file) name space */
+NAMESPACE	is nsys	on TOP
+
+%
+
+/* Configuration and Size Constants */
+
+#define	NPROC	100			/* number of user processes	*/
+#define	NSEM	200			/* total number of semaphores	*/
+#define	MEMMARK				/* define if memory marking used*/
+#define	RTCLOCK				/* system has a real-time clock	*/
+#define	STKCHK				/* resched checks stack overflow*/
+#define	NETDAEMON			/* Ethernet network daemon runs	*/
+#define	GATEWAY     128,10,2,70		/* Gateway address		*/
+#define	TSERVER     "128.10.2.3:37"	/* Time server address		*/
+#define	RSERVER     "128.10.2.8:2001"	/* Remote file server address	*/
+#define	DSERVER     "128.10.2.8:53"	/* Domain Name server address	*/
+#define	VERSION     "7.6 (03/08/87)"	/* label printed at startup	*/
+					/* (vers7: Diskless Workstation)*/
+/************************************************************************/
+/*			Target machine type				*/
+/* To reconfigure for a different target VAX system, change the		*/
+/* following statement to define one of:				*/
+/*									*/
+/*	VAX8600 VAX785 VAX780 VAX750 VAX730 VAX725 UVAXII UVAXI		*/
+/*									*/
+/* Yes folks, we actually downloaded Xinu into an 8600 (but there's	*/
+/* no Unibus Ethernet driver.						*/
+/*									*/
+/************************************************************************/
+
+#define	UVAX				/* machine type			*/
+
+#ifdef	UVAX
+#define	SYSTEM		"MicroVAX"	/* name printed at startup	*/
+#endif
+#ifdef	VAX725
+#define	SYSTEM		"VAX 11/725"
+#endif
+#ifdef	VAX730
+#define	SYSTEM		"VAX 11/730"
+#endif
+#ifdef	VAX750
+#define	SYSTEM		"VAX 11/750"
+#endif
+#ifdef	VAX780
+#define	SYSTEM		"VAX 11/780"
+#endif
+#ifdef	VAX785
+#define	SYSTEM		"VAX 11/785"
+#endif
+#ifdef	VAX8600
+#define	SYSTEM		"VAX 8600"
+#endif

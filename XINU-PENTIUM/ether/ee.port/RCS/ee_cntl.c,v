@@ -1,0 +1,59 @@
+head	1.1;
+access;
+symbols;
+locks
+	lin:1.1; strict;
+comment	@ * @;
+
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@/* ee_cntl.c - ee_cntl */
+
+#include <conf.h>
+#include <kernel.h>
+#include <network.h>
+
+/*------------------------------------------------------------------------
+ * ee_cntl - handle Intel EtherExpress16 control() functions
+ *------------------------------------------------------------------------
+ */
+int
+ee_cntl(pdev, func, arg)
+struct devsw	*pdev;
+int		func;
+char		*arg;
+{
+	STATWORD	ps;
+	struct etdev	*ped = &ee[pdev->dvminor];
+	int		rv;
+
+	switch (func) {
+	case EPC_PROMON:
+	case EPC_PROMOFF:
+		rv = SYSERR;	/* not supported yet */
+	case EPC_MADD:
+		rv = ee_mcadd(ped, arg);
+		break;
+	case EPC_MDEL:
+		rv = ee_mcdel(ped, arg);
+		break;
+	default:
+		rv = SYSERR;
+	}
+	return rv;
+}
+@

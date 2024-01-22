@@ -1,0 +1,15 @@
+.TH GETGRENT 3
+.SH NOTE
+The routines in this package --
+.I getgrent,
+.I endgrent,
+.I getgrgid,
+.I getgrnam,
+.I setgrent
+and
+.I initgroups --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+initgroups(3X), getgrent(3) of the UNIX man pages

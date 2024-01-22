@@ -1,0 +1,110 @@
+
+			   X I N U 
+			   -------
+
+   Xinu is a layered, process-based operating system.  A detailed
+description can be found in the text:
+
+	Comer, Douglas E., Operating System Design: The Xinu
+	  Approach, Prentice-Hall, 1984.
+
+	Comer, Douglas E., Operating System Design Vol 2:
+	  Internetworking with Xinu, Prentice-Hall, 1987.
+
+Sparc.vmxinu8.1.tar.Z contains version 8.1 of the software for the Sun-4
+SPARC architecture called VM Xinu.
+
+   To run VM Xinu, you will need at least 2 Sun-4 workstations.  The
+workstations are arranged in pairs, with the frontend machine serving
+as the editing and compiling machine, and the backend workstation
+being used to test the software.  Each pair of machines must be
+connected to the local network, and they must have an RS232 line
+connecting their two A serial ports.
+
+   The tar file contains source programs for both VM Xinu and the
+development system.  The tar file can be read into any directory.
+These programs do not need to be placed in system directories unless
+you want to do so.
+
+  Once downloaded, VM Xinu on the Sun-4 runs independently,
+communicating with the network servers over an Ethernet, using the
+standard DARPA Internet protocol suite TCP/IP.
+
+   This code assumes that you have some machines on your network which
+are capable of supplying the standard RARP, time, Sun Network File
+System (NFS), and Domain Name services.
+
+   We have attempted to keep most of the software identical to that
+published in the above text, only adding new code to support virtual
+memory, Sun NFS, Sun Remote Procedure Call (RPC).  Almost all of the
+higher level software is identical.  The low level software, in many
+cases, had to be rewritten to some extent.  At the very least, we have
+attempted to maintain the function of each source file, even if the
+code has been significantly changed.
+
+
+Acknowledgments
+---------------
+   VM Xinu for SPARC is a collective effort by students and faculty in the
+Purdue Internetworking and Systems Research Laboratory under the direction
+of Prof. Douglas Comer.
+
+   Many people have contributed to the Xinu project. Those who have
+made contributions to the virtual memory system and SPARC port
+include: Margaret Gaitatzes, Jim Griffioen, Gouben Li, John Lin, Andy
+Muckelbauer, Vic Norman, Shawn Ostermann, Vince Russo, Dave Stevens,
+and Raj Yavatkar.
+
+
+Differences between V7 Sun and V8 Sun (Sun VM Xinu)
+---------------------------------------------------
+   Obviously there are many differences between V7 Xinu and VM Xinu
+(V8).  The most glaring difference is the added virtual memory support.
+See the file {Xinu-directory}/docs/overview.doc for a description of the new
+features of VM Xinu.  Because of the large number of changes, I will
+briefly list things that have changed.  Please see the code for more
+details:
+
+	o added virtual memory support (see the
+	  {Xinu-directory}/xinu/src/sys/vm directory for new files)
+	o add several new shell commands to print out various virtual
+	  memory data structures
+	o clock now interrupts 100 times a second
+	o network buffer pool is now allocated in DMA space so
+	  that no copying occurs at the ethernet level.  This changes
+	  the semantics of ethread slightly.  Also fixed a few bugs in
+	  the ethernet interrupt handler
+	o changed the constant INTERNET to UDP  (for future merger
+	  with the TCP device in our next release).
+	o changed the shell to execute dynamic processes
+	o some shell commands are now (sort-of) useless (create, snap, reboot)
+	o changed system startup drastically
+	o added "address spaces" and "threads".  Processes in V7 Xinu
+	  are now called kernel "threads".  Address Spaces are
+	  protected from eachother.  Threads in the same address space
+	  share everything except their stack.  Each thread has 2
+	  stacks: a user stack and a kernel stack.
+	o added kernel and user mode
+	o added new kernel threads to support virtual memory
+	o added a page server for backing storage.
+        o added Sun NFS for file storage and VM paging.
+	o added Sun RPC and XDR support.
+        o added system configuration using Sun ROM monitor.
+	o added on-demand loading of the "a.out" image.
+	o enhanced TCP code.
+
+
+Problems or Questions
+---------------------
+   VM Xinu was designed and written by Jim Griffioen and Dr. Douglas
+Comer. Sun NFS and RPC were implemented by Shawn Ostermann. John Lin
+integrated Jim's VM system with Shawn's NFS implementation and made
+necessary changes to the VM code. Dave Stevens implemented TCP/IP.
+
+   This is a research version and represents on-going distributed
+systems research.  Reports of errors in the software or documentation
+are gratefully accepted. Please mail all comments and bug reports to:
+
+        e-mail:
+                griff@ms.uky.edu
+                comer@cs.purdue.edu

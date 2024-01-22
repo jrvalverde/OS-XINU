@@ -1,0 +1,32 @@
+.TH FREEMEM 2CCC
+.SH NAME
+freemem, freestk \- free a block of main memory allocated with
+.I getmem
+or
+.I getstk.
+.SH SYNOPSIS
+.nf
+.B freemem(p,len)
+.B char *p;
+.B int len;
+.sp
+.B freestk(p,len)
+.B char *p;
+.B int len;
+.fi
+.SH DESCRIPTION
+In either form,
+.I freemem
+deallocates the block pointed to by
+.I p
+of length
+.I len
+(using
+.I free(3)
+).
+.SH RETURN VALUE
+The return value is whatever
+.I free(3)
+returns.
+.SH SEE ALSO
+getmem(2CCC), buffer(3CCC), malloc(3)

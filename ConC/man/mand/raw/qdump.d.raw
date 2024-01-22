@@ -1,0 +1,20 @@
+.TH QDUMP DEBUG
+.SH NAME
+qdump, qdumph, qdumpa \- dump the queue structure
+.SH SYNOPSIS
+.B qdump()
+.sp
+.B qdumph()
+.sp
+.B qdumpa()
+.SH DESCRIPTION
+.I Qdump
+dumps the contents of the queue structure that is currently in use.
+This includes the ready list, semaphore queues, clock queue, etc..
+.I Qdumph
+does the same thing as
+.I qdump,
+but halts when finished.
+.I Qdumpa
+dumps all the contents of the queue structure, whether or not the
+particular queue is in use.

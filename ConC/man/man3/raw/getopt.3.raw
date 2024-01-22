@@ -1,0 +1,9 @@
+.TH GETOPT 3
+.SH NOTE
+The routine in this package --
+.I getopt --
+might not work correctly if it is called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+getopt(3) of the UNIX man pages

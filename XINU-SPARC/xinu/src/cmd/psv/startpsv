@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "./psv -nd 4000 -lf psv.log"
+./psv -nd 4000 -lf psv.log
+
+ps aux |grep psv
+

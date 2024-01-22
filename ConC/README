@@ -1,0 +1,206 @@
+
+		      C O N C U R R E N C
+		      -------------------
+
+   ConcurrenC (Copyright (c) 1985 -- can be distributed for research
+purposes) is a concurrent version of the C programming language.
+A brief description can be found in the file man/INTRO/INTRO,
+and details of commands and routines can be found in the manual pages
+contained in the sub-directory 'man' supplied with this system.
+Implementation details can be found in the README file in the src
+directory.  A detailed description of XINU, the operating system upon
+which ConcurrenC is built, can be found in the following text:
+
+	Comer, Douglas E., Operating System Design: The Xinu
+	  Approach, Prentice-Hall, 1983.
+
+   To use the ConcurrenC system on this tape, you will need a
+Digital Equipment Corp. VAX computer running the Berkeley 4.2
+or 4.3 UNIX operating system.
+
+   The tape is self-contained.  It contains shell scripts for
+compiling ConcurrenC programs as well as manual pages and source
+code for both ConcurrenC and modified UNIX routines.  The tape can
+be read into any directory.  The ConcurrenC compiling commands
+need not be placed in system directories unless you want to do so.
+
+
+Setting up your system
+----------------------
+
+   Choose a directory for the ConcurrenC software.  You need not be
+in this directory to compile ConcurrenC programs -- it is merely the
+place to store the ConcurrenC software.  Throughout this documentation,
+the directory into which you place the ConcurrenC system is denoted
+{ConC-dir}.
+
+   If you are reading this system from a tar file, type these commands:
+
+	mkdir {ConC-dir}
+	cd {ConC-dir}
+	tar xf <tar file>
+
+   If you are reading this system from tape, your distribution tape
+has two tar files of the ConcurrenC system on it -- the first is for
+UNIX 4.3BSD and the second for UNIX 4.2BSD.  If you are running
+UNIX 4.2BSD, type the following command before running the next
+set of commands:
+
+	mt -f /dev/rmt0.nr fsf 1   (your 1600 bpi tape device may
+				    be named something other than
+				    /dev/rmt0)
+
+(Continue for tape installation) Now type the following commands:
+
+	mkdir {ConC-dir}
+	cd {ConC-dir}
+	tar xbf 20 /dev/rmt0	(your 1600 bpi tape device may
+				 be named something other than
+				 /dev/rmt0)
+
+
+Installation
+------------
+
+   If you are running UNIX 4.3BSD, before installing, you need to
+know how your system does host name lookup.  There are two possible
+methods for doing host name lookup.  Refer to {ConC-dir}/src/Makefile
+to set up ConcurrenC using the correct routines for your system.
+
+   To install your ConcurrenC system, type the following commands:
+
+	cd {ConC-dir}
+	make install >& make.out &
+
+   The make may take about 60 minutes to run.  Executing make as above
+will put the make into background and redirect all output to the file
+make.out, so you can do other things while the system is being installed.
+
+   To force making everything fresh (i.e., Makefile dependencies,
+all the object files, the bin directory, recompile example programs,
+and re-make manual pages), type the following:
+
+	cd {ConC-dir}
+	make force >& make.out &
+
+
+Setting up your path
+--------------------
+
+   Add {ConC-dir}/bin to your "path" so you can compile ConcurrenC
+   programs:
+
+	C-shell users type:
+
+		set path=( $path {ConC-dir}/bin )
+
+	Bourne shell users type:
+
+		PATH=$PATH:{ConC-dir}/bin
+		export PATH
+
+   To make the ConcurrenC compiler accessible after your next login,
+you must change the path assignment in your .profile or .cshrc files.
+
+
+Testing the new system
+----------------------
+
+   Now test your newly installed system.  Pick one of your directories
+and type the following commands:
+
+	cd directory-of-your-choice
+	cp {ConC-dir}/example/test.c .
+	ccc test.c -o test.out
+	test.out
+
+   If everything is installed correctly, you will get the output
+   'hello world.'.
+
+   There is no change in argument format between ccc and cc.
+The above ccc command puts the executable binary into the file
+'test.out'.  If no -o option is given, the executable is put into
+the file 'a.out'.
+
+
+Directories
+-----------
+
+   When the tape has been read, you will find a directory
+structure like this (some subdirectories will not exist for
+the UNIX 4.2BSD system):
+
+1 .				{ConC-dir}
+
+  2 /bin			ConcurrenC compilation commands
+
+  2 /example			example programs
+    3 /data			data for example program ex5.c
+
+  2 /include			include files
+
+  2 /man			all manual pages for:
+    3 /INTRO			introduction paper
+    3 /man0			introduction to the ConCurrenC system
+    3 /man1			compilation commands and example progs
+    3 /man2			ConcurrenC and restricted UNIX system calls
+    3 /man3			ConcurrenC and restricted UNIX lib routines
+    3 /mand			ConcurrenC debugging routines
+    3 tmac.an			manual macros
+
+  2 /src			all sources and object files for
+				    (UNIX sources modified where needed):
+    3 /ConC_sys			ConcurrenC system and library routines
+    3 /compat-4.1		UNIX compat-4.1 routines
+    3 /compat-sys5		UNIX compat-sys5 routines
+    3 /gen			UNIX gen routines
+    3 /inet			UNIX inet routines
+    3 /net			UNIX net routines
+    3 /ns			UNIX ns routines
+    3 /stdio			UNIX stdio routines
+    3 /sys_interface		ConcurrenC-to-UNIX sys call interface
+				    routines
+    3 /vax			sources and object files for:
+      4 /compat-4.1		UNIX vax/compat-4.1 routines
+      4 /csu			UNIX vax/csu routines
+      4 /gen			UNIX vax/gen routines
+      4 /net			UNIX vax/net routines
+      4 /stdio			UNIX vax/stdio routines
+      4 /sys			actual UNIX system calls, declared as
+				    sys_<system call>
+    3 ccclib.a			ConcurrenC testing system library
+				    (used in tccc command)
+
+  2 Makefile			installation make file
+
+  2 README			this file
+
+  2 ccclib.a			installed ConcurrenC library
+				    (used in ccc command)
+
+
+Modifying your ConcurrenC system
+--------------------------------
+
+   Should you want to modify your ConcurrenC system, you will find
+instructions and some implementation details in the file
+{ConC-dir}/src/README.
+
+
+Problems or Questions
+-------- -- ---------
+
+Reports of errors in the software or documentation are gratefully
+accepted.  Please mail all comments and bug reports, indicating
+which ConcurrenC system you are running -- UNIX 4.2 or 4.3BSD, to:
+
+	DARPA Internet/ CSNet address:
+		ConC-bugs @ purdue . ARPA
+	uucp address:
+		purdue ! ConC-bugs
+	Postal address:
+		Kenneth Rodemann
+		Dept. Computer Science
+		Purdue University
+		West Lafayette, IN  47907
+		(317) 494-7801

@@ -1,0 +1,13 @@
+.TH EX1 1CCC
+.SH NAME
+ex1 - example program 1
+.SH DESCRIPTION
+.I Ex1
+has a single task which prints out "hello world".
+Since there are no calls to either
+.I create(2CCC)
+or
+.I tstart(2CCC),
+the io_server is not created.
+.SH SEE ALSO
+ex2(1CCC), create(2CCC), tstart(2CCC)

@@ -1,0 +1,10 @@
+.TH EXECL 3
+.SH NOTE
+.I Execl,
+.I execlp,
+.I execvp,
+.I execle,
+.I exect,
+and
+.I execv
+are not available in ConcurrenC.

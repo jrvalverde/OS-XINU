@@ -1,0 +1,45 @@
+.TH INTRO DEBUG
+.UC 4
+.de en
+.HP
+\\$1  \\$2  \\$3
+.br
+..
+.SH NAME
+intro \- introduction to the run-time debugging routines
+.DESCRIPTION
+The following routines are available for ConcurrenC system debugging:
+.sp
+.sp
+.nf
+.I "Name               Appears on Page            Description"
+.sp
+.nf
+.TP 3
+kprintf              kprintf(DEBUG)
+uninterrupted, unbuffered formatted output for the ConcurrenC system
+.TP 3
+kprintf_serv         kprintf(DEBUG)
+same as above, but for the io_server (they disable different interrupts)
+.TP 3
+qdump                qdump(DEBUG)  
+dump the used entries in the queue structure
+.TP 3
+qdumph               qdump(DEBUG)  
+dump the used entries in the queue structure and exit
+.TP 3
+qdumpa               qdump(DEBUG)  
+dump all entries in the queue structure
+.TP 3
+stdump               stdump(DEBUG) 
+dump the register and stack contents for a specific task
+.TP 3
+tdump                tdump(DEBUG)  
+dump the used entries in the task table
+.TP 3
+tdumph               tdump(DEBUG)  
+dump the used entries in the task table and halt
+.TP 3
+tdumpa               tdump(DEBUG)  
+dump all entries in the task table
+.fi

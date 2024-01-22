@@ -1,0 +1,134 @@
+addarg.o : addarg.c ../h/conf.h ../h/kernel.h ../h/proc.h ../h/shell.h \
+  ../h/mark.h 
+ascdate.o : ascdate.c ../h/conf.h ../h/kernel.h ../h/date.h 
+lexan.o : lexan.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h 
+login.o : login.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h \
+  ../h/network.h ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h \
+  ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h \
+  ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h \
+  ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h ../h/daemon.h \
+  ../h/snmpvars.h ../h/tty.h 
+shell.o : shell.c ../h/conf.h ../h/kernel.h ../h/proc.h ../h/shell.h \
+  ../h/mark.h ../h/cmd.h ../h/tty.h ../h/network.h ../h/lereg.h ../h/ip.h \
+  ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h \
+  ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h \
+  ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h \
+  ../h/daemon.h ../h/snmpvars.h 
+x_arp.o : x_arp.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_bpool.o : x_bpool.c ../h/conf.h ../h/kernel.h ../h/mark.h ../h/bufpool.h 
+x_cat.o : x_cat.c ../h/conf.h ../h/kernel.h 
+x_close.o : x_close.c ../h/conf.h ../h/kernel.h 
+x_conf.o : x_conf.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_cp.o : x_cp.c ../h/conf.h ../h/kernel.h 
+x_create.o : x_create.c ../h/conf.h ../h/kernel.h ../h/a.out.h 
+x_date.o : x_date.c ../h/conf.h ../h/kernel.h ../h/sleep.h ../h/date.h 
+x_devs.o : x_devs.c ../h/conf.h ../h/kernel.h 
+x_dg.o : x_dg.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_dumper.o : x_dumper.c ../h/conf.h ../h/kernel.h ../h/proc.h \
+  ../h/network.h ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h \
+  ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h \
+  ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h \
+  ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h ../h/daemon.h \
+  ../h/snmpvars.h 
+x_echo.o : x_echo.c ../h/conf.h ../h/kernel.h 
+x_exit.o : x_exit.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h 
+x_finger.o : x_finger.c ../h/conf.h ../h/kernel.h ../h/proc.h \
+  ../h/network.h ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h \
+  ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h \
+  ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h \
+  ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h ../h/daemon.h \
+  ../h/snmpvars.h 
+x_help.o : x_help.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h \
+  ../h/cmd.h 
+x_ifstat.o : x_ifstat.c ../h/conf.h ../h/kernel.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_igmp.o : x_igmp.c ../h/conf.h ../h/kernel.h ../h/proc.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_kill.o : x_kill.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h 
+x_mem.o : x_mem.c ../h/conf.h ../h/kernel.h ../h/proc.h ../h/mem.h 
+x_mount.o : x_mount.c ../h/conf.h ../h/kernel.h ../h/io.h ../h/name.h 
+x_mv.o : x_mv.c ../h/conf.h ../h/kernel.h ../h/file.h 
+x_net.o : x_net.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h ../h/asn1.h \
+  ../h/snmp.h ../h/mib.h 
+x_ns.o : x_ns.c ../h/conf.h ../h/kernel.h ../h/proc.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_ospf.o : x_ospf.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_ping.o : x_ping.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_ps.o : x_ps.c ../h/conf.h ../h/kernel.h ../h/proc.h 
+x_reboot.o : x_reboot.c ../h/conf.h ../h/kernel.h 
+x_rf.o : x_rf.c ../h/conf.h ../h/kernel.h ../h/fserver.h ../h/rfile.h \
+  ../h/file.h 
+x_rls.o : x_rls.c ../h/conf.h ../h/kernel.h ../h/shell.h ../h/mark.h \
+  ../h/network.h ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h \
+  ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h \
+  ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h \
+  ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h ../h/daemon.h \
+  ../h/snmpvars.h 
+x_rm.o : x_rm.c ../h/conf.h ../h/kernel.h ../h/file.h 
+x_route.o : x_route.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_routes.o : x_routes.c ../h/conf.h ../h/kernel.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_sleep.o : x_sleep.c ../h/conf.h ../h/kernel.h 
+x_snap.o : x_snap.c ../h/conf.h ../h/kernel.h ../h/mem.h 
+x_snmp.o : x_snmp.c ../h/conf.h ../h/kernel.h ../h/network.h ../h/lereg.h \
+  ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h \
+  ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h \
+  ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_timerq.o : x_timerq.c ../h/conf.h ../h/kernel.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h 
+x_unmou.o : x_unmou.c ../h/conf.h ../h/kernel.h ../h/io.h ../h/name.h 
+x_uptime.o : x_uptime.c ../h/conf.h ../h/kernel.h ../h/network.h \
+  ../h/lereg.h ../h/ip.h ../h/ether.h ../h/ipreass.h ../h/icmp.h ../h/udp.h \
+  ../h/tcp.h ../h/tcpfsm.h ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h \
+  ../h/arp.h ../h/fserver.h ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h \
+  ../h/netif.h ../h/route.h ../h/daemon.h ../h/snmpvars.h ../h/rwho.h 
+x_who.o : x_who.c ../h/conf.h ../h/kernel.h ../h/date.h ../h/shell.h \
+  ../h/mark.h ../h/network.h ../h/lereg.h ../h/ip.h ../h/ether.h \
+  ../h/ipreass.h ../h/icmp.h ../h/udp.h ../h/tcp.h ../h/tcpfsm.h \
+  ../h/tcpstat.h ../h/tcb.h ../h/net.h ../h/dgram.h ../h/arp.h ../h/fserver.h \
+  ../h/rfile.h ../h/file.h ../h/domain.h ../h/dma.h ../h/netif.h ../h/route.h \
+  ../h/daemon.h ../h/snmpvars.h 

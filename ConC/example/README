@@ -1,0 +1,6 @@
+This is file {ConC-dir}/example/README
+
+A bit about each of these programs can be found in section (1CCC)
+of the manual pages for ConcurrenC.
+
+The sources are in *.c and the executable binaries are in *.out .

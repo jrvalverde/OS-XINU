@@ -1,0 +1,39 @@
+    	This directory contains the sources for the BOOTP server
+    called bootpd.  It should work on any 4.3 derived Unix machine.
+    It is compliant with the RFCs but does not implement all of the
+    vendor specific values currently listed in RFC 1084.  It also has
+    support for an unimplemented vendor specific structure for the
+    Xinu operating system.  Support for this may be added at a later
+    time.
+
+    	The major features requiring mention will be discussed here.
+    There is currently no man page (though I might get to one
+    someday).  The data structures used to store the configuration
+    file consist of three multi-threaded hash tables using a simple
+    bucket hashing algorithm.  In addition, there are two other hash
+    tables (also bucket hashes) that are used to store duplicated
+    items of text and IP addresses.  See the files include/hash.h,
+    src/hash.c, src/inithash.c, src/lookup.c, and src/insert.c.  The
+    functions that manipulate these hash tables (insert() and
+    lookup()) are polymorphic so that we can really store/retrieve
+    anything in any hash table with the same two functions.
+
+    	The configuration file is patterned after suggestions in the
+    bootp RFC and the Unix termcap file.  See the sample configuration
+    file for the entry descriptions.  The one thing worth noting is
+    this:  The template field is like a macro, it expands inline.
+    This fact, combined with the fact that only the last of multiple
+    values for a tag is preserved, means that the position of the
+    template tag in an entry is important.  Also, when a list of
+    values for a tag is given (i.e. the gateway "gw" tag), order is
+    preserved and is passed to the client which should also preserve
+    the order.  Hence, you should specify such entries in the order of
+    preference that you want the client to use.
+
+    Acknowledgements:
+
+    	This program draws some of its ideas (like the configuration
+    file format) from previous work done at CMU.  However, this code
+    is solely the author's work and in no way is derivative from the
+    work at CMU.
+

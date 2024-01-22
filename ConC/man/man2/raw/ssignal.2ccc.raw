@@ -1,0 +1,50 @@
+.TH SSIGNAL 2CCC
+.SH NAME
+ssignal, ssignaln \- signal a semaphore
+.SH SYNOPSIS
+.nf
+.B int ssignal(sem)
+.B int sem;
+.sp
+.B int ssignaln(sem,count)
+.B int sem;
+.B int count;
+.fi
+.SH DESCRIPTION
+In either form,
+.I ssignal
+signals semaphore
+.I sem.
+The form
+.I ssignal
+increments the count of
+.I sem
+by 1 and frees the next task if any
+are waiting.
+The form
+.I ssignaln
+increments the semaphore by
+.I count
+and frees up to
+.I count
+tasks if that many are waiting.
+Note that
+ssignaln(sem,x)
+is equivalent to executing
+ssignal(sem)
+x times.
+.SH RETURN VALUE
+If the call is successful, 0 is returned.
+Otherwise -1 is returned and errno is set to
+indicate the error.
+.SH ERRORS
+.TP 15
+[EINVAL]
+Invalid argument (
+.I count
+).
+.TP 15
+[CEBADSEM]
+Invalid semaphore.
+.SH SEE ALSO
+scount(2CCC), screate(2CCC), sdelete(2CCC), sreset(2CCC), swait(2CCC)

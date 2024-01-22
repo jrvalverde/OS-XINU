@@ -1,0 +1,31 @@
+.TH SWAIT 2CCC
+.SH NAME
+swait \- block and wait until semaphore signaled
+.SH SYNOPSIS
+.nf
+.B int swait(sem)
+.B int sem;
+.fi
+.SH DESCRIPTION
+.I Swait
+decrements the count of semaphore
+.I sem,
+blocking the calling task if the count goes negative
+by enqueuing it in the queue for
+.I sem.
+The only ways to get free from a semaphore queue are for
+some other task to signal the semaphore, or
+for some other task to delete or reset the semaphore.
+.I Swait
+and
+.I ssignal
+are the two basic synchronization primitives in
+the system.
+.SH RETURN VALUE
+.I Swait
+returns -1 and errno is set to CEBADSEM if
+.I sem
+is invalid.
+Otherwise, it returns 0 once freed from the queue.
+.SH SEE ALSO
+scount(2CCC), screate(2CCC), sdelete(2CCC), ssignal(2CCC), sreset(2CCC)

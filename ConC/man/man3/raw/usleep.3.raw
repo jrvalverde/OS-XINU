@@ -1,0 +1,4 @@
+.TH USLEEP 3
+.SH NOTE
+.I Usleep
+is not available in ConcurrenC.

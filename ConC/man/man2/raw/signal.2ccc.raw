@@ -1,0 +1,5 @@
+.TH SIGNAL 2CCC
+.SH USE INSTEAD
+.I ssignal(2CCC)
+or
+.I ssignaln.

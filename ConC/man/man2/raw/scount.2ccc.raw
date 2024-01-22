@@ -1,0 +1,30 @@
+.TH SCOUNT 2CCC
+.SH NAME
+scount \- return the count associated with a semaphore
+.SH SYNOPSIS
+.nf
+.B s =  scount(sem)
+.B int s;
+.B int sem;
+.fi
+.SH DESCRIPTION
+.I Scount
+returns the current count associated with semaphore
+.I sem.
+If
+.I sem
+is invalid, -1 is returned and errno is set to CEBADSEM.
+A count of negative s means that there are s tasks waiting
+on the semaphore; a count of positive s means that at most s more
+calls to swait() can occur before a task will be blocked (assuming
+no intervening ssignals occur).
+.SH SEE ALSO
+screate(2CCC), sdelete(2CCC), ssignal(2CCC), sreset(2CCC), swait(2CCC)
+.SH BUGS
+The error return value of -1 is
+a legal semaphore count.  The indication that an actual error occurred is
+given in errno.  For this reason, errno is set to
+zero inside
+.I scount
+if no error occurred.  This is in opposition with the convention
+of system calls not reseting errno.

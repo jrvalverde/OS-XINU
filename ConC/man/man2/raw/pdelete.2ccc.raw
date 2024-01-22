@@ -1,0 +1,34 @@
+.TH PDELETE 2CCC
+.SH NAME
+pdelete \- delete a port
+.SH SYNOPSIS
+.B int pdelete(portid, dispose)
+.nf
+.B int portid;
+.B int (*dispose)(); 
+.fi
+.SH DESCRIPTION
+.I Pdelete
+deallocates port
+.I portid.
+The call returns -1 and errno is set to CEBADPT if
+.I portid
+is illegal or is not currently allocated.
+.PP
+The command has several effects, depending on the state of the 
+port at the time the call is issued.
+If tasks are waiting for messages from portid, they
+are made ready and return -1 to their caller. If messages
+exist in the port, they are disposed of by procedure
+.IR dispose .
+If tasks are waiting to place messages
+in the port, they are made ready and given -1 indications
+(just as if the port never existed).
+.I Pdelete
+performs the same function of clearing messages and tasks from a
+port as preset(2CCC)
+except that
+.I pdelete
+also deallocates the port.
+.SH SEE ALSO
+pcount(2CCC), pcreate(2CCC), preceive(2CCC), preset(2CCC), psend(2CCC)

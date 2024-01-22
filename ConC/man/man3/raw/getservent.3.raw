@@ -1,0 +1,14 @@
+.TH GETSERVENT 3
+.SH NOTE
+The routines in this package --
+.I getservent,
+.I endservent,
+.I getservbyname,
+.I getservbyport,
+and
+.I setservent --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+getservent(3N) of the UNIX man pages

@@ -1,0 +1,28 @@
+.TH INTRO 1CCC
+.SH NAME
+intro \- introduction to ConcurrenC compilation and example programs
+.SH CONCURRENC COMPILATION
+The ConcurrenC compilation shell script,
+.I ccc,
+is located in the directory {ConC-dir}/bin, where {ConC-dir}
+is the installation directory for ConcurrenC.
+This directory must be part of your PATH for you to execute it.
+If it is not in the directory /usr/ConC/bin, consult whoever installed
+ConcurrenC for the bin directory name and add it to your path.
+Refer to CCC(1CCC) for usage of this command.
+.SH EXAMPLE PROGRAMS
+Some sample programs have been included in the ConcurrenC system.
+They are located in the directory {ConC-dir}/example
+and are called ex1.c \- ex5.c .
+In ordred to compile ex2.c, for instance, type
+.sp
+.nf
+.in 1.0i
+ccc ex2.c -o ex2.out.
+.in 0.5i
+.fi
+.sp
+This will put the executable binary into the file ex2.out .
+Refer to EX1(1CCC) - EX5(1CCC) for a description of the programs.
+.SH SEE ALSO
+ccc(1CCC), ex1(1CCC), ex2(1CCC), ex3(1CCC), ex4(1CCC), ex5(1CCC)

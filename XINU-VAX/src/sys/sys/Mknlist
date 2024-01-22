@@ -1,0 +1,5 @@
+#!/bin/sh
+PATH=/bin:/usr/bin
+OUTFILE=$1
+shift
+nm -n $* | egrep ' T | D | B ' > $OUTFILE &

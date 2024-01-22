@@ -1,0 +1,49 @@
+==== .Cc "4" "Internetworking" 41
+==== .iX "internet" " " "41"
+==== .iX "address" " " "41"
+==== .Sc "4.1" "Introduction" 41
+==== .iX "internetworking" " " "41"
+==== .Sc "4.2" "Why An Internet?" 41
+==== .iX "internetwork" " " "42"
+==== .iX "internet" " " "42"
+==== .Bc "4.2.1" "Properties of the Internet" 42
+==== .iX "address" " " "42"
+==== .iX "network" " " "42"
+==== .iX "address" " " "42"
+==== .iX "route" " " "42"
+==== .Sc "4.3" "The DARPA Internet" 43
+==== .iX "DARPA" " " "43"
+==== .iX "protocol" " " "43"
+==== .sX "internet" "DARPA" "43"
+==== .iX "ARPANET" " " "43"
+==== .iX "SATNET" " " "43"
+==== .iX "protocol" " " "43"
+==== .iX "TCP/IP" " " "43"
+==== .Bc "4.3.1" "Internet Architecture" 43
+==== .iX "gateway" " " "43"
+==== .Bc "4.3.2" "Gateways" 43
+==== .iX "gateway" " " "43"
+==== .sX "network" "gateway" "43"
+==== .sX "internet" "gateway" "43"
+==== .Bc "4.3.3" "Internet Addressing" 44
+==== .sX "internet" "address" "44"
+==== .sX "address" "internet" "44"
+==== .iX "host" " " "44"
+==== .Bc "4.3.4" "Network and Broadcast Addresses" 45
+==== .Bc "4.3.5" "Dotted Decimal Notation" 45
+==== .sX "internet address" "decimal notation" "45"
+==== .iX "decimal notation" " " "45"
+==== .Bc "4.3.6" "An Example" 45
+==== .iX "forward" " " "45"
+==== .sX "internet" "hop" "46"
+==== .iX "hop" " " "46"
+==== .Sc "4.4" "Network Byte Order" 46
+==== .iX "" " " "48"
+==== .iX "" " " "49"
+==== .Sc "4.5" "Computing A Network Address" 49
+==== .iX "" " " "50"
+==== .Sc "4.6" "The Unanswered Questions" 50
+==== .Sc "4.7" "Summary" 51
+==== .Ec 51
+==== LAST 51 -- Chap. 4 
+==== PAGES 11 -- Chap. 4 

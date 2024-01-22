@@ -1,0 +1,1270 @@
+/*----------------------------------------------------------------------------
+ * psv.c
+ *
+ * Xinu Version 8.0 Page Server
+ *
+ *  The Xinu version 8 Page Server utilizes 2 hash tables for quick access
+ *  to the stored pages.  The P[] table holds information about processes 
+ *  that are currently using the page server.  The G[] table holds the 
+ *  actual page data, plus information about the pages process.  A double
+ *  hashing algorithm is used to index into these tables.
+ *----------------------------------------------------------------------------
+ */
+
+
+#define kprintf(a)	printf(a);sleep(1)
+
+#define SHERRORS 1 
+/*#define SHDEBUG 1 */
+
+#include <sys/xinusys.h>
+#include <network.h>
+#include "psv.h"
+#include "tp.h"
+
+/*-------- Global data ---------*/
+
+struct m_entry *M;    /* M table 				*/
+struct p_entry *P;    /* P table 				*/
+struct g_entry *G;    /* G table 				*/
+struct d_block *D;    /* the free list		        */
+struct d_block *free_list;      /* pointer to the head of the free list	*/
+struct tmessage *msglist[MAX_M_ENT];	/* saved message list		*/
+struct xsockaddr_in from;		/* IP address of a client port	*/
+
+short curmidx;			/* current M-table index		*/
+
+/*------------------------------*/
+
+int                pid;	
+char		   *Which(), *ErrNo();
+struct d_block     *Init_Free();	/* creates free list of 1k pages*/
+
+
+int fd;
+char *fp;
+#define		PSVPORT		2020
+
+
+extern int TPSread(), TPSwrite();	/* Transport (William) Prototcol*/
+int SOCK_FD;
+
+int	store_num = 0;
+int	fetch_num = 0;
+int 	cur_ststrt;
+int	cur_ftstrt;
+int	store_actime = 0;
+int	fetch_actime = 0;
+int	fttime, sttime,maxst=0,maxft=0,minst=100,minft=100;
+int	llft, llst, llftacc=0, llstacc=0;
+
+/*----------------------------------------------------------------------------
+ * MAIN() - Xinu8 Page Server driver routine
+ *----------------------------------------------------------------------------
+ */
+
+main(stdin, stdout, stderr, argc, argv)
+int stdin, stdout, stderr;
+int argc;
+char *argv[];
+{
+#ifdef SHDEBUG
+printf("Calling Init();\n");
+#endif
+	Init();			/* initialize all data structs	*/
+	if (SOCK_FD == SYSERR) {
+		printf("cannot open UDP port to listen on\n");
+		printf("Page Server exiting\n");
+		return;
+	}
+#ifdef SHDEBUG
+printf("Returned from Init(), Calling Do_Paging\n");
+#endif
+	Do_Paging();		/* child executes		*/
+}
+
+/*----------------------------------------------------------------------------
+ * NET_TO_HOST() - Change header info from network to host byte order
+ *----------------------------------------------------------------------------
+ */
+Net_to_Host(p)
+	struct message *p;
+{
+	int  i;
+
+	p->msg_num   = net2hl(p->msg_num);	/* change entire header	*/
+	p->msg_type  = net2hl(p->msg_type);
+	p->proc_id   = net2hl(p->proc_id);
+	p->page_num  = net2hl(p->page_num);
+ 	p->page_size = net2hl(p->page_size);
+	p->ok_error  = net2hl(p->ok_error);
+	return(ROK);
+}
+
+/*----------------------------------------------------------------------------
+ * HOST_TO_NET() - Change header info from host to network byte order
+ *----------------------------------------------------------------------------
+ */
+Host_to_Net(p)
+	struct message *p;
+{
+	int  i;
+	
+	p->msg_num   = hl2net(p->msg_num);	/* change entire header	*/
+	p->msg_type  = hl2net(p->msg_type);
+	p->proc_id   = hl2net(p->proc_id);
+	p->page_num  = hl2net(p->page_num);
+ 	p->page_size = hl2net(p->page_size);
+	p->ok_error  = hl2net(p->ok_error);
+	return(ROK);
+
+}
+/*----------------------------------------------------------------------------
+ * INIT() - Initialize global data structures
+ *----------------------------------------------------------------------------
+ */
+
+Init()
+
+{
+	SOCK_FD = ListenUdp();		/* set up socket to listen	*/
+
+	M = (struct m_entry *) getheap(sizeof(struct m_entry)*MAX_M_ENT);
+	P = (struct p_entry *) getheap(sizeof(struct p_entry)*MAX_P_ENT);
+	G = (struct g_entry *) getheap(sizeof(struct g_entry)*MAX_G_ENT);
+	D = (struct d_block *) getheap(sizeof(struct d_block)*MAX_D_BLK);
+
+	if ((M == (struct m_entry *)SYSERR) ||
+	    (P == (struct p_entry *)SYSERR) ||
+	    (G == (struct g_entry *)SYSERR) ||
+	    (D == (struct d_block *)SYSERR)) {
+		printf("error reserving space for M,P,G,D\n");
+		kill(getpid());
+	}
+
+	InitTPbuff();			/* init Transport Proto. buffers*/
+	Init_Mtable();			/* initialize M table		*/
+	Init_Ptable();			/* initialize P hash table	*/
+	Init_Gtable();			/* initialize G hash table	*/
+	free_list = Init_Free();	/* set up 1K free list of pages */
+
+#ifdef SHDEBUG
+printf("Init() has completed, now returning\n");
+#endif
+
+}
+
+/*----------------------------------------------------------------------------
+ * currtime() - millisecons
+ *----------------------------------------------------------------------------
+ */
+#ifdef REALLYNEEDED
+currtime()
+{
+	struct timeb timeb, *timebp;
+
+	timebp = &timeb;
+	ftime(timebp);
+	return( (timebp->time%100000) * 1000 + timebp->millitm);
+			/* take the four least significant digits of the
+			   time since the epoch in secoonds */
+}
+#endif
+
+
+/*----------------------------------------------------------------------------
+ * DO_PAGING() - Read packets and service requests
+ *----------------------------------------------------------------------------
+ */
+
+Do_Paging()
+
+{
+
+	int    seq, status, msize, hdr_len, msg_len, dblk_num;
+	struct d_block   *parray[MAX_PER_PAGE];
+	struct message msg, *mptr;
+	int 		j;
+	struct tmessage	*tmpmsg;
+	struct tmessage	*pnextmsg;
+	char		getnewmsg;
+	TPReadListType	*tprlt;
+
+#ifdef SHDEBUG
+printf("Now in Do Paging\n");
+#endif
+	
+	mptr = &msg; 
+#ifdef SHDEBUG
+printf("Do Paging; after mptr = &msg;\n");
+#endif
+	msg_len = sizeof(struct message);	/* only calculate once  */
+#ifdef SHDEBUG
+printf("Do Paging: after msg_len = sizeof(struct message);\n");
+#endif
+	curmidx = 0;
+
+
+	printf("Xinu Page Sever: Initialized and ready to handle requests\n");
+
+	
+	while (1)    {				/* forever (hopefully)	*/
+
+		if (((msglist[curmidx] != (struct tmessage *)NULL) &&
+		     (msglist[curmidx]->tprdlstptr->msgno ==
+		      (M[curmidx].msg_num+1)))){
+					/* got msg out of order but saved it */
+#ifdef SHERRORS
+printf("using out of order saved message\n");
+#endif
+			getnewmsg = FALSE;
+			tprlt = msglist[curmidx]->tprdlstptr;
+			mptr = tprlt->msgp;
+			for (j=0; j < tprlt->dblknum; j++)
+			    parray[j] = tprlt->datap[j];
+			dblk_num = tprlt->dblknum;
+			blkcopy(&from, &(tprlt->from),
+			      sizeof(struct xsockaddr_in));
+			tmpmsg = msglist[curmidx];
+			msglist[curmidx] = tmpmsg->nextmsg;
+			freeheap(tmpmsg,sizeof(struct tmessage));
+		}
+		else {
+			getnewmsg = TRUE;
+		}
+
+		if (getnewmsg) {
+
+			while (TPSread(&mptr, parray, &from, &dblk_num)
+			       != ROK)	/* get msg*/
+			    {
+				    printf("\n *** TP buffers full! ***\n");
+			    }
+			Net_to_Host(mptr);	/* header in net byte   */
+		}
+
+		/* message sequence checking */
+		if (mptr->msg_type != START_REQ){
+			
+			curmidx = HashM(mptr);		
+			if ( curmidx == ERROR ) {
+				status = ERROR;
+				hdr_len = MSGLEN;
+		        	Response(status, BADREQ ,mptr, hdr_len);
+				continue;
+			}
+
+		   	seq = M[curmidx].msg_num;
+							/* check msg sequence*/
+			seq = (++seq > MAX_M_NO)?(seq - MAX_M_NO): seq;
+							/* seq = expected num*/
+			if ( mptr->msg_num == seq )
+				    			/* normal case	     */
+		    		M[curmidx].msg_num = seq;
+							/* update msg seq No */
+			else if ( mptr->msg_num > seq ) {
+			    if (mptr->msg_type==TERMIN_REQ ||
+				mptr->msg_type==END_REQ ) {
+				    M[curmidx].msg_num = seq;
+			    }
+			    else {		/* send End-to-end NACK	*/
+				    /* save the message for later	*/
+				    tmpmsg = (struct tmessage *)
+					getheap(sizeof(struct tmessage));
+				    if (msglist[curmidx] == (int) NULL) {
+					    msglist[curmidx] = tmpmsg;
+					    tmpmsg->nextmsg = (int) NULL;
+				    }
+				    else {
+					    pnextmsg = msglist[curmidx];
+					    while ((pnextmsg->tprdlstptr->msgno
+						   < mptr->msg_num) &&
+						   (pnextmsg->nextmsg!=
+						    (int)NULL))
+						pnextmsg = pnextmsg->nextmsg;
+					    tmpmsg->nextmsg=pnextmsg->nextmsg;
+					    pnextmsg->nextmsg = tmpmsg;
+				    }
+				    if ((j=LookupReadList(mptr->msg_num,&from))
+					 !=(-1)) {
+					    tmpmsg->tprdlstptr =
+						&(TPReadList[j]);
+				    }
+				    /* done saving message for later */
+
+				    /* find out if the missing message	*/
+				    /* is currently coming in: if it is	*/
+				    /* don't bother sending an E-to-E	*/
+				    /* NACK, else send a E-to-E NACK	*/
+#ifdef SHERRORS
+printf("check if missing packet %d is currently coming in\n", seq);
+#endif
+				    if ((j=LookupReadList(seq, &from))!=(-1)){
+#ifdef SHERRORS
+printf("msgno = %d, curfrag = %d, j = %d\n", TPReadList[j].msgno,
+       TPReadList[j].curfrag, j);
+#endif
+					if (TPReadList[j].curfrag==(-1)) {
+#ifdef SHERRORS
+printf("packet %d is NOT coming in, E-E NACK it\n", TPReadList[j].msgno);
+#endif
+					    /* has not come in yet */
+					    /* so send NACK	   */
+					    blkcopy(TPReadList[j].msgp, mptr,
+						  MSGLEN);
+					    status = ERROR;
+					    TPReadList[j].msgp->msg_num=seq;
+					    Response(status,NACK_REQ,
+						     TPReadList[j].msgp,
+						     MSGLEN);
+					}
+#ifdef SHERRORS
+else {
+printf("packet %d is coming in, do not E-E NACK\n", TPReadList[j].msgno);
+}
+#endif
+					/* else it is coming in, so	*/
+					/* let it finish, no NACK	*/
+				    }
+				    continue;
+			    }
+		    	}
+#ifdef WRONGWAYTODOIT
+			else {		/* mptr->msg_num < seq	*/
+				printf("dropping duplicate packet, msg #%d\n",
+				       mptr->msg_num);
+				continue;
+			}
+#endif
+		       	/* third case is:mptr->msg_num < seq,just go ahead */
+			/* and process it, the client must not have 	   */
+			/* received our first response			   */
+		}    
+
+		switch (mptr->msg_type)  {	/* what kind?	*/
+
+		case CRSTOR_REQ	:		/* creat & store*/
+
+			status = Creat_Store(mptr);
+
+#ifdef DEBUG2		
+	 		if (status == ROK) DumpData(mptr);
+#endif			
+
+		        Response(status,CRSTOR_RSP,mptr,MSGLEN,NULLARY);
+			break;
+
+		case STORE_REQ	:		/* store page	*/
+			status = Store_Page(mptr, parray, dblk_num);
+#ifdef DEBUG2		
+	 		if (status == ROK) DumpData(mptr);
+#endif
+		        Response(status,STORE_RSP,mptr,MSGLEN,NULLARY);
+			break;
+
+		case FETCH_REQ	:		/* fetch page	*/
+			status = Fetch_Page(mptr, parray);
+#ifdef DEBUG2		
+	 		if (status == ROK) DumpData(mptr);
+#endif
+			Response(status,FETCH_RSP,mptr,
+				 mptr->page_size+MSGLEN, parray);
+			break;
+
+      case TEST_REQ:
+	status = ROK;
+	Response(status,TEST_RSP,mptr,MSGLEN,NULLARY);
+	break;
+			
+		case CREATE_REQ	:		/* proc create	*/
+			status = Creat_Proc(mptr);
+
+#ifdef DEBUG2
+			printf("case:CREATE_REQ\n");
+	 		if (status == ROK) DumpData(mptr);
+#endif			
+		        Response(status,CREATE_RSP,mptr,MSGLEN,NULLARY);
+			break;
+
+		case TERMIN_REQ	:		/* proc terminat*/
+			status = Terminate(mptr);
+			Response(status,TERMIN_RSP,mptr,MSGLEN,NULLARY);
+			break;
+
+		case START_REQ  :
+		        status = Mach_Start(mptr);
+			Response(status,START_RSP,mptr,MSGLEN,NULLARY);
+			break;
+			
+		case END_REQ  :
+		        status = Mach_End(mptr);
+			Response(status,END_RSP,mptr,MSGLEN,NULLARY);
+			break;
+		default		:		/* invalid	*/
+			status = BADREQ;
+#ifdef DEBUG2
+			printf("BAD message - contents follow\n");
+	 		DumpData(mptr);
+#endif			
+		        Response(status,mptr->msg_type,mptr,MSGLEN);
+
+		}
+
+	}
+
+}
+
+
+/*----------------------------------------------------------------------------
+ * INIT_MTABLE() - Initialize the M (machine) table
+ *----------------------------------------------------------------------------
+ */
+
+Init_Mtable()
+
+{
+	int i;
+
+
+#ifdef DEBUG2			
+	printf("Initializing M table.\n");
+#endif				
+
+
+	for (i=0; i<MAX_M_ENT; i++) {	/* initialize each slot 	*/
+		M[i].valid = INVALID;	        /* mark it invalid	*/
+		M[i].tstamp = 0;		/* initial time stamp   */
+		M[i].msg_num  = INVALID;	/* initialize msg number */
+		msglist[i] = (struct tmessage *)NULL; /* init saved msg	*/
+					/* list for out of order msgs	*/
+	}
+
+}
+
+/*----------------------------------------------------------------------------
+ * INIT_PTABLE() - Initialize the P (process) hash table
+ *----------------------------------------------------------------------------
+ */
+
+Init_Ptable()
+
+{
+	int i;
+
+
+#ifdef DEBUG2			
+	printf("Initializing P hash table.\n");
+#endif				
+
+
+	for (i=0; i<MAX_P_ENT; i++) {	/* initialize each slot 	*/
+		P[i].valid_flag = INVALID;	/* mark it invalid	*/
+		P[i].mach_tstp = 0;		/* initialize mach tstamp */
+		P[i].timestamp  = 0;	        /* initialize timestamp */
+	}
+
+}
+
+
+/*----------------------------------------------------------------------------
+ * INIT_GTABLE() - Initialize G (global) hash table
+ *----------------------------------------------------------------------------
+ */
+
+Init_Gtable()
+
+{
+	int i;
+
+
+#ifdef DEBUG2			
+	printf("Initializing G hash table.\n");
+#endif				
+
+
+	for (i=0; i<MAX_G_ENT; i++){	/* initialize each slot		*/
+		G[i].valid_flag = INVALID;	/* mark it invalid	*/
+		G[i].dblk_cnt   = 0;
+	}
+
+}
+
+
+/*----------------------------------------------------------------------------
+ * INIT_FREE() - Create the free list of pages
+ *----------------------------------------------------------------------------
+ */
+
+struct d_block *Init_Free()
+
+{
+	int i;
+
+
+#ifdef DEBUG2			
+	printf("Linking together the free list.\n");
+#endif				
+
+
+	for (i=0; i<MAX_D_BLK-1; i++) {	/* create maximum number allowed*/
+#ifdef SHDEBUG
+if ((i%50)==0) {
+	printf("    linked together %d so far\n", i);
+	if (i>2000) sleep10(2);
+}
+#endif
+       		D[i].next = &D[i+1];	/* link them together		*/
+	}
+
+#ifdef SHDEBUG
+printf("Almost done Linking together the free list\n");
+#endif
+	D[MAX_D_BLK-1].next = (int) NULL; /* set tail of list		*/
+#ifdef SHDEBUG
+printf("Done Linking together the free list\n");
+#endif
+        return(D);			/* return head			*/
+
+}
+
+	
+/*-----------------------------------------------------------------------------
+ * CREAT_PROC() - Set up for a new process
+ *-----------------------------------------------------------------------------
+ */
+
+Creat_Proc(p)
+	struct message *p;
+
+{
+	int pidx;
+
+	pidx = HashP(p, INSERT);	/* hash into P table inserting	*/
+
+	if (pidx == ERROR) return(PFULL);	/* no room		*/
+	P[pidx].valid_flag = VALID;	/* validate the new process	*/
+	P[pidx].proc_id = p->proc_id;	/* store the PID		*/
+	P[pidx].mach_id = curmidx;	/* store machine id		*/
+	P[pidx].mach_tstp = M[curmidx].tstamp;	/*store machine t-stamp*/
+
+
+#ifdef DEBUG2			
+	printf("Create proc %d in P slot %d valid=%d\n",p->proc_id,pidx,P[pidx].valid_flag);
+#endif		
+
+
+	return(ROK);
+
+}
+
+/*-----------------------------------------------------------------------------
+ * MACH_START() - Set up for a new machine
+ *-----------------------------------------------------------------------------
+ */
+
+Mach_Start(p)
+	struct message *p;
+
+{
+	int midx;
+
+	midx = HashM(p);
+
+	if (midx==ERROR)
+	    return(ERROR);
+	if (M[midx].valid != VALID) 	     /* client boots up first time */
+		M[midx].valid = VALID;	     /* validate the new machine */
+	M[midx].tstamp++;		     /* increment time stamp	 */
+	M[midx].msg_num = p->msg_num;	     /* store the message number */
+
+	return(ROK);
+
+}
+/*-----------------------------------------------------------------------------
+ * MACH_END() - Clear up for a machine
+ *-----------------------------------------------------------------------------
+ */
+
+Mach_End(p)
+	struct message *p;
+
+{
+	int midx;
+
+	midx = curmidx;
+	M[midx].valid = INVALID;             /* validate the new machine */
+	M[midx].msg_num = INVALID;	     /* store the message number */
+
+	return(ROK);
+
+}
+/*-----------------------------------------------------------------------------
+ * CREAT_STORE() - create process and store first page
+ *-----------------------------------------------------------------------------
+ */
+
+Creat_Store(p)
+	struct message *p;
+
+{
+
+	int status;
+
+	if ((status = Creat_Proc(p)) != ROK) 
+		return(status);			/* create the process	*/
+
+	if ((status = Store_Page(p)) != ROK) {	/* store it's page	*/
+                Terminate(p);			/* undo the Creat_Proc */
+		return(status); 
+		}
+
+	return(ROK);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * STORE_PAGE() - Store a page
+ *-----------------------------------------------------------------------------
+ */
+
+Store_Page(p, ptrs, num)
+	struct message *p;
+	struct d_block   *ptrs[MAX_PER_PAGE];
+        int    num;
+{
+
+	int pidx, gidx, j;
+char s[10];
+	
+	pidx = HashP(p, FIND);		/* find the process & timestamp	*/
+	if (pidx == ERROR) {		/* not there		*/
+		return(NOEXIST);
+	}
+	gidx = HashG(p, P[pidx].timestamp, INSERT);	/* find a slot	*/
+	if (gidx == ERROR) {				/* no room	*/
+		return(GFULL);
+	}
+	G[gidx].mach_id = curmidx;	/* save machine id	*/
+	G[gidx].proc_id = p->proc_id;	/* save PID		*/
+	G[gidx].page_num = p->page_num; /* save page number	*/
+	G[gidx].valid_flag = VALID;	/* validate the new one */
+	G[gidx].timestamp = P[pidx].timestamp;	/* stamp it	*/
+	G[gidx].p_ent_ptr = &P[pidx];	/* save back pointer	*/
+
+	if (G[gidx].dblk_cnt)		/* free old d_blocks if any */
+	    Put_Free(G[gidx].d_blk_ptr,G[gidx].dblk_cnt);
+	
+	G[gidx].dblk_cnt = num;		/* save number of 1k's	*/
+	for ( j=0; j< num; j++)
+	    G[gidx].d_blk_ptr[j] = ptrs[j];
+
+	return(ROK);
+}
+
+/*-----------------------------------------------------------------------------
+ * FETCH_PAGE() - Get a page for the client
+ *-----------------------------------------------------------------------------
+ */
+
+Fetch_Page(p, ptrs)
+	struct message *p;
+	struct d_block *ptrs[MAX_PER_PAGE];
+{
+
+	int pidx, gidx, nalloc, i;
+	char *a;
+
+	pidx = HashP(p, FIND);		/* find the process & timestamp	*/
+	if (pidx == ERROR) {
+		printf("Fetch hashP not found\n");
+		return(NOEXIST);	/* not there		*/
+	}
+	gidx = HashG(p, P[pidx].timestamp, FIND);	/* find the slot*/
+	if (gidx == ERROR){
+		printf("Fetch hashG not found\n");
+		return(NOEXIST);		/* not there	*/
+	}
+
+	nalloc = G[gidx].dblk_cnt;		
+
+	for (i=0; i<nalloc; i++)
+	     ptrs[i] = G[gidx].d_blk_ptr[i];
+	
+	return(ROK);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * TERMINATE() - Indicate that a process no longer exists for a client
+ *-----------------------------------------------------------------------------
+ */
+
+Terminate(p)
+	struct message *p;
+
+{
+
+	int pidx;
+
+	pidx = HashP(p, FIND);		        /* find the entry 	*/
+
+	if (pidx == ERROR) return(NOEXIST);	/* not there		*/
+
+	P[pidx].valid_flag = INVALID;		/* mark as invalid	*/
+	P[pidx].timestamp++;			/* increment timestamp	*/
+	return(ROK);
+
+}
+
+/*-----------------------------------------------------------------------------
+ * GET_FREE() - Get a number of 1k pages from the free list
+ *-----------------------------------------------------------------------------
+ */
+
+Get_Free(d, cnt)
+	struct d_block *d[MAX_D_BLK];
+	int cnt;
+
+{
+
+	int i;
+	struct d_block *tp;
+
+	for (i=0, tp=free_list; (tp != (int)NULL)&&(i<cnt); i++, tp=tp->next)
+		d[i] = tp;		/* put in a list of pointers	*/
+
+	if (i != cnt) return(ERROR);	/* ran out before completing	*/
+
+	free_list = tp;			/* update free list pointer	*/
+	return(ROK);
+
+}
+
+/*-----------------------------------------------------------------------------
+ * HASHM() - Hash function into the M (machine) hash table
+ *-----------------------------------------------------------------------------
+ */
+
+HashM(p)
+struct message *p;
+{
+	short  index = 0;
+
+	index = ( p->mach_id[3] & p->mach_id[2] | p->mach_id[1] |
+	        p->mach_id[0]) & 017;
+	while( M[index].valid == VALID ) {
+             if ( M[index].mach_id[3]==p->mach_id[3] &&
+	     	  M[index].mach_id[2]==p->mach_id[2] &&
+	     	  M[index].mach_id[1]==p->mach_id[1] &&
+	     	  M[index].mach_id[0]==p->mach_id[0] )
+			return(index);
+	     else {
+		index = ((index += 13) > MAX_M_ENT-1)? index-MAX_M_ENT : index;
+		continue;
+	    }
+        }
+	if ( p->msg_type == START_REQ ) {
+	    M[index].mach_id[3] = p->mach_id[3];
+            M[index].mach_id[2] = p->mach_id[2];
+	    M[index].mach_id[1] = p->mach_id[1];
+	    M[index].mach_id[0] = p->mach_id[0];		
+	    return(index);
+	} else
+	    return(ERROR);
+}
+	
+/*-----------------------------------------------------------------------------
+ * HASHG() - Hash function into the G (global) page hash table.  If INSERT
+ *           then if it exists, return the index else if it doesn't exist
+ *	     return a blank slot else return error.  If FIND then if it exists
+ *	     return the index else return error.
+ *-----------------------------------------------------------------------------
+ */
+
+HashG(p, t, cmd)
+	struct message *p;
+	int t, cmd;
+
+{
+
+	int idx, inc, nchk;
+	struct p_entry *bptr;
+
+	HashFnG(p, t, &idx, &inc);	/* hash the keys		*/
+
+
+#ifdef DEBUG2			
+	printf("Hashing into G table. IDX=%d INC=%d\n",idx,inc);
+#endif				
+
+
+	for (nchk=1; nchk<=MAX_G_ENT; nchk++) {		/* until exhaust*/
+
+
+#ifdef DEBUG2			
+		printf("Check %d time(s).",nchk);
+#endif				
+		if ((G[idx].valid_flag == VALID)	&&
+		    (G[idx].page_num == p->page_num)	&&
+		    (G[idx].proc_id == p->proc_id)	&&	/* found*/
+		    (G[idx].mach_id == curmidx)	&&
+		    (G[idx].timestamp == t)) return(idx);
+
+		if (G[idx].valid_flag == VALID) {	/* found valid	*/
+
+			bptr = G[idx].p_ent_ptr;	/* P backpointer*/
+			if (bptr->valid_flag == INVALID){/* old G entry */
+
+#ifdef DEBUG2			
+				printf("Old G entry, P entry invalid.\n");
+#endif				
+
+				G[idx].valid_flag = INVALID;
+				Put_Free(G[idx].d_blk_ptr, G[idx].dblk_cnt);
+				G[idx].dblk_cnt = 0;
+				if (cmd == INSERT) return(idx);
+
+			} else {		/* old G entry, used P	*/
+
+				if (G[idx].proc_id != bptr->proc_id	||
+			    	    G[idx].mach_id != bptr->mach_id	||
+			            G[idx].timestamp != bptr->timestamp) {
+
+
+#ifdef DEBUG2			    
+				    printf("Old G entry, P entry re-used\n");
+#endif				    
+
+
+				    G[idx].valid_flag = INVALID;
+				    Put_Free(G[idx].d_blk_ptr,G[idx].dblk_cnt);
+				    G[idx].dblk_cnt = 0;
+				    if (cmd == INSERT) return(idx);
+				    } 
+			}
+
+		} else {		/* invalid, no collision	*/
+
+#ifdef DEBUG2
+	printf("\n");
+#endif
+
+			if (cmd == INSERT) return(idx);	/* INSERT, ok	*/
+		}  
+
+		if ((idx -= inc) < 0) idx += MAX_G_ENT; /* search again */
+	}
+
+#ifdef DEBUG2
+	printf("\n");
+#endif
+
+	return(ERROR);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * HASHP() - Hash function into the P (process) hash table
+ *-----------------------------------------------------------------------------
+ */
+
+HashP(p, cmd)
+	struct message *p;
+	int cmd;
+
+{
+
+	int idx, inc, nchk;
+	
+	HashFnP(p, &idx, &inc);		/* hash the keys		*/
+
+
+#ifdef DEBUG2			
+	printf("Hashing into P table, IDX=%d INC=%d.\n",idx,inc);
+#endif				
+
+	for (nchk=1; nchk<=MAX_P_ENT; nchk++) {
+
+#ifdef DEBUG2			
+	printf("Check %d time(s)\n",nchk);
+#endif			
+
+		if (P[idx].valid_flag == VALID		&&
+		    P[idx].proc_id == p->proc_id	&&
+		    P[idx].mach_id == curmidx	&&
+		    P[idx].mach_tstp == M[curmidx].tstamp )
+		    	return(idx); 			/* match	*/
+
+		if ((P[idx].valid_flag == INVALID ||	/* prev. terminated */
+		     P[idx].proc_id == p->proc_id	&&    
+		     P[idx].mach_id == curmidx	&&     /* or client  */
+		     P[idx].mach_tstp < M[curmidx].tstamp) && 
+		     cmd == INSERT)
+			return(idx);			/* INSERT, ok	*/
+		else if ((idx -= inc) < 0)	
+		    idx += MAX_P_ENT; 			/* again */
+	}
+
+	return(ERROR);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * PUT_FREE() - put blocks back on the free list
+ *-----------------------------------------------------------------------------
+ */
+
+Put_Free(d, nblk)
+	struct d_block *d[MAX_D_BLK];
+	int nblk;
+
+{
+
+	int i;
+	struct d_block *tp;
+
+	for (i=(nblk-1), tp=free_list; i>=0; i--){/* return reverse order*/
+		(d[i])->next = tp;		/* link last to head	*/
+		tp = d[i];			/* last is new head	*/
+	}
+
+	free_list = tp;				/* new head of freelist */
+	return(ROK);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * HASHFNG() - Hash function for the G table
+ *-----------------------------------------------------------------------------
+ */
+
+HashFnG(p, time, idx, inc)
+	struct message *p;
+	int time, *idx, *inc;
+
+{
+
+	unsigned int val;
+
+	val = FoldG(curmidx, p->proc_id, p->page_num, time);
+	*idx = val % MAX_G_ENT;			/* fold four integers..	*/
+	*inc = (val % (MAX_G_ENT-2)) + 1;	/* ..into one and mod	*/
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * HASHFNP() - Hash function for the P table
+ *-----------------------------------------------------------------------------
+ */
+
+HashFnP(p, idx, inc)
+	struct message *p;
+	int *idx, *inc;
+
+{
+
+	unsigned int val;
+
+	val = FoldP(curmidx, p->proc_id);
+	*idx = val % MAX_P_ENT;			/* fold two integers..	*/
+	*inc = (val % (MAX_P_ENT-2)) + 1;	/* ..into one and mod	*/
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * FOLDG() - Fold the G table keys into an integer.  To keep this function
+ *	relatively machine independent, the hl2net() function was used to
+ *	standardize the bit ordering of the hashed integers and get the best
+ *	distribution for any machine.
+ *-----------------------------------------------------------------------------
+ */
+
+FoldG(m, pid, pn, ts)
+	int m, pid, pn, ts;
+
+{
+
+	int t1, t2, final;
+
+	t1 = pid << 16;		/* PID upper 2 bytes		*/
+	t2 = pn  << 8;		/* page number middle 2 bytes	*/
+				/* small timestamp, lower 2 byte*/
+	final = ((m ^ t1) ^ t2) ^ ts;	/* timestamp lower 2 bytes	*/
+	return(final);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * FOLDP() - Fold the P table keys into an integer.  To keep this routine
+ *	relatively machine independent, the hl2net() function was used to
+ *	standardize the bit ordering of the hashed integers and get the best
+ *	distribution for any machine.
+ *-----------------------------------------------------------------------------
+ */
+
+FoldP(m, pid)
+	int m, pid;
+
+{
+
+	int t1, final;
+
+	t1 = pid << 16;		/* PID upper 2 bytes		*/
+	final = m ^ t1;		/* EXOR with machine id		*/
+	return(final);
+
+}
+
+
+/*-----------------------------------------------------------------------------
+ * RESPONSE() - Response to a command from a client
+ *-----------------------------------------------------------------------------
+ */
+
+Response(stat, msgresp, p, msgsize, ptrs)
+	int stat, msgresp, msgsize;
+	struct message *p;
+        char *ptrs[MAX_PER_PAGE];
+{
+	struct message msg, *mptr;
+	int  reqtype, time;
+	long sec, usec;
+	char hostserved[64], str1[16], str2[16];
+
+	mptr = &msg;
+	blkcopy( mptr, p, MSGLEN);
+	
+	p->ok_error = stat;		/* status of the request	*/
+	reqtype = p->msg_type;		/* save if need to report error */
+	p->msg_type = msgresp;		/* response type		*/
+	
+
+#ifdef DEBUG2			
+	printf("\nMessage to TPSWrite :\n");
+	print_msg(p);
+#endif				
+
+	Host_to_Net(p);			/* change to network byte order	*/
+	TPSwrite(mptr , p, msgsize, &from, ptrs);	/* back to client */
+}
+
+
+/*----------------------------------------------------------------------------
+ * LISTENUDP() - Called at initialization to set up UDP port for the
+ *	protocol to listen.  The file descriptor is returned (to protocol).
+ *	This routine will not work under 4.2 Berkley UNIX due to the fact
+ *	that one cannot increase the size of the UDP buffers, and this must
+ *	be increased if more than one client expects to use the server.
+ *----------------------------------------------------------------------------
+ */
+
+ListenUdp()
+
+{
+
+	int dev;
+
+	if ( (dev=open(UDP, ANYFPORT, PSVPORT)) == SYSERR) {
+		printf("psv: open fails - psv already running?\n");
+		return(SYSERR);
+	}
+
+	return(dev);				/* device descriptor	*/
+
+}
+
+				
+
+#ifdef DEBUG2			
+
+/*-----------------------------------------------------------------------
+ * DumpG() - Dump G table. For debugging only.
+ *-----------------------------------------------------------------------
+ */
+
+DumpG()
+
+{
+
+	int i;
+
+	printf("==================== G Table ===========================\n");
+
+	for (i=0; i<MAX_G_ENT; i++) {
+
+	    if (G[i].valid_flag == VALID) 
+	        printf("%4d: Mach=%X PID=%d Page=%d Val=VALID Time=%d Cnt=%d\n",
+			i,G[i].mach_id,G[i].proc_id,G[i].page_num,
+			G[i].timestamp,G[i].dblk_cnt);
+	}
+
+	return(ROK);
+
+}
+
+
+/*----------------------------------------------------------------------
+ * DumpP() - Dump P table. For debugging only.
+ *----------------------------------------------------------------------
+ */
+
+DumpP()
+
+{
+
+	int i;
+
+	printf("================== P Table ======================\n");
+
+	for (i=0; i<MAX_P_ENT; i++) {
+		if (P[i].valid_flag == VALID) 
+	            printf("%4d: Mach=%X  PID=%d  Val=VALID  Time=%d\n",
+			i,P[i].mach_id,P[i].proc_id,P[i].timestamp);
+	}
+
+	return(ROK);
+
+}
+
+
+/*----------------------------------------------------------------------
+ * DUMPTGNP() - Dump both P and G tables
+ *----------------------------------------------------------------------
+ */
+
+DumpGnP()
+
+{	
+
+	DumpP();
+	DumpG();
+	return(ROK);
+
+}
+ 
+#endif
+
+
+
+/*------------------------------------------------------------------------
+ * Dump the data
+ *------------------------------------------------------------------------
+ */
+
+DumpData(p)
+	struct message *p;
+
+{
+
+	int i, j, k;
+
+	printf("========== PAGE DATA =============\n");
+        k = 0;
+
+  	printf("%4.4X:  ",k);
+	for (j=0; j<32; j++) {
+		printf("%2.2d",(int)(p->data[k]));
+		k++;
+	}
+
+	printf("\n");
+
+
+}
+
+
+/*--------------------------------------------------------------------------
+ * PRINT_MSG() - Debugging utility to dump the page server header info
+ *--------------------------------------------------------------------------
+ */
+
+print_msg(mp)
+	struct message *mp;
+
+{
+
+	char type[16];
+
+	printf("msg_num:    %d\n",mp->msg_num);
+	printf("msg_type:   %s\n",Which(mp->msg_type,type));
+/*	printf("mach_id:    %d\n",mp->mach_id);*/
+	printf("proc_id:    %d\n",mp->proc_id);
+	printf("page_num:   %d\n",mp->page_num);
+	printf("page_size:  %d\n",mp->page_size);
+	DumpData(mp);
+
+}
+
+
+/*-------------------------------------------------------------------------
+ * WHICH() - Translates a Request/Response constant into a string
+ *-------------------------------------------------------------------------
+ */
+
+char *Which(n,cp)
+	int n;
+	char *cp;
+
+{
+
+	switch (n) {
+
+	case	CREATE_REQ : strcpy(cp,"CREAT_REQ"); break;
+	case	CRSTOR_REQ : strcpy(cp,"CRSTOR_REQ");break;
+	case	STORE_REQ  : strcpy(cp,"STORE_REQ"); break;
+	case	FETCH_REQ  : strcpy(cp,"FETCH_REQ"); break;
+	case	TERMIN_REQ : strcpy(cp,"TERMIN_REQ");break;
+	case	CREATE_RSP : strcpy(cp,"CREATE_RSP");break;
+	case	CRSTOR_RSP : strcpy(cp,"CRSTOR_RSP");break;
+	case	STORE_RSP  : strcpy(cp,"STORE_RSP"); break;
+	case	FETCH_RSP  : strcpy(cp,"FETCH_RSP"); break;
+	case	TERMIN_RSP : strcpy(cp,"TERMIN_RSP");break;
+	case	BADREQ	   : strcpy(cp,"BADREQ");    break;
+	default		   : sprintf(cp,"%d",n);
+
+	}
+
+	return(cp);
+
+}
+
+/*---------------------------------------------------------------------------
+ * ERRNO() - Translates an error return code constant into a string
+ *---------------------------------------------------------------------------
+ */
+
+char *ErrNo(no,str)
+	int no;
+	char *str;
+{
+	switch (no) {
+	case  ERROR 	: strcpy(str,"ERROR"); break;
+	case  ROK	: strcpy(str,"ROK"); break;
+	case  PFULL	: strcpy(str,"P TABLE FULL"); break;
+	case  NOEXIST	: strcpy(str,"NON-EXISTANT"); break;
+	case  GFULL	: strcpy(str,"G TABLE FULL"); break;
+	case  NOPAGES	: strcpy(str,"OUT OF PAGES"); break;
+	}
+	return(str);
+}
+
+/*---------------------------------------------------------------------------
+ * FBCOPY - fast block copy
+ 	    used from int address to int address with multiple int's
+ *---------------------------------------------------------------------------
+ */
+fastbcopy(toaddr, fromaddr, numofint)
+register unsigned int *toaddr, *fromaddr;
+register int numofint;
+{
+	while( numofint-- > 0 )
+		*toaddr++ = *fromaddr++;
+}

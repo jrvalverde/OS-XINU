@@ -1,0 +1,3 @@
+.TH GETPID 2CCC
+.SH USE INSTEAD
+.I gettid(2CCC).

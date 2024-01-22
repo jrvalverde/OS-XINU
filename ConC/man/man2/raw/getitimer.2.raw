@@ -1,0 +1,6 @@
+.TH GETITIMER 2
+.SH NOTE
+.I Getitimer
+and
+.I setitimer
+are not available in ConcurrenC.

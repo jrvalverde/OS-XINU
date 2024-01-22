@@ -1,0 +1,30 @@
+head	1.1;
+access;
+symbols;
+locks
+	lin:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@#!/bin/sh
+
+H=/.menthe/home/lin/xinu/xinu/ether/ee
+
+echo "rcp $* lin@@martini.cs:$H"
+rcp $* lin@@martini.cs:$H
+@

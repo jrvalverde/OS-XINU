@@ -1,0 +1,34 @@
+.TH SCREATE 2CCC
+.SH NAME
+screate \- create a new semaphore
+.SH SYNOPSIS
+.nf
+.B s = screate(count)
+.B int s;
+.B int count;
+.fi
+.SH DESCRIPTION
+.I Screate
+creates a counting semaphore and initializes it to
+.I count.
+.PP
+Semaphores are manipulated with SWAIT(2CCC) and SSIGNAL(2CCC) to
+synchronize tasks.
+Waiting causes the semaphore count to be decremented; decrementing
+a semaphore count past zero causes a task to be blocked.
+Signaling a semaphore increases its count, freeing a blocked
+task if one is waiting.
+.SH RETURN VALUE
+.I Screate
+returns the integer identifier of the semaphore if
+successful; otherwise -1 is returned and errno is set to indicate
+to error.
+.SH ERRORS
+.TP 15
+[EINVAL]
+Invalid argument.
+.TP 15
+[CENOSEM]
+Semaphore table is full.  No more semaphores allowed.
+.SH SEE ALSO
+scount(2CCC), sdelete(2CCC), ssignal(2CCC), sreset(2CCC), swait(2CCC)

@@ -1,0 +1,33 @@
+.TH PCREATE 2CCC
+.SH NAME
+pcreate \- create a new port
+.SH SYNOPSIS
+.B portid = pcreate(count)
+.nf
+.B int portid;
+.B int count;
+.fi
+.SH DESCRIPTION
+.I Pcreate
+creates a port with
+.I count
+locations for storing message pointers.
+.PP
+Ports are manipulated with
+PSEND(2CCC) and PRECEIVE(2CCC).
+Receiving from a port returns a pointer to a message that was previously
+sent to the port.
+.SH RETURN VALUE
+.I Pcreate
+returns an integer identifying  the port if
+successful.  Otherwise it returns
+-1 and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[EINVAL]
+Invalid argument.
+.TP 15
+[CENOPORT]
+Port table is full.  No more ports allowed.
+.SH SEE ALSO
+pcount(2CCC), pdelete(2CCC), preceive(2CCC), preset(2CCC), psend(2CCC)

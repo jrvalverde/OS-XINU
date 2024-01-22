@@ -1,0 +1,4 @@
+.TH PUTC 2CCC
+.SH REFER TO
+.I putc(3S)
+of the UNIX man pages.

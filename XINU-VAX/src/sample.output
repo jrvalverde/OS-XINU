@@ -1,0 +1,91 @@
+*** Making all pieces of Xinu cross-development system
+
+
+
+*** Making commands in {Xinu-directory}/src/cmd
+chmod 755 cprint
+cp cprint /usr/Xinu/bin
+
+*** Making commands in {Xinu-directory}/src/cmd/download
+(cd lib   ; make all)
+cc  -O -I../h -c freedev.c
+cc  -O -I../h -c getdb.c
+cc  -O -I../h -c getdev.c
+cc  -O -I../h -c ulock.c
+rm -rf libd.a
+/bin/ar cr libd.a freedev.o getdb.o getdev.o ulock.o usleep.o
+ranlib libd.a
+(cd cmd   ; make all)
+cc -O -I../h -c download.c
+cc -O -I../h -o download download.o ../lib/libd.a
+cc -O -I../h -c odt.c
+cc -O -I../h -o odt odt.o ../lib/libd.a
+cc -O -I../h -c lusers.c
+cc -O -I../h -o lusers lusers.o ../lib/libd.a
+cc -O -I../h -c odtunlock.c
+cc -O -I../h -o odtunlock odtunlock.o ../lib/libd.a
+cc -O -I../h -c upload.c
+cc -O -I../h -o upload upload.o ../lib/libd.a
+(cd vax   ; make all)
+Making VAX-resident portion of up/downloaders
+(cd eload ; make all)
+(cd src ; make all)
+/bin/cc -c -O eload.c
+/bin/cc -c -O -I../h blkequ.c
+/bin/ld -e estart -T ce000 -o eload			 startup.o eload.o eread.o ewrite.o erstart.o	 estrt.o ewstart.o blkcopy.o blkequ.o netutil.o	 udpipwr.o edcmset.o cksum.o qmapinit.o		 autostart.o sizmem.o
+Making UNIX portion of VAX up/downloaders
+(cd src   ; make all)
+cc -O -I../h -c edl.c
+cc -o edl edl.o /usr/Xinu/src/cmd/download/lib/libd.a
+cc -O -I../h -c sdl.c
+cc -o sdl sdl.o /usr/Xinu/src/cmd/download/lib/libd.a
+/lib/cpp -I../h sdl.boot.s | as -o sdl.boot
+cc -o eul eul.o /usr/Xinu/src/cmd/download/lib/libd.a
+(cd lib   ; make install)
+(cd cmd   ; make install)
+chmod 755 download odt lusers odtunlock upload
+cp download odt lusers odtunlock upload /usr/Xinu/bin
+(cd vax   ; make install)
+Making and installing VAX-resident portion of up/downloaders
+(cd eload ; make install)
+(cd src ; make install)
+cp eload /usr/Xinu/lib/eload.vax
+Making and installing UNIX portion of VAX up/downloaders
+(cd src   ; make install)
+chmod 755 edl eul sdl
+chmod 644 sdl.boot
+cp edl /usr/Xinu/lib/edl.vax
+cp eul /usr/Xinu/lib/eul.vax
+cp sdl /usr/Xinu/lib/sdl.vax
+cp sdl.boot  /usr/Xinu/lib/sdl.boot.vax
+
+*** Making commands in {Xinu-directory}/src/cmd/fs
+cc -O -o fsd fsd.c
+chmod 755 fs fsd
+cp fs fsd /usr/Xinu/bin
+
+*** Making commands in {Xinu-directory}/src/cmd/pm
+sed '/#define	NULL	/d;/#define	EOF/d;  /#include \<sys\/exec.h\>/d;s/^#/+%+/' /usr/include/sys/exec.h	 /usr/include/a.out.h	 /usr/Xinu/src/sys/h/conf.h		 /usr/Xinu/include/coreX.h	 /usr/Xinu/src/sys/h/kernel.h	 /usr/Xinu/src/sys/h/q.h		 /usr/Xinu/src/sys/h/proc.h		 /usr/Xinu/src/sys/h/sem.h		 /usr/Xinu/src/sys/h/tty.h		 /usr/Xinu/src/sys/h/date.h >,x
+sed 's/^+%+/#/;/^# /d;/^[ 	]*$/d' < ,x > x.h
+rm ,x
+cc -O -c ascdate.c
+cc -O -o pm pm.o setup.o trace.o ascdate.o
+chmod 755 pm
+cp pm /usr/Xinu/bin
+
+*** Making Xinu library {Xinu-directory}/src/lib/libvxc
+cp libvxc.a /usr/Xinu/lib/libvxc.a
+/usr/bin/ranlib /usr/Xinu/lib/libvxc.a
+
+*** Making {Xinu--directory}/src/sys/con
+cp config ../sys/config
+*** Making {Xinu--directory}/src/sys/sys
+/bin/cc -O -c -I../h	naminit.c
+/bin/rm -f  libx.a
+/bin/ar cr libx.a	adump.o arp_in.o arpfind.o arpinit.o	 ascdate.o				 blkcopy.o blkequ.o bpdump.o		 chprio.o ckmode.o cksum.o clkint.o	 clkinit.o close.o 			 control.o create.o ctxsw.o 		 devdump.o				 dgalloc.o dgclose.o dgcntl.o dgdump.o	 dginit.o dgmcntl.o dgmopen.o dgparse.o	 dgread.o dgwrite.o 			 doprnt.o dot2ip.o			 ethinit.o ethinter.o			 ethread.o ethrstrt.o ethstrt.o		 ethwrite.o ethwstrt.o			 freemem.o freebuf.o getaddr.o		 getbuf.o getc.o				 getitem.o getmem.o getname.o getnet.o	 getpath.o getpid.o getprio.o getstk.o	 gettime.o getutim.o halt.o		 icmp_in.o				 init.o insert.o insertd.o		 interrupt.o				 ioerr.o ioinit.o ionull.o ioint.o	 ipsend.o ip_in.o ip2name.o		 kill.o kprintf.o			 mark.o mdump.o mkarp.o mkpool.o mount.o	 naminit.o nammap.o namopen.o namrepl.o	 ndump.o netdump.o netin.o		 netinit.o netnum.o netout.o netutil.o	 newqueue.o nqalloc.o nullpcb.o open.o	 ovfloff.o ovflon.o panic.o		 pcreate.o pcount.o pdelete.o pinit.o	 poolinit.o prdump.o preceive.o		 preset.o procreg.o psend.o		 ptclear.o putc.o			 qdump.o qmapinit.o queue.o		 rarp_in.o read.o			 ready.o	receive.o recvclr.o		 recvtim.o remove.o rename.o		 resched.o resume.o			 rfalloc.o rfclose.o rfcntl.o rfdump.o	 rfgetc.o rfinit.o rfio.o rfmkpac.o	 rfopen.o rfputc.o rfread.o rfseek.o	 rfsend.o rfwrite.o route.o		 rwho.o rwhod.o rwhoind.o		 scount.o screate.o sdelete.o seek.o	 send.o sendf.o setdev.o setnok.o sh.o	 signal.o signaln.o sizmem.o sleep.o	 sleep10.o sndrarp.o sreset.o		 ssclock.o suspend.o tdump.o		 ttycntl.o ttygetc.o ttyiin.o ttyinit.o	 ttyoin.o ttyopen.o ttyputc.o ttyread.o	 ttywrite.o				 udpecho.o udpsend.o udpnxtp.o		 unmount.o unsleep.o userret.o		 vaxcons.o				 vcucntl.o vcuiin.o vcuinit.o vcuoin.o	 vcuputc.o vcuwrite.o			 wait.o wakeup.o write.o xdone.o
+ranlib libx.a
+/bin/ld -X -e start xinu.o test.o libx.a /usr/Xinu/lib/libvxc.a libx.a
+./Mknlist ,nm
+/bin/cp libx.a /usr/Xinu/lib/libx.a
+/usr/bin/ranlib /usr/Xinu/lib/libx.a
+/bin/cp xinu.o /usr/Xinu/lib

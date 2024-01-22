@@ -1,0 +1,13 @@
+.TH RANDOM 3
+.SH NOTE
+The routines in this package --
+.I random,
+.I initstate,
+.I setstate,
+and
+.I srandom --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+random(3) of the UNIX man pages

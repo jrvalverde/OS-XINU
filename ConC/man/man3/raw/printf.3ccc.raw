@@ -1,0 +1,4 @@
+.TH PRINTF 3CCC
+.SH REFER TO
+.I printf(3S)
+of the UNIX man pages.

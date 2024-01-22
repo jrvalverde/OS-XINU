@@ -1,0 +1,25 @@
+.TH CCC 1CCC
+.SH NAME
+ccc, tccc \- ConcurrenC compiler shell\-script
+.SH SYNOPSIS
+.B ccc [ option ] ... file ...
+.sp
+.B tccc [ option ] ... file ...
+.SH DESCRIPTION
+In either form,
+.I ccc
+is a shell-script set up to invoke
+.I cc(1)
+using the ConcurrenC library and include files.
+The arguments to ccc are passed directly to cc.
+.PP
+As an example, to compile a ConcurrenC program test.c into executable
+file test, type the command 'ccc test.c -o test'.  The command 'ccc test.c'
+will put the executable binary into the default file a.out.
+.PP
+.I Ccc
+uses the installed system library in {ConC-dir)/ccclib.a, while
+.I tccc
+uses the testing library in {ConC-dir}/src/ccclib.a
+.SH SEE ALSO
+cc(1) of the UNIX man pages

@@ -1,0 +1,35 @@
+.TH SUSPEND 2CCC
+.SH NAME
+suspend \- suspend a task to keep it from executing
+.SH SYNOPSIS
+.nf
+.B prio = suspend(tid)
+.B int prio;
+.B int tid;
+.fi
+.SH DESCRIPTION
+.I Suspend
+places task
+.I tid
+in a state of hibernation.
+.PP
+Note that hibernation differs from sleeping because a
+hibernating task can remain on semaphore queues.
+A task can put another into hibernation; a task can
+only put itself to sleep.
+.SH RETURN VALUE
+If successful,
+.I suspend
+returns the priority of the suspended task.
+Otherwise, it returns -1 and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[CEBADTID]
+Invalid task id.
+.TP 15
+[CENOTREADY]
+Task
+.I tid
+is not in the ready state.
+.SH SEE ALSO
+resume(2CCC), sleep(2CCC), tsend(2CCC), treceive(2CCC)

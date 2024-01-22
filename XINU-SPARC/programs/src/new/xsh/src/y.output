@@ -1,0 +1,245 @@
+
+state 0
+	$accept : _inputline $end 
+
+	error  shift 4
+	SWORD  shift 9
+	DWORD  shift 8
+	WORD  shift 7
+	NEWLINE  shift 3
+	.  error
+
+	inputline  goto 1
+	commandlist  goto 2
+	command  goto 5
+	cmd  goto 6
+
+state 1
+	$accept :  inputline_$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	inputline :  commandlist_NEWLINE 
+	commandlist :  commandlist_SEMI command 
+
+	NEWLINE  shift 10
+	SEMI  shift 11
+	.  error
+
+
+state 3
+	inputline :  NEWLINE_    (2)
+
+	.  reduce 2
+
+
+state 4
+	inputline :  error_NEWLINE 
+
+	NEWLINE  shift 12
+	.  error
+
+
+state 5
+	commandlist :  command_    (5)
+
+	.  reduce 5
+
+
+state 6
+	command :  cmd_arglist redirin redirout background 
+	arglist : _    (11)
+
+	.  reduce 11
+
+	arglist  goto 13
+
+state 7
+	cmd :  WORD_    (7)
+
+	.  reduce 7
+
+
+state 8
+	cmd :  DWORD_    (8)
+
+	.  reduce 8
+
+
+state 9
+	cmd :  SWORD_    (9)
+
+	.  reduce 9
+
+
+state 10
+	inputline :  commandlist NEWLINE_    (1)
+
+	.  reduce 1
+
+
+state 11
+	commandlist :  commandlist SEMI_command 
+
+	SWORD  shift 9
+	DWORD  shift 8
+	WORD  shift 7
+	.  error
+
+	command  goto 14
+	cmd  goto 6
+
+state 12
+	inputline :  error NEWLINE_    (3)
+
+	.  reduce 3
+
+
+state 13
+	command :  cmd arglist_redirin redirout background 
+	arglist :  arglist_arg 
+	redirin : _    (18)
+
+	SWORD  shift 20
+	DWORD  shift 19
+	WORD  shift 18
+	REDIRIN  shift 17
+	.  reduce 18
+
+	redirin  goto 15
+	arg  goto 16
+
+state 14
+	commandlist :  commandlist SEMI command_    (4)
+
+	.  reduce 4
+
+
+state 15
+	command :  cmd arglist redirin_redirout background 
+	redirout : _    (22)
+
+	REDIROUT  shift 22
+	.  reduce 22
+
+	redirout  goto 21
+
+state 16
+	arglist :  arglist arg_    (10)
+
+	.  reduce 10
+
+
+state 17
+	redirin :  REDIRIN_WORD 
+	redirin :  REDIRIN_DWORD 
+	redirin :  REDIRIN_SWORD 
+
+	SWORD  shift 25
+	DWORD  shift 24
+	WORD  shift 23
+	.  error
+
+
+state 18
+	arg :  WORD_    (12)
+
+	.  reduce 12
+
+
+state 19
+	arg :  DWORD_    (13)
+
+	.  reduce 13
+
+
+state 20
+	arg :  SWORD_    (14)
+
+	.  reduce 14
+
+
+state 21
+	command :  cmd arglist redirin redirout_background 
+	background : _    (24)
+
+	BACKGROUND  shift 27
+	.  reduce 24
+
+	background  goto 26
+
+state 22
+	redirout :  REDIROUT_WORD 
+	redirout :  REDIROUT_DWORD 
+	redirout :  REDIROUT_SWORD 
+
+	SWORD  shift 30
+	DWORD  shift 29
+	WORD  shift 28
+	.  error
+
+
+state 23
+	redirin :  REDIRIN WORD_    (15)
+
+	.  reduce 15
+
+
+state 24
+	redirin :  REDIRIN DWORD_    (16)
+
+	.  reduce 16
+
+
+state 25
+	redirin :  REDIRIN SWORD_    (17)
+
+	.  reduce 17
+
+
+state 26
+	command :  cmd arglist redirin redirout background_    (6)
+
+	.  reduce 6
+
+
+state 27
+	background :  BACKGROUND_    (23)
+
+	.  reduce 23
+
+
+state 28
+	redirout :  REDIROUT WORD_    (19)
+
+	.  reduce 19
+
+
+state 29
+	redirout :  REDIROUT DWORD_    (20)
+
+	.  reduce 20
+
+
+state 30
+	redirout :  REDIROUT SWORD_    (21)
+
+	.  reduce 21
+
+
+10/300 terminals, 9/300 nonterminals
+25/600 grammar rules, 31/1000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+10/350 working sets used
+memory: states,etc. 167/24000, parser 10/12000
+11/600 distinct lookahead sets
+0 extra closures
+23 shift entries, 1 exceptions
+10 goto entries
+1 entries saved by goto default
+Optimizer space used: input 59/24000, output 36/12000
+36 table entries, 3 zero
+maximum spread: 264, maximum offset: 263

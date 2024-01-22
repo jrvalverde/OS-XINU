@@ -1,0 +1,11 @@
+DIR=/a/dec/Xinu/v7
+FORDIR=$DIR/book/formatted
+LIBDIR=$DIR/src/lib/libxc
+case $1 in
+	c|h) for i in *.c *.h
+	   do expand < $i | sed 's/\\/&&&&/g;s/^\./\\\\\&./' > $FORDIR/$i
+	   done
+	   ;;
+	*) echo error in use of doform...
+esac
+

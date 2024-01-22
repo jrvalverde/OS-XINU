@@ -1,0 +1,18 @@
+.TH STDUMP DEBUG
+.SH NAME
+stdump \- give a stack dump for a specific task.
+.SH SYNOPSIS
+.B stdump(tid,string)
+.nf
+.B int tid;
+.B char *string;
+.fi
+.SH DESCRIPTION
+.I Stdump
+prints out the contents of the stack for the task designated by
+.I tid.
+.I String
+gets printed on the first line to allow the user to destinguish
+between different calls to
+.I stdump.
+NOTE:  all numbers printed are in octal.

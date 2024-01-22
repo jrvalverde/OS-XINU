@@ -1,0 +1,33 @@
+.TH RESUME 2CCC
+.SH NAME
+resume \- resume a suspended task
+.SH SYNOPSIS
+.nf
+.B prio = resume(tid)
+.B int prio;
+.B int tid;
+.fi
+.SH DESCRIPTION
+.I Resume
+takes task
+.I tid
+out of hibernation and allows it to resume execution.
+Only suspended tasks may be resumed.
+.SH RETURN VALUE
+If successful,
+.I resume
+returns 
+the priority at which
+the task resumed execution.
+Otherwise, it returns -1 and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[CEBADTID]
+Invalid task id.
+.TP 15
+[CENOTSUSP]
+Task
+.I tid
+not in suspended state.
+.SH SEE ALSO
+sleep(2CCC), suspend(2CCC), tsend(2CCC), treceive(2CCC)

@@ -1,0 +1,4 @@
+.TH FLOCK 2
+.SH NOTE
+.I Flock
+is not available in ConcurrenC.

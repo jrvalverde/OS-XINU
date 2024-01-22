@@ -1,0 +1,14 @@
+.TH GETHOSTENT 3
+.SH NOTE
+The routines in this package --
+.I gethostent,
+.I endhostent,
+.I gethostbyaddr,
+.I gethostbyname,
+and
+.I sethostent --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+gethostent(3N) of the UNIX man pages

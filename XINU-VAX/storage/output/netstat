@@ -1,0 +1,5 @@
+bpool=0, mutex/cnt=167/1, nxt prt=2054, addr valid
+Packets: recvd=11273, tossed=1228 (0 for overrun)
+ 0. uport= 513, pid= -1, xprt=49, size=-1
+ 1. uport=2053, pid= -1, xprt=48, size= 0
+ 2. uport=   7, pid= -1, xprt=47, size=-1

@@ -1,0 +1,4 @@
+.TH QSORT 3CCC
+.SH REFER TO
+.I qsort(3)
+of the UNIX man pages.

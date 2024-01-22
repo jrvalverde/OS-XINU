@@ -1,0 +1,12 @@
+.TH GETUSERSHELL 3
+.SH NOTE
+The routines in this package --
+.I getusershell,
+.I endusershell,
+and
+.I setusershell --
+might not work correctly if they are called interspersly from
+.I two or more
+tasks.
+.SH SEE ALSO
+getusershell(3) of the UNIX man pages

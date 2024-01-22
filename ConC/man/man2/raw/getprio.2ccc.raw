@@ -1,0 +1,16 @@
+.TH GETPRIO 2CCC
+.SH NAME
+getprio \- return the scheduling priority of a given task
+.SH SYNOPSIS
+.B prio = getprio(tid)
+.nf
+.B int prio;
+.B int tid;
+.fi
+.SH DESCRIPTION
+.I Getprio
+returns the scheduling priority of task
+.I tid.
+If tid is invalid,
+.I getprio
+returns -1 and errno is set to CEBADTID.

@@ -1,0 +1,35 @@
+.TH GETMEM 2CCC
+.SH NAME
+getmem, getstk \- get a block of main memory
+.SH SYNOPSIS
+.B char *getmem(nbytes)
+.br
+.B int nbytes;
+.sp
+.B char *getstk(nbytes)
+.br
+.B int nbytes;
+.fi
+.SH DESCRIPTION
+In either form,
+.I getmem
+allocates a block of
+.I nbytes
+bytes of memory for the caller (using
+.I malloc(3)
+).  Note that malloc(3) and free(3) can be used directly by the user.
+.SH RETURN VALUE
+.I Getmem
+returns the lowest word address in the allocated block;
+.I getstk
+returns the highest word address in the allocated block.
+In either case, if
+.I malloc
+returns a null pointer, so will
+.I getmem.
+.SH SEE ALSO
+freemem(2CCC), buffer(3CCC), malloc(3)
+.SH BUGS
+There is no way to protect memory, so the active stack may write into
+regions returned by
+either call.

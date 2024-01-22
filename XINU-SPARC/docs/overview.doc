@@ -1,0 +1,660 @@
+
+
+
+
+
+
+
+
+
+                VVVViiiirrrrttttuuuuaaaallll MMMMeeeemmmmoooorrrryyyy XXXXiiiinnnnuuuu PPPPrrrroooojjjjeeeecccctttt
+
+
+                       Douglas Comer
+                      James Griffioen
+
+               Department of Computer Science
+                     Purdue University
+                     West Lafayette, IN
+                           47906
+
+                      August 17, 1990
+
+
+
+                          _A_B_S_T_R_A_C_T
+
+          The Virtual Memory Xinu Project  is  investi-
+     gating   a  new  model  of virtual memory in which
+     dedicated, large-memory machines serve as a  back-
+     ing store (page server) for virtual memory systems
+     operating on a  set  of  (heterogeneous)  clients.
+     The  dedicated  page  server allows sharing of the
+     large physical memory resource and  provides  fast
+     access to data.
+
+          This paper outlines the  new  virtual  memory
+     model of computing used in the VM Xinu project and
+     presents an overview of the VM Xinu operating sys-
+     tem,  its  capabilities,  and the functionality it
+     provides.
+
+
+
+_1.  _B_a_c_k_g_r_o_u_n_d
+
+     Xinu [1][2] is a small, elegant operating system.  Xinu
+arranges  the  components  of  the system into a hiearchy of
+layers, clarifying the interaction between the various  com-
+ponents of the system and making the system easier to under-
+stand and modify.  Despite its small size, Xinu uses  power-
+ful  primitives  to provide the same functionality many con-
+ventional operating systems supply.
+
+     Xinu originally ran on  Digital  Equipment  Corporation
+LSI  11's with only 64K bytes of memory.  Version 6 Xinu, as
+it was called, supplied primitives to handle memory  manage-
+ment,          process          management,          process
+coordination/synchronization,  interprocess   communication,
+real-time clock management, device drivers, and intermachine
+communication (a ring network).  Version 7 Xinu replaced the
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 2 -
+
+
+point-to-point  networking  capabilities  of  Version 6 with
+support  for  the  Ethernet  and  TCP/IP  Internet  protocol
+software.  Version 7 also included a shell and a remote file
+system that allowed Xinu to access remote files via a remote
+file server executing on a UNIX system.
+
+     Over the years Xinu versions 6 and 7 have  been  ported
+to  many  architectures  including  the IBM PC, Sun 3, Tran-
+sputer, MacIntosh, and much of the Vax family.
+
+     Both Version 6 and Version 7 Xinu ran all processes  in
+a  single,  global,  address  space  and did not require any
+hardware virtual memory support.   While  designing  the  VM
+Xinu operating system we looked at several different virtual
+memory hardware architectures. Although the LSI 11/23 memory
+management  unit provides virtual memory support, we decided
+to base the  design  on  more  conventional  virtual  memory
+architectures such as the Vax architecture or the Sun archi-
+tecture.
+
+_2.  _V_i_r_t_u_a_l _M_e_m_o_r_y _X_i_n_u
+
+     VM Xinu is a virtual memory operating system  providing
+the  functionality  required to support large user processes
+executing in large virtual address spaces.  VM  Xinu  builds
+on and enhances the functionality found in Xinu Version 7.
+
+     The Virtual Memory Xinu project explores a new model of
+virtual  memory  in  which  dedicated, large-memory machines
+serve as a backing store (page server)  for  virtual  memory
+systems  operating on a set of (heterogeneous) clients.  The
+dedicated page server allows sharing of the  large  physical
+memory  resource and provides fast access to data.  The pro-
+ject also investigates how virtual memory can be  integrated
+into a hierarchically designed operating system.
+
+     The VM Xinu operating system executes  on  the  set  of
+client  machines  providing large virtual address spaces for
+jobs requiring large amounts of memory.  The VM Xinu  kernel
+provides   a   multi-threaded  kernel,  multi-threaded  user
+processes, shared memory, and remote memory backing storage.
+
+_2._1.  _M_o_d_e_l
+
+     The VM Xinu operating system is based on a new model of
+virtual  memory  called  the  _r_e_m_o_t_e  _m_e_m_o_r_y _m_o_d_e_l [3].  The
+remote memory model consists  of  several  client  machines,
+various  servers,  one  or  more  dedicated  machines called
+remote memory servers (or page servers), and a communication
+channel  interconnecting  all the machines.  Figure 1 illus-
+trates an example remote memory model archictecture.
+
+
+
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 3 -
+
+
+  +---------------+            +-----------+    +-----------+
+  |               | +------+   |           |    |           |
+  | Memory Server |-| Disk |   |  Client   |    |   Client  |
+  |               | +------+   |           |    |           |
+  +-----+---------+            +-----+-----+    +-----+-----+
+        |                            |                |
+--------+---LAN-----+----------+------------+---------+----------
+                    |                       |
+              +-----+-----+           +-----+---------+
+              |           |           |               | +------+
+              |   Client  |           | Memory Server +-+ Disk |
+              |           |           |               | +------+
+              +-----------+           +---------------+
+
+
+                                Figure 1
+                                --------
+
+
+     The model uses dedicated, large-memory machines to pro-
+vide backing storage for virtual memory systems executing on
+heterogeneous client machines.  The VM Xinu operating system
+executes  on the client machines and provides the mechanisms
+needed  to  efficiently  access  the  large-memory   backing
+storage  over  a  high  speed, high bandwidth, communication
+channel.  The  large-memory  page  server  machines  provide
+backing  storage  for multiple heterogeneous client machines
+at speeds competitive with local disk speeds.
+
+     Client machines  share  the  physical  memory  resource
+located  at  the  page  server.   Each  client machine has a
+private local memory large enough to support the normal pro-
+cessing  demands.   For  jobs  requiring  large  amounts  of
+memory, clients page across the network,  storing  pages  on
+the  large-memory page server machine and retrieving them as
+needed. The  page  server  allocates  memory  on  demand  to
+clients that require additional memory.  Unlike conventional
+distributed virtual memory systems which page  to  a  remote
+disk  with  fixed  partitions,  the  remote  memory  backing
+storage model provides a dynamically allocated shared  back-
+ing storage resource to heterogeneous client architectures.
+
+_2._2.  _V_M _X_i_n_u _O_p_e_r_a_t_i_n_g _S_y_s_t_e_m
+
+     The  VM  Xinu  operating  system  is  a  hierarchically
+designed  virtual  memory  operating system which features a
+multi-threaded kernel, multi-threaded user processes, shared
+memory, and remote memory backing storage.
+
+     VM Xinu uses a hierarchical design to incorporate  vir-
+tual  memory  support into the operating system, simplifying
+the kernel and clarifying the relationship between the vari-
+ous  components  of  the system.  The design also identifies
+and separates out the architecture dependent  components  of
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 4 -
+
+
+the  system.  An architecture interface layer resides at the
+lowest  level  of  the  hierarchy,  hiding  the   underlying
+hardware  virtual  memory  support from the higher layers of
+the operating system and reducing the effort needed to  port
+the system to new architectures.
+
+     In Version 7 Xinu, all processes are part of the kernel
+and  execute  in  a  shared  global  address space.  Because
+processes share the memory space, a process  cannot  protect
+private  data  from  other  processes.   The  virtual memory
+hardware support provided by most conventional architectures
+allows  VM  Xinu  to  create  multiple  address spaces, each
+specifying an independent virtual to  physical  memory  map-
+ping.   VM Xinu uses this ability to provide both shared and
+protected/private data.  Each user process in VM  Xinu  exe-
+cutes  in  its own address space, only accessing data in its
+address space.  Each address space is defined by  a  mapping
+from  virtual  memory  to  physical memory that protects the
+data in the address space from all other user processes.
+
+     VM Xinu supports multi-threaded user processes allowing
+concurrent  manipulation of shared data within a process.  A
+thread is defined as a point of execution within a  process.
+All  threads  within a process execute instructions from the
+same text region, each at a different point in the code, and
+share the process' data region with all other threads in the
+process.  Semaphores and efficient  interprocess  communica-
+tion  provide synchronization between threads, both when the
+threads are in the same process and when they  are  in  dif-
+ferent processes.
+
+     VM  Xinu's  kernel  provides  the  ability  to  execute
+several  kernel tasks concurrently. VM Xinu's multi-threaded
+kernel in  many  ways  resembles  Version  7  Xinu's  global
+address  space  with  multiple  concurrent  processes.  Many
+operations performed by the kernel such as page reclamation,
+network  management,  background  paging,  etc, can be coded
+very simply and elegantly when thought of as executing  con-
+currently within the kernel.
+
+     In Version 7 Xinu all user processes are compiled  into
+the  kernel,  but,  in VM Xinu, the kernel dynamically loads
+user processes from the remote file system.   VM  Xinu  pro-
+vides  the  ability  to  read an executable file into memory
+from the file system and start up  a  thread  in  the  newly
+loaded  process.  All dynamically loaded user processes exe-
+cute in user-mode and trap into the kernel via system  calls
+to  invoke Xinu kernel routines.  Because the kernel is pro-
+tected from user processes, user processes only access  ker-
+nel data structures via systems calls. Unlike user processes
+in Version 7 Xinu, threads execute on  a  dynamically  allo-
+cated  stack  rather  than  a  fixed size stack.  The kernel
+allocates additional memory to a thread's stack  as  needed.
+Similarly, each process' heap region grows dynamically.
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 5 -
+
+
+     The VM Xinu operating system is unique in that it  uses
+remote  (physical)  memory,  accessed via a high speed, high
+bandwidth network, as shared secondary storage.  The  kernel
+provides  the support needed to page across the network to a
+remote memory server.  The kernel uses a  highly  efficient,
+reliable,  data streaming, architecture independent protocol
+to send and receive pages of memory to and from  the  memory
+server.   The  memory  server  employs special purpose algo-
+rithms to minimize the time spent locating the desired data.
+The  result  is  a  high-speed,  shared,  secondary  storage
+mechanism operating at speeds competitive with a local disk.
+
+     A small, but important, change from Version 7  Xinu  is
+the enhanced shell which provides a way to utilize VM Xinu's
+new capabilities.  VM Xinu's shell now provides commands  to
+examine  many of the virtual memory data structures and also
+provides  methods  for  invoking  dynamically  loaded   user
+processes.
+
+     We designed and  implemented  a  prototype  distributed
+system  based  on  the remote memory model.  The system con-
+sists of heterogeneous client machines (Sun Microsystems SUN
+3/50's,  Digital  Equipment  Corporation  Microvax  I's  and
+II's), a memory server, and a remote file server,  all  con-
+nected  by  a  10  Mb/sec Ethernet.  Sun and Microvax client
+machines simultaneously access the remote memory server  for
+backing  storage,  demonstrating  support  for heterogeneous
+clients.
+
+_3.  _P_r_o_t_o_t_y_p_e _A_v_a_i_l_a_b_i_l_i_t_y
+
+     A prototype  implementation  of  the  VM  Xinu  system,
+including  source  code,  for  the Sun 3 architecture is now
+available.  The kernel executes on a diskless Sun 3  machine
+and  contains  the support needed to access remote files via
+xinu's remote file system [2].
+
+     Backing storage for the VM Xinu kernel is provided by a
+_p_a_g_e _s_e_r_v_e_r.  The page server runs as a UNIX user level pro-
+cess, allowing us to run the server on  a  wide  variety  of
+platforms.  We have used a SUN 3/50, Vax 11/780, Microvax II
+and III, Vaxserver 3100, an 8  processor  Sequent  Symmetry,
+running  a wide variety of operating systems (SunOS, 4.3BSD,
+Dynix, Ultrix) as the page server. The page server  provides
+backing storage for multiple client machines simultaneously.
+The high speed protocol used to transfer pages  between  the
+client  and the page server is built on top of UDP, allowing
+clients to access a page server on other network across  one
+or more gateways.
+
+     The VM Xinu kernel  supports  dynamically  loaded  user
+level  programs.   Users  compile their programs on the UNIX
+development machine and then install the executable image so
+that  it  is  accessible via the remote file system. Clients
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 6 -
+
+
+dynamically load the executable image from the  remote  file
+system  and  start a thread executing the program.  The Xinu
+shell provides an easy method for invoking user level dynam-
+ically loaded programs.
+
+     A library of system calls allows user level programs to
+invoke  xinu  kernel  routines such as semaphore operations,
+interprocess communication,  thread  creation,  remote  file
+system  access,  network  access, etc.  To reduce the effort
+required to port UNIX programs to Xinu, the system  includes
+a user level UNIX simulation library that uses the Xinu sys-
+tem calls to simulate many of the most  common  UNIX  system
+calls.
+
+_4.  _D_i_s_t_r_i_b_u_t_i_o_n _C_o_n_t_e_n_t_s
+
+     VM Xinu (version 8.0.0) is available for the SUN 3  and
+can be ordered as indicated on the order form in Appendix A.
+The VM Xinu version 8.0.0 tape contains:
+
++o    _V_M _X_i_n_u _K_e_r_n_e_l source code.
+
++o    _R_e_m_o_t_e _F_i_l_e _S_e_r_v_e_r and _X_i_n_u _P_a_g_e _S_e_r_v_e_r source code
+
++o    _C_r_o_s_s _D_e_v_e_l_o_p_m_e_n_t _S_o_f_t_w_a_r_e with source code that facil-
+     itates  kernel  development  in  a UNIX environment and
+     provides methods for downloading  and  testing  the  VM
+     Xinu kernel on a second SUN 3.
+
++o    _X_i_n_u _S_y_s_t_e_m _C_a_l_l _L_i_b_r_a_r_y and source code for  use  with
+     user level programs
+
++o    _U_N_I_X _S_i_m_u_l_a_t_i_o_n _L_i_b_r_a_r_y and source code  for  use  with
+     user level programs.  The library simulates many of the
+     UNIX system calls reducing the effort required to  port
+     UNIX applications to VM Xinu.
+
++o    _C _L_i_b_r_a_r_y (_s_u_b_s_e_t) and source  code.   A  small  public
+     domain C library for use with user programs.
+
++o    _X_i_n_u _U_s_e_r _P_r_o_g_r_a_m_s and source  code.   Several  dynami-
+     cally loaded Xinu user programs (cat, cp, ls, mv, ...)
+
++o    _M_a_n_u_a_l _P_a_g_e_s for the VM Xinu kernel and the Xinu System
+     Calls
+
++o    _I_n_s_t_a_l_l_a_t_i_o_n _I_n_s_t_r_u_c_t_i_o_n to get VM Xinu up and running.
+
+
+_5.  _R_e_f_e_r_e_n_c_e_s
+
+[1]  Comer, Douglas E., _O_p_e_r_a_t_i_n_g _S_y_s_t_e_m  _D_e_s_i_g_n:  _T_h_e  _X_i_n_u
+     _A_p_p_r_o_a_c_h, Prentice-Hall, 1984.
+
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 7 -
+
+
+[2]  Comer, Douglas  E.,  _O_p_e_r_a_t_i_n_g  _S_y_s_t_e_m  _D_e_s_i_g_n  _V_o_l  _2:
+     _I_n_t_e_r_n_e_t_w_o_r_k_i_n_g _w_i_t_h _X_i_n_u, Prentice-Hall, 1987.
+
+[3]  Comer, Douglas and Griffioen, James, _A _N_e_w  _D_e_s_i_g_n  _f_o_r
+     _D_i_s_t_r_i_b_u_t_e_d  _S_y_s_t_e_m_s: _T_h_e _R_e_m_o_t_e _M_e_m_o_r_y _M_o_d_e_l, Proceed-
+     ings of the Summer Usenix Conference, June 1990
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 8 -
+
+
+                           Appendix A
+
+
+                       Xinu Types and Price List
+
+     Target  Xinu        Host Compiler  Media        Price   Make Check
+     Machine Version     Operating                          Payable to
+                         System
+     -------------------------------------------------------------------
+      LSI (@) 6 (Book I)Cross Compiler 1600 BPI      $100   Douglas Comer
+                        Included       9-Track UNIX
+                        4.3BSD UNIX    Tar Tape
+
+      LSI (@) 7(Book II) Cross Compiler 1600 BPI     $200   Douglas Comer
+                         Included       9-Track UNIX
+                         4.3BSD UNIX    Tar Tape
+     _____________________________________________________________________
+
+      8086 (%)6 (Book I) Cross Compiler 1600 BPI     $100   Douglas Comer
+                 Derived Included       9-Track UNIX
+                 from    4.3BSD UNIX    Tar Tape
+                 LSI-11
+     ______________________________________________________________________
+
+      Sun3 (%)6 (Book I)  Sun Micro-     1600 BPI      $100  Shawn Ostermann
+                          Systems C      9-Track UNIX
+                          Sun OS         Tar Tape
+
+      Sun3 (%)7 (Book II) Sun Micro-     1600 BPI      $200 Shawn Ostermann
+                          Systems C      9-Track UNIX
+                          Sun OS         Tar Tape
+
+     ************************ N E W   R E L E A S E ***********************
+      Sun3 (%)8.0 VM Xinu Sun Micro-     1600 BPI      $200 Jim Griffioen
+                          Systems C      9-Track UNIX
+                          Sun OS         Tar Tape, or
+                                         1/4 inch cartridge
+     **********************************************************************
+
+     ______________________________________________________________________
+
+      IBM-PC  6 PC-Xinu  Microsoft C    5 1/4 floppy ~ $80 Contact Prentice
+                (Book I)  MS/DOS                                  Hall
+                                                       ISBN #0-13-638271-1
+
+      IBM-PC (%)6 (Book I) Aztec C      5 1/4 floppy   $100 Andy Thomas
+
+
+           Book 2 version 7 is not available yet for the PC.
+           For information on version 7 software for the PC, Please contact:
+
+                     Prof. Timothy Fossum
+                     Department of Applied Computer Science
+                     University of Wisconsin-Parkside
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 9 -
+
+
+                     Kenosha, WI  53141
+                     (414) 553-2314
+                     (414) 553-2297 office
+                     FAX:  414-553-2630
+                     fossum@vacs.uwp.wisc.edu
+
+     ______________________________________________________________________
+
+      Macint (%)6 (Book I) Aztec C   two 3 1/2 floppy  $200 Steven Munson
+      tosh         &       Macintosh  &
+      512K      7 (Book II)          1600BPI
+                                     9-Track UNIX
+                                     Tar Tape
+
+      Macint (%)6 (Book I) Aztec C   two 3 1/2 floppy ~ $80 Contact Prentice
+      tosh                 Macintosh                             Hall
+      512K                                              ISBN #0-13-638545-1
+
+               or
+
+             $100 Steven Munson
+
+     _________________________________________________________________________
+
+      VAX         6 (Book I ) VAX UNIX C   1600 BPI     $200 Douglas Comer
+                     &        Compiler     9-Track UNIX
+                  7 (Book II) 4.3BSD UNIX  Tar Tape
+     _________________________________________________________________________
+
+      VAX (*)     ConcurrenC VAX UNIX    1600 BPI       $50  Ken Rodemann
+                             Compiler    9-Track UNIX
+                             4.3BSD UNIX Tar Tape
+     _________________________________________________________________________
+
+
+
+          (@) Less expensive if purchased from Prentice-Hall.
+          For Prentice Hall, contact Rob Dewey,  (201)  592-2862;
+          or Mail Order dept.  (201) 767-5937.
+
+          (%) Prepared by students.  These versions are "as is".
+
+          (*) Requires UNIX source license.  Send a mailing  tape.
+          4.2 BSD UNIX available.
+
+
+          If you have a UNIX source license, please send  a  copy
+          of the signature page; otherwise, we will send you dis-
+          tributions without UNIX source.
+
+          Send your order and check to: Professor Douglas  Comer,
+          Department  of  Computer  Sciences,  Purdue University,
+          West Lafayette, IN  47907.
+
+
+
+
+                      August 20, 1990
+
+
+
+
+
+                           - 10 -
+
+
+     Information about Xinu is exchanged through  electronic  mail.   To
+     have  your  name  added  to  the  mailing list, send to  xinu-info-
+     request@purdue.edu. To send mail to the Xinu list,  address  it  to
+     xinu-info@purdue.edu.
+
+                        Titles by Comer
+
+     Operating System Design Vol. 1 The Xinu Approach, 1984
+     ISBN 0-13-637539-1
+
+     Operating System Design Vol. 1 The Xinu Approach (PC Edition), 1988
+     By:  Comer & Fossum
+     ISBN 0-13-638180-4
+     Software ISBN 0-13-638271-1
+
+     Operating System Design Vol. 1 The Xinu Approach (Macintosh Edition), 1989
+     By:   Comer & Munson
+     ISBN 0-13-638529-X
+     Software ISBN 0-13-638545-1
+
+     Operating System Design Vol. II Internetworking with Xinu, 1987
+     ISBN 0-13-637414-X
+
+     Internetworking with TCP/IP: Principles, Protocols, and Architecture, 1988
+     ISBN 0-13-470154-2
+
+     All books and listed software are available from  Pren-
+     tice  Hall,  College  Marketing  Department,  Englewood
+     Cliffs, NJ  07632 .    Phone  Mail  Order  Dept.  (201)
+     767-5937 Software, except those listed above, available
+     from the Xinu  Project,  Computer  Science  Department,
+     Purdue University, West Lafayette, IN  47907.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      August 20, 1990
+
+

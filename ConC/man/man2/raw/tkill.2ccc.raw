@@ -1,0 +1,33 @@
+.TH TKILL 2CCC
+.SH NAME
+tkill \- terminate a task
+.SH SYNOPSIS
+.B int
+.B tkill(tid)
+.br
+.B int tid;
+.SH DESCRIPTION
+.I Tkill
+will stop task
+.I tid
+and remove it from the system.
+.I Tkill
+terminates a task immediately.
+If the task has been queued on a semaphore, it is removed from
+the queue and the semaphore count is incremented as if the
+task had never been there.
+Tasks waiting to send a message to a full port disappear without
+affecting the port.
+.PP
+One can kill a task in any state, including a suspended one.
+Once killed, a task cannot recover.
+.SH RETURN VALUE
+If successful,
+.I tkill
+returns 0.  Otherwise, it returns -1 and errno is set to CEBADTID.
+.SH BUGS
+At present there is no way to recover space allocated dynamically
+when a task terminates.
+However,
+.I tkill
+does recover the stack space allocated to a task when it is created.

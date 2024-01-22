@@ -1,0 +1,21 @@
+   This directory contains source files for the Xinu Operating System
+described in the text Operating System Design -- The XINU Approach
+(Prentice Hall, 1983).
+
+   This version of Xinu is for the Intel 486 architecture, and was
+ported to the Intel architecture for use in the Xinu Laboratory at
+Purdue University.  The Xinu lab has two sets of computers: conventional
+workstations running a UNIX operating system, and computers on which
+students download and run Xinu.  We call the conventional workstations
+'front-end' machines and the other computers 'back-end' machines.  Both
+sets are connected to an Ethernet.  In addition, a multiplexor exists
+that allows anyone on a front-end machine to connect a window on the screen
+to the console serial port of one of the back-end computers.  Finally, a
+remote control hardware unit exists that can a front-end user can invoke
+to reboot any back-end computer at any time.
+
+   This software is supplied AS IS with no guarantees about correctness
+or capabilities.  If you have questions or suggestions, contact
+
+		John Lin  (lin@cs.purdue,edu)
+

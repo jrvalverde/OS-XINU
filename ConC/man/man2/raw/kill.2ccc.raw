@@ -1,0 +1,3 @@
+.TH KILL 2CCC
+.SH USE INSTEAD
+.I tkill(2CCC).

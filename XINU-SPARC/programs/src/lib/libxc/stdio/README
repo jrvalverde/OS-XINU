@@ -1,0 +1,15 @@
+
+README
+------
+
+This directory contains very (let me emphasis VERY) simple minded routines
+that immitate the standard C library stdio functions.
+
+Unlike the standard C lib stdio functions that do buffering, these routines
+do not do any buffering.  This makes some programs (like editors which
+may read an entire file using the fgetc() routine) intolerable.
+
+We suggest you copy over your C lib stdio source code (assuming you have source
+code) and link with that.  If you don't have source code, then you will have
+to settle for this implementation unless you care to rewrite the stdio
+routines correctly.

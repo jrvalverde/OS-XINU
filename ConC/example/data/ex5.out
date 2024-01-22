@@ -1,0 +1,124 @@
+
+This program has three tasks running:
+	2 reading from input and
+	1 reading from a file, printing to the terminal,
+		then sleeping for 5 seconds.
+
+All output will be echoed to file 'ex5.out' in 'data' directory
+	to test writing to a file.
+
+This shows how 2 processes are queued up to read from the same
+	input and how this reading does not block other task(s).
+
+To get the full effect, wait a long time (about 30 seconds)
+	before typing anything in.  When you want to stop, type
+	'quit' twice (once for each input task).
+
+Hit return when you want to continue:
+Enter a line.
+
+input process 1 ==>	hi
+
+input process 2 ==>	good
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+input process 1 ==>	wow
+
+input process 2 ==>	ls
+
+input process 1 ==>	ll
+
+input process 2 ==>	ll
+
+Finally you enterred something!!  Do it again.
+
+input process 1 ==>	ll
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+input process 2 ==>	ss
+
+input process 2 ==>	ff
+
+input process 1 ==>	dd
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+Come on.  Enter a line.
+
+Why don't you want to enter a line ??
+
+input process 2 ==>	oops
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+input process 1 ==>	kk
+
+input process 2 ==>	
+
+input process 1 ==>	
+
+input process 2 ==>	j
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+Come on.  Enter a line.
+
+Why don't you want to enter a line ??
+
+PLEASE enter a line.
+
+What's wrong with you, boah!!  Enter that line.
+
+Can't you read (or write)??  Enter a line.
+
+This is getting outrageous! Enter a line, or go home.
+
+This is your last chance to enter a line.  Else I will start over.
+
+Enter a line.
+
+input process 1 ==>	quit
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+input process 2 ==>	ll
+
+input process 2 ==>	
+
+input process 2 ==>	
+
+input process 2 ==>	s
+
+input process 2 ==>	d
+
+input process 2 ==>	d
+
+Finally you enterred something!!  Do it again.
+
+Enter a line.
+
+input process 2 ==>	hi there
+
+input process 2 ==>	grweat
+
+input process 2 ==>	quit
+
+Finally you enterred something!!  Do it again.
+
+
+
+Thank you for playing this game.

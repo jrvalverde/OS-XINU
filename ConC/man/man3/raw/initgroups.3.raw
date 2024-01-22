@@ -1,0 +1,3 @@
+.TH INITGROUPS 3
+.SH REFER TO
+getgrent(3) of the ConcurrenC man pages

@@ -1,0 +1,6 @@
+.TH FGETC 3CCC
+.SH REFER TO
+.I fgetc
+in
+.I getc(3S)
+of the UNIX man pages.

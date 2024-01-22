@@ -1,0 +1,52 @@
+This program was modified to run under VM Xinu.
+Permission was also granted by Steve Chapin to distribute the code with the
+copyright notice as given in the code.
+
+------------------------------------------------------------------------------
+
+19 Jan 87
+
+This directory contains the source files for the Programming Contest
+Editor.  There isn't a whole lot of documentation (comments?
+we don't need no steenking comments!) but there is a short
+description of each function at the top of it.
+
+Everything should compile ok.  The Makefile should do everything you
+need, but feel free to embellish.  The editor uses the curses library,
+and some signal stuff to turn off stop and kill, so that confused
+hackers wouldn't leave tons of stuff lying around in the contest
+directories.
+
+If you can't get it to work, or have some other problems, I can
+be reached at:
+
+	Steve Chapin
+	Department of Computer Sciences
+	Computer Sciences Building
+	Purdue University
+	West Lafayette, IN  47907
+
+	317/494-7816	(office)
+	317/423-4529	(home)
+
+	arpa/csnet: 	sjc@mordred.cs.purdue.edu
+	uucp:		{ihnp4, pur-ee, ...}!purdue!sjc
+
+What should be done:
+There are several places in the code where I've been inconsistent in
+declaring all variables extern.  The way it should be is that the
+ed.h header file should be included in the main program, and
+all the routines should refer to the variables after declaring them
+extern.  Therefore, all the various and sundry .c files shouldn't
+need to included ed.h.  As it stands, almost all of them do, and
+I relied on the loader to resolve any conflicts.  This really
+should be cleaned up, but I'm a little too busy to do so right now.
+Maybe next Summer.  Hey, I just wrote it.  I didn't say it was pretty!
+
+I'd appreciate it if I were kept informed of any changes made to
+the source code.
+
+P.S.  Ignore the file ed.doc.  It's out of date, and the source 
+for the new editor document went to its reward, so there isn't
+a true document around.  Some of the statements made in the document
+(e.g. no undo command) are outright wrong.

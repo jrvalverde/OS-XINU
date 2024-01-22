@@ -1,0 +1,4 @@
+.TH SEEK 2CCC
+.SH USE INSTEAD
+.I lseek(2)
+of the UNIX man pages.

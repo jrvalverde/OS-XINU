@@ -1,0 +1,107 @@
+
+
+XSH			USER COMMANDS
+
+NAME
+	xsh - a dynamically loaded xinu shell
+
+SYNOPSIS
+	xsh [-t terminal_type] [-n login_name] [-p] [arguments]*
+
+DESCRIPTION
+
+	Options.
+	The -t option is used to set the the environment variable TERM.
+	If the -t option is not given and TERM is not set then TERM
+	is set to the default value 'xterms'.
+
+	The -n option is to set the environment variable USER.  If -n
+	option is not given and USER is not set then
+
+	is set to 
+	Syntax and Grammar.
+	Xsh is a line at a time command programming language that reads
+	input from the terminal or a file.  Command line editing is
+	handled by the gnu readline function (read corresponding man
+	pages for more information).  The readline function provides
+	command line editing very similar to that of ksh.
+
+	The following meta-characters have special meanings :
+
+	\    "    '    &    <    >    ;    $    new-line    tab    space
+
+
+	An identifier is a sequence of characters surrounded by single
+	quotes, or a sequence of characters surrounded by double quotes,
+	or a sequence of characters other than the meta-characters.  The
+	meta-character backslash is used as an escape character.
+
+	A simple command consist of the command name followed by
+	the argument list, input redirection, output redirection,
+	and the background symbol.  All parts of the the simple
+	command are optional except the command name.
+
+	    simple command  -> cmd arglist redirect_in redirect_out background
+
+	    cmd		    -> IDENTIFIER
+
+	    arglist	    -> [ IDENTIFIER ]*
+
+	    redirect_in	    -> [ < IDENTIFIER ]
+
+	    redirect_out    -> [ > IDENTIFIER ]
+
+            background      -> [ & ]
+
+
+	A compound command is a series of simple commands separated by
+	semicolons.
+
+	    compound command-> simple command [ ; simple command ]*
+
+
+	Variables.
+	Xsh maintains a set of environment variables and local variables.
+  	Builtin functions are provides to set and review these variables
+	(for more information see the section on builtin commands).
+
+	When xsh creates a child process, xsh exports its environment to
+	the child.  This does not include the local variables, only the
+	environment variables.
+
+	Current Working Directory.
+	Xsh uses the enviroment variable PWD to hold the current working
+	directory.  By using an environment variable, the problem of
+	setting the child's current working directory is solved.  Recall
+	that all of the shell's environment variables, include PWD, are
+	exported to the new child process.
+
+	Variable Substitution.
+	.....
+
+	Tilde Substitution.
+	.....
+
+	Aliasing and Parameter Substitution.
+	.....
+
+	Builtin Functions.
+		help 	:
+		set  	:
+		unset 	:
+		print	:
+		setenv	:
+		unsetenv:
+		printenv:
+		export	:
+		source	:
+		alias	:
+		unalias	:
+		cd	:
+		pwd	:
+		bye	:
+		debug	:
+	.....
+
+BUGS
+	TTY.

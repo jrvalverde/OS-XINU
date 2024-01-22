@@ -1,0 +1,3 @@
+.TH WAIT 2CCC
+.SH USE INSTEAD
+.I swait(2CCC).

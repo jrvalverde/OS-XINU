@@ -1,0 +1,4 @@
+.TH SCANF 3CCC
+.SH REFER TO
+.I scanf(3S)
+of the UNIX man pages.

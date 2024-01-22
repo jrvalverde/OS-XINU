@@ -1,0 +1,23 @@
+.TH TRECEIVE 2CCC
+.SH NAME
+treceive, trecvclr \- receive a (one-word) message
+.SH SYNOPSIS
+.nf
+.B int treceive()
+.sp
+.B int trecvclr()
+.fi
+.SH DESCRIPTION
+.I Treceive
+returns the one-word
+message sent to a task using TSEND(2CCC).
+If no messages are waiting,
+.I treceive
+blocks until one appears.
+.PP
+.I Trecvclr
+returns the one-word message if one is available, else it returns 0.
+.I Trecvclr
+clears any pending message for the task.
+.SH SEE ALSO
+preceive(2CCC), psend(2CCC), send(2CCC)

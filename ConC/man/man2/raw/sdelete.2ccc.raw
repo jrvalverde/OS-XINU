@@ -1,0 +1,20 @@
+.TH SDELETE 2CCC
+.SH NAME
+sdelete \- delete a semaphore
+.SH SYNOPSIS
+.nf
+.B int sdelete(sem)
+.B int sem;
+.fi
+.SH DESCRIPTION
+.I Sdelete
+removes semaphore
+.I sem
+from the system and returns tasks that were waiting for it
+to the ready state.
+The call returns -1 and errno is set to CEBADSEM if
+.I sem
+is not a legal semaphore;
+it returns 0 if the deletion was successful.
+.SH SEE ALSO
+scount(2CCC), screate(2CCC), ssignal(2CCC), sreset(2CCC), swait(2CCC)

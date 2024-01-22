@@ -1,0 +1,1106 @@
+#
+#  Makefile for VM Xinu Shell interface
+#
+
+# Directory where we are building Xinu
+DIR	=	../../..
+
+# Machine specific things we must define
+INSTR_TYPE	=	RISC
+ARCH		=	SPARC
+MODEL		=	SPARC_SLC
+CODE_NAME	=	sun4c
+
+
+CDEFS	=	-D$(INSTR_TYPE) -D$(ARCH) -D$(MODEL) -D$(CODE_NAME) -DKERNEL
+CFLAGS	=	-g -c -I../h ${CDEFS}
+#CFLAGS	=	-O -c -I../h ${CDEFS}
+SFLAGS	=	-I../h
+ASCPPFLAGS =	-I../h -DASM ${CDEFS}
+AR	=	/bin/ar
+CC	=	/bin/cc
+LD	=	/bin/ld
+LIB	=	${DIR}/lib
+HDIR	=	../h
+MAKETD	= 	../../tools/maketd
+
+AFILE	=	../libx.a
+TSTAMP	=	.last_make_all_run
+
+DIR1	=	kmemcmds
+DIR2	=	usercmds
+
+KMEMOFIL =			\
+	kmemcmds/addarg.o       \
+	kmemcmds/lexan.o        \
+	kmemcmds/login.o        \
+        kmemcmds/shell.o        \
+        kmemcmds/x_args.o       \
+        kmemcmds/x_arp.o        \
+        kmemcmds/x_bpool.o      \
+        kmemcmds/x_chprio.o     \
+        kmemcmds/x_clock.o      \
+        kmemcmds/x_close.o      \
+        kmemcmds/x_conf.o       \
+        kmemcmds/x_create.o     \
+        kmemcmds/x_devs.o       \
+        kmemcmds/x_df.o         \
+        kmemcmds/x_dg.o         \
+        kmemcmds/x_dumper.o     \
+        kmemcmds/x_exception.o  \
+        kmemcmds/x_exit.o       \
+        kmemcmds/x_finger.o     \
+        kmemcmds/x_fmdump.o     \
+        kmemcmds/x_help.o       \
+        kmemcmds/x_ifstat.o     \
+        kmemcmds/x_kill.o       \
+        kmemcmds/x_mem.o        \
+        kmemcmds/x_net.o        \
+        kmemcmds/x_nfs.o        \
+        kmemcmds/x_nfsls.o      \
+        kmemcmds/x_ns.o         \
+        kmemcmds/x_pgstats.o    \
+        kmemcmds/x_ping.o       \
+        kmemcmds/x_pmem.o       \
+        kmemcmds/x_printpgtbl.o \
+        kmemcmds/x_ps.o         \
+        kmemcmds/x_reboot.o     \
+        kmemcmds/x_rf.o         \
+        kmemcmds/x_route.o      \
+        kmemcmds/x_routes.o     \
+        kmemcmds/x_rpc.o        \
+        kmemcmds/x_rpcinfo.o    \
+        kmemcmds/x_run.o        \
+        kmemcmds/x_rusers.o     \
+        kmemcmds/x_sem.o        \
+        kmemcmds/x_sgmp.o       \
+        kmemcmds/x_snmp.o       \
+        kmemcmds/x_timerq.o     \
+        kmemcmds/x_uptime.o     \
+        kmemcmds/x_vmem.o       \
+	kmemcmds/x_pmeg.o	\
+	kmemcmds/x_rtt.o	\
+        kmemcmds/x_who.o        
+
+USEROFIL =      usercmds/ascdate.o usercmds/x_cat.o usercmds/x_cp.o     \
+                usercmds/x_date.o usercmds/x_echo.o usercmds/x_mount.o  \
+                usercmds/x_mv.o usercmds/x_rls.o usercmds/x_rm.o        \
+		usercmds/x_sleep.o usercmds/x_unmou.o usercmds/x_X.o
+
+ALLOFIL	=	${KMEMOFIL} ${USEROFIL}
+
+.c.o:
+	${CC} ${CFLAGS} -o $@ $<
+.s.o:
+	${CC} -c ${SFLAGS} -o $@ $<
+
+all:	${TSTAMP}
+
+${TSTAMP}: ${ALLOFIL}
+#	$(AR) cr ${AFILE} ${ALLOFIL}
+	ld -r ${ALLOFIL} -o xshell.o
+	touch ${TSTAMP}
+
+top:
+	cd .. ; make
+
+kmemcmds: ${KMEMOFIL}
+	$(AR) cr ${AFILE} ${KMEMOFIL}
+
+usercmds: ${USEROFIL}
+	$(AR) cr ${AFILE} ${USEROFIL}
+
+
+depend:
+	${MAKETD} -d -o${DIR1} ${CDEFS} -I${HDIR} ${DIR1}/*.c > makedep
+	${MAKETD} -d -o${DIR2} ${CDEFS} -I${HDIR} ${DIR2}/*.c >> makedep
+	echo '/^# DO NOT DELETE THIS LINE/+2,$$d' >eddep
+	echo '$$r makedep' >>eddep
+	echo 'w' >>eddep
+	cp Makefile .,oldmake
+	cp Makefile ,Makefile
+	ed - ,Makefile < eddep
+	/bin/rm eddep makedep
+	echo '#	DEPENDENCIES MUST END AT END OF	FILE' >>,Makefile
+	echo '#	IF YOU PUT STUFF HERE IT WILL GO AWAY'>>,Makefile
+	echo '#	see make depend	above'>>,Makefile
+	/bin/mv ,Makefile Makefile
+
+
+# DO NOT DELETE THIS LINE - maketd DEPENDS ON IT
+# Dependencies generated at: Tue May  8 15:34:19 EST 1990
+kmemcmds/addarg.o: ../h/a.out.h
+kmemcmds/addarg.o: ../h/conf.h
+kmemcmds/addarg.o: ../h/kernel.h
+kmemcmds/addarg.o: ../h/kernel.sparc.h
+kmemcmds/addarg.o: ../h/mark.h
+kmemcmds/addarg.o: ../h/mem.h
+kmemcmds/addarg.o: ../h/proc.h
+kmemcmds/addarg.o: ../h/select.h
+kmemcmds/addarg.o: ../h/shell.h
+kmemcmds/addarg.o: ../h/types.h
+kmemcmds/addarg.o: kmemcmds/addarg.c
+kmemcmds/lexan.o: ../h/conf.h
+kmemcmds/lexan.o: ../h/kernel.h
+kmemcmds/lexan.o: ../h/kernel.sparc.h
+kmemcmds/lexan.o: ../h/mark.h
+kmemcmds/lexan.o: ../h/shell.h
+kmemcmds/lexan.o: ../h/types.h
+kmemcmds/lexan.o: kmemcmds/lexan.c
+kmemcmds/login.o: ../h/conf.h
+kmemcmds/login.o: ../h/kernel.h
+kmemcmds/login.o: ../h/kernel.sparc.h
+kmemcmds/login.o: ../h/mark.h
+kmemcmds/login.o: ../h/shell.h
+kmemcmds/login.o: ../h/types.h
+kmemcmds/login.o: kmemcmds/login.c
+kmemcmds/shell.o: ../h/a.out.h
+kmemcmds/shell.o: ../h/cmd.h
+kmemcmds/shell.o: ../h/conf.h
+kmemcmds/shell.o: ../h/kernel.h
+kmemcmds/shell.o: ../h/kernel.sparc.h
+kmemcmds/shell.o: ../h/mark.h
+kmemcmds/shell.o: ../h/proc.h
+kmemcmds/shell.o: ../h/select.h
+kmemcmds/shell.o: ../h/shell.h
+kmemcmds/shell.o: ../h/tty.h
+kmemcmds/shell.o: ../h/types.h
+kmemcmds/shell.o: kmemcmds/shell.c
+kmemcmds/x_args.o: ../h/conf.h
+kmemcmds/x_args.o: ../h/kernel.h
+kmemcmds/x_args.o: ../h/kernel.sparc.h
+kmemcmds/x_args.o: ../h/types.h
+kmemcmds/x_args.o: ../h/vmem.h
+kmemcmds/x_args.o: ../h/vmem.sparc.h
+kmemcmds/x_args.o: kmemcmds/x_args.c
+kmemcmds/x_arp.o: ../h/arp.h
+kmemcmds/x_arp.o: ../h/conf.h
+kmemcmds/x_arp.o: ../h/daemon.h
+kmemcmds/x_arp.o: ../h/dgram.h
+kmemcmds/x_arp.o: ../h/domain.h
+kmemcmds/x_arp.o: ../h/ether.h
+kmemcmds/x_arp.o: ../h/file.h
+kmemcmds/x_arp.o: ../h/fserver.h
+kmemcmds/x_arp.o: ../h/icmp.h
+kmemcmds/x_arp.o: ../h/ip.h
+kmemcmds/x_arp.o: ../h/ipreass.h
+kmemcmds/x_arp.o: ../h/kernel.h
+kmemcmds/x_arp.o: ../h/kernel.sparc.h
+kmemcmds/x_arp.o: ../h/net.h
+kmemcmds/x_arp.o: ../h/netconf.h
+kmemcmds/x_arp.o: ../h/netif.h
+kmemcmds/x_arp.o: ../h/network.h
+kmemcmds/x_arp.o: ../h/rfile.h
+kmemcmds/x_arp.o: ../h/rip.h
+kmemcmds/x_arp.o: ../h/route.h
+kmemcmds/x_arp.o: ../h/snmpvars.h
+kmemcmds/x_arp.o: ../h/types.h
+kmemcmds/x_arp.o: ../h/udp.h
+kmemcmds/x_arp.o: kmemcmds/x_arp.c
+kmemcmds/x_bpool.o: ../h/bufpool.h
+kmemcmds/x_bpool.o: ../h/conf.h
+kmemcmds/x_bpool.o: ../h/kernel.h
+kmemcmds/x_bpool.o: ../h/kernel.sparc.h
+kmemcmds/x_bpool.o: ../h/mark.h
+kmemcmds/x_bpool.o: ../h/types.h
+kmemcmds/x_bpool.o: kmemcmds/x_bpool.c
+kmemcmds/x_chprio.o: ../h/conf.h
+kmemcmds/x_chprio.o: ../h/kernel.h
+kmemcmds/x_chprio.o: ../h/kernel.sparc.h
+kmemcmds/x_chprio.o: ../h/types.h
+kmemcmds/x_chprio.o: kmemcmds/x_chprio.c
+kmemcmds/x_clock.o: ../h/a.out.h
+kmemcmds/x_clock.o: ../h/clock.h
+kmemcmds/x_clock.o: ../h/conf.h
+kmemcmds/x_clock.o: ../h/date.h
+kmemcmds/x_clock.o: ../h/kernel.h
+kmemcmds/x_clock.o: ../h/kernel.sparc.h
+kmemcmds/x_clock.o: ../h/proc.h
+kmemcmds/x_clock.o: ../h/q.h
+kmemcmds/x_clock.o: ../h/select.h
+kmemcmds/x_clock.o: ../h/sleep.h
+kmemcmds/x_clock.o: ../h/types.h
+kmemcmds/x_clock.o: kmemcmds/x_clock.c
+kmemcmds/x_close.o: ../h/conf.h
+kmemcmds/x_close.o: ../h/kernel.h
+kmemcmds/x_close.o: ../h/kernel.sparc.h
+kmemcmds/x_close.o: ../h/types.h
+kmemcmds/x_close.o: kmemcmds/x_close.c
+kmemcmds/x_conf.o: ../h/arp.h
+kmemcmds/x_conf.o: ../h/conf.h
+kmemcmds/x_conf.o: ../h/daemon.h
+kmemcmds/x_conf.o: ../h/dgram.h
+kmemcmds/x_conf.o: ../h/domain.h
+kmemcmds/x_conf.o: ../h/ether.h
+kmemcmds/x_conf.o: ../h/file.h
+kmemcmds/x_conf.o: ../h/fserver.h
+kmemcmds/x_conf.o: ../h/icmp.h
+kmemcmds/x_conf.o: ../h/ip.h
+kmemcmds/x_conf.o: ../h/ipreass.h
+kmemcmds/x_conf.o: ../h/kernel.h
+kmemcmds/x_conf.o: ../h/kernel.sparc.h
+kmemcmds/x_conf.o: ../h/net.h
+kmemcmds/x_conf.o: ../h/netconf.h
+kmemcmds/x_conf.o: ../h/netif.h
+kmemcmds/x_conf.o: ../h/network.h
+kmemcmds/x_conf.o: ../h/rfile.h
+kmemcmds/x_conf.o: ../h/rip.h
+kmemcmds/x_conf.o: ../h/route.h
+kmemcmds/x_conf.o: ../h/snmpvars.h
+kmemcmds/x_conf.o: ../h/types.h
+kmemcmds/x_conf.o: ../h/udp.h
+kmemcmds/x_conf.o: kmemcmds/x_conf.c
+kmemcmds/x_create.o: ../h/a.out.h
+kmemcmds/x_create.o: ../h/conf.h
+kmemcmds/x_create.o: ../h/kernel.h
+kmemcmds/x_create.o: ../h/kernel.sparc.h
+kmemcmds/x_create.o: ../h/types.h
+kmemcmds/x_create.o: kmemcmds/x_create.c
+kmemcmds/x_devs.o: ../h/conf.h
+kmemcmds/x_devs.o: ../h/kernel.h
+kmemcmds/x_devs.o: ../h/kernel.sparc.h
+kmemcmds/x_devs.o: ../h/types.h
+kmemcmds/x_devs.o: kmemcmds/x_devs.c
+kmemcmds/x_df.o: ../h/a.out.h
+kmemcmds/x_df.o: ../h/arp.h
+kmemcmds/x_df.o: ../h/conf.h
+kmemcmds/x_df.o: ../h/daemon.h
+kmemcmds/x_df.o: ../h/dgram.h
+kmemcmds/x_df.o: ../h/domain.h
+kmemcmds/x_df.o: ../h/ether.h
+kmemcmds/x_df.o: ../h/file.h
+kmemcmds/x_df.o: ../h/fserver.h
+kmemcmds/x_df.o: ../h/icmp.h
+kmemcmds/x_df.o: ../h/ip.h
+kmemcmds/x_df.o: ../h/ipreass.h
+kmemcmds/x_df.o: ../h/kernel.h
+kmemcmds/x_df.o: ../h/kernel.sparc.h
+kmemcmds/x_df.o: ../h/mount.h
+kmemcmds/x_df.o: ../h/net.h
+kmemcmds/x_df.o: ../h/netconf.h
+kmemcmds/x_df.o: ../h/netif.h
+kmemcmds/x_df.o: ../h/network.h
+kmemcmds/x_df.o: ../h/nfs.h
+kmemcmds/x_df.o: ../h/portmapper.h
+kmemcmds/x_df.o: ../h/proc.h
+kmemcmds/x_df.o: ../h/rfile.h
+kmemcmds/x_df.o: ../h/rip.h
+kmemcmds/x_df.o: ../h/route.h
+kmemcmds/x_df.o: ../h/rpc.h
+kmemcmds/x_df.o: ../h/rpcprogs.h
+kmemcmds/x_df.o: ../h/select.h
+kmemcmds/x_df.o: ../h/snmpvars.h
+kmemcmds/x_df.o: ../h/types.h
+kmemcmds/x_df.o: ../h/udp.h
+kmemcmds/x_df.o: kmemcmds/x_df.c
+kmemcmds/x_dg.o: ../h/arp.h
+kmemcmds/x_dg.o: ../h/conf.h
+kmemcmds/x_dg.o: ../h/daemon.h
+kmemcmds/x_dg.o: ../h/dgram.h
+kmemcmds/x_dg.o: ../h/domain.h
+kmemcmds/x_dg.o: ../h/ether.h
+kmemcmds/x_dg.o: ../h/file.h
+kmemcmds/x_dg.o: ../h/fserver.h
+kmemcmds/x_dg.o: ../h/icmp.h
+kmemcmds/x_dg.o: ../h/ip.h
+kmemcmds/x_dg.o: ../h/ipreass.h
+kmemcmds/x_dg.o: ../h/kernel.h
+kmemcmds/x_dg.o: ../h/kernel.sparc.h
+kmemcmds/x_dg.o: ../h/net.h
+kmemcmds/x_dg.o: ../h/netconf.h
+kmemcmds/x_dg.o: ../h/netif.h
+kmemcmds/x_dg.o: ../h/network.h
+kmemcmds/x_dg.o: ../h/rfile.h
+kmemcmds/x_dg.o: ../h/rip.h
+kmemcmds/x_dg.o: ../h/route.h
+kmemcmds/x_dg.o: ../h/snmpvars.h
+kmemcmds/x_dg.o: ../h/types.h
+kmemcmds/x_dg.o: ../h/udp.h
+kmemcmds/x_dg.o: kmemcmds/x_dg.c
+kmemcmds/x_dumper.o: ../h/a.out.h
+kmemcmds/x_dumper.o: ../h/arp.h
+kmemcmds/x_dumper.o: ../h/conf.h
+kmemcmds/x_dumper.o: ../h/daemon.h
+kmemcmds/x_dumper.o: ../h/dgram.h
+kmemcmds/x_dumper.o: ../h/domain.h
+kmemcmds/x_dumper.o: ../h/ether.h
+kmemcmds/x_dumper.o: ../h/file.h
+kmemcmds/x_dumper.o: ../h/fserver.h
+kmemcmds/x_dumper.o: ../h/icmp.h
+kmemcmds/x_dumper.o: ../h/ip.h
+kmemcmds/x_dumper.o: ../h/ipreass.h
+kmemcmds/x_dumper.o: ../h/kernel.h
+kmemcmds/x_dumper.o: ../h/kernel.sparc.h
+kmemcmds/x_dumper.o: ../h/net.h
+kmemcmds/x_dumper.o: ../h/netconf.h
+kmemcmds/x_dumper.o: ../h/netif.h
+kmemcmds/x_dumper.o: ../h/nettcp.h
+kmemcmds/x_dumper.o: ../h/network.h
+kmemcmds/x_dumper.o: ../h/proc.h
+kmemcmds/x_dumper.o: ../h/rfile.h
+kmemcmds/x_dumper.o: ../h/rip.h
+kmemcmds/x_dumper.o: ../h/route.h
+kmemcmds/x_dumper.o: ../h/select.h
+kmemcmds/x_dumper.o: ../h/snmpvars.h
+kmemcmds/x_dumper.o: ../h/tcb.h
+kmemcmds/x_dumper.o: ../h/tcp.h
+kmemcmds/x_dumper.o: ../h/tcpfsm.h
+kmemcmds/x_dumper.o: ../h/tcpstat.h
+kmemcmds/x_dumper.o: ../h/types.h
+kmemcmds/x_dumper.o: ../h/udp.h
+kmemcmds/x_dumper.o: kmemcmds/x_dumper.c
+kmemcmds/x_exception.o: ../h/a.out.h
+kmemcmds/x_exception.o: ../h/conf.h
+kmemcmds/x_exception.o: ../h/kernel.h
+kmemcmds/x_exception.o: ../h/kernel.sparc.h
+kmemcmds/x_exception.o: ../h/proc.h
+kmemcmds/x_exception.o: ../h/select.h
+kmemcmds/x_exception.o: ../h/types.h
+kmemcmds/x_exception.o: ../h/vmem.h
+kmemcmds/x_exception.o: ../h/vmem.sparc.h
+kmemcmds/x_exception.o: kmemcmds/x_exception.c
+kmemcmds/x_exit.o: ../h/conf.h
+kmemcmds/x_exit.o: ../h/kernel.h
+kmemcmds/x_exit.o: ../h/kernel.sparc.h
+kmemcmds/x_exit.o: ../h/mark.h
+kmemcmds/x_exit.o: ../h/shell.h
+kmemcmds/x_exit.o: ../h/types.h
+kmemcmds/x_exit.o: kmemcmds/x_exit.c
+kmemcmds/x_finger.o: ../h/a.out.h
+kmemcmds/x_finger.o: ../h/arp.h
+kmemcmds/x_finger.o: ../h/conf.h
+kmemcmds/x_finger.o: ../h/daemon.h
+kmemcmds/x_finger.o: ../h/dgram.h
+kmemcmds/x_finger.o: ../h/domain.h
+kmemcmds/x_finger.o: ../h/ether.h
+kmemcmds/x_finger.o: ../h/file.h
+kmemcmds/x_finger.o: ../h/fserver.h
+kmemcmds/x_finger.o: ../h/icmp.h
+kmemcmds/x_finger.o: ../h/ip.h
+kmemcmds/x_finger.o: ../h/ipreass.h
+kmemcmds/x_finger.o: ../h/kernel.h
+kmemcmds/x_finger.o: ../h/kernel.sparc.h
+kmemcmds/x_finger.o: ../h/net.h
+kmemcmds/x_finger.o: ../h/netconf.h
+kmemcmds/x_finger.o: ../h/netif.h
+kmemcmds/x_finger.o: ../h/nettcp.h
+kmemcmds/x_finger.o: ../h/network.h
+kmemcmds/x_finger.o: ../h/proc.h
+kmemcmds/x_finger.o: ../h/rfile.h
+kmemcmds/x_finger.o: ../h/rip.h
+kmemcmds/x_finger.o: ../h/route.h
+kmemcmds/x_finger.o: ../h/select.h
+kmemcmds/x_finger.o: ../h/snmpvars.h
+kmemcmds/x_finger.o: ../h/tcb.h
+kmemcmds/x_finger.o: ../h/tcp.h
+kmemcmds/x_finger.o: ../h/tcpfsm.h
+kmemcmds/x_finger.o: ../h/tcpstat.h
+kmemcmds/x_finger.o: ../h/types.h
+kmemcmds/x_finger.o: ../h/udp.h
+kmemcmds/x_finger.o: kmemcmds/x_finger.c
+kmemcmds/x_fmdump.o: ../h/a.out.h
+kmemcmds/x_fmdump.o: ../h/conf.h
+kmemcmds/x_fmdump.o: ../h/kernel.h
+kmemcmds/x_fmdump.o: ../h/kernel.sparc.h
+kmemcmds/x_fmdump.o: ../h/proc.h
+kmemcmds/x_fmdump.o: ../h/select.h
+kmemcmds/x_fmdump.o: ../h/types.h
+kmemcmds/x_fmdump.o: kmemcmds/x_fmdump.c
+kmemcmds/x_help.o: ../h/cmd.h
+kmemcmds/x_help.o: ../h/conf.h
+kmemcmds/x_help.o: ../h/kernel.h
+kmemcmds/x_help.o: ../h/kernel.sparc.h
+kmemcmds/x_help.o: ../h/mark.h
+kmemcmds/x_help.o: ../h/shell.h
+kmemcmds/x_help.o: ../h/types.h
+kmemcmds/x_help.o: kmemcmds/x_help.c
+kmemcmds/x_ifstat.o: ../h/arp.h
+kmemcmds/x_ifstat.o: ../h/conf.h
+kmemcmds/x_ifstat.o: ../h/daemon.h
+kmemcmds/x_ifstat.o: ../h/dgram.h
+kmemcmds/x_ifstat.o: ../h/domain.h
+kmemcmds/x_ifstat.o: ../h/ether.h
+kmemcmds/x_ifstat.o: ../h/file.h
+kmemcmds/x_ifstat.o: ../h/fserver.h
+kmemcmds/x_ifstat.o: ../h/icmp.h
+kmemcmds/x_ifstat.o: ../h/ip.h
+kmemcmds/x_ifstat.o: ../h/ipreass.h
+kmemcmds/x_ifstat.o: ../h/kernel.h
+kmemcmds/x_ifstat.o: ../h/kernel.sparc.h
+kmemcmds/x_ifstat.o: ../h/net.h
+kmemcmds/x_ifstat.o: ../h/netconf.h
+kmemcmds/x_ifstat.o: ../h/netif.h
+kmemcmds/x_ifstat.o: ../h/network.h
+kmemcmds/x_ifstat.o: ../h/rfile.h
+kmemcmds/x_ifstat.o: ../h/rip.h
+kmemcmds/x_ifstat.o: ../h/route.h
+kmemcmds/x_ifstat.o: ../h/snmpvars.h
+kmemcmds/x_ifstat.o: ../h/types.h
+kmemcmds/x_ifstat.o: ../h/udp.h
+kmemcmds/x_ifstat.o: kmemcmds/x_ifstat.c
+kmemcmds/x_kill.o: ../h/conf.h
+kmemcmds/x_kill.o: ../h/kernel.h
+kmemcmds/x_kill.o: ../h/kernel.sparc.h
+kmemcmds/x_kill.o: ../h/mark.h
+kmemcmds/x_kill.o: ../h/shell.h
+kmemcmds/x_kill.o: ../h/types.h
+kmemcmds/x_kill.o: kmemcmds/x_kill.c
+kmemcmds/x_mem.o: ../h/a.out.h
+kmemcmds/x_mem.o: ../h/conf.h
+kmemcmds/x_mem.o: ../h/frame.h
+kmemcmds/x_mem.o: ../h/kernel.h
+kmemcmds/x_mem.o: ../h/kernel.sparc.h
+kmemcmds/x_mem.o: ../h/mem.h
+kmemcmds/x_mem.o: ../h/proc.h
+kmemcmds/x_mem.o: ../h/select.h
+kmemcmds/x_mem.o: ../h/types.h
+kmemcmds/x_mem.o: ../h/vmem.h
+kmemcmds/x_mem.o: ../h/vmem.sparc.h
+kmemcmds/x_mem.o: kmemcmds/x_mem.c
+kmemcmds/x_net.o: ../h/arp.h
+kmemcmds/x_net.o: ../h/asn1.h
+kmemcmds/x_net.o: ../h/conf.h
+kmemcmds/x_net.o: ../h/daemon.h
+kmemcmds/x_net.o: ../h/dgram.h
+kmemcmds/x_net.o: ../h/domain.h
+kmemcmds/x_net.o: ../h/ether.h
+kmemcmds/x_net.o: ../h/file.h
+kmemcmds/x_net.o: ../h/fserver.h
+kmemcmds/x_net.o: ../h/icmp.h
+kmemcmds/x_net.o: ../h/ip.h
+kmemcmds/x_net.o: ../h/ipreass.h
+kmemcmds/x_net.o: ../h/kernel.h
+kmemcmds/x_net.o: ../h/kernel.sparc.h
+kmemcmds/x_net.o: ../h/mib.h
+kmemcmds/x_net.o: ../h/net.h
+kmemcmds/x_net.o: ../h/netconf.h
+kmemcmds/x_net.o: ../h/netif.h
+kmemcmds/x_net.o: ../h/nettcp.h
+kmemcmds/x_net.o: ../h/network.h
+kmemcmds/x_net.o: ../h/rfile.h
+kmemcmds/x_net.o: ../h/rip.h
+kmemcmds/x_net.o: ../h/route.h
+kmemcmds/x_net.o: ../h/snmp.h
+kmemcmds/x_net.o: ../h/snmpvars.h
+kmemcmds/x_net.o: ../h/tcb.h
+kmemcmds/x_net.o: ../h/tcp.h
+kmemcmds/x_net.o: ../h/tcpfsm.h
+kmemcmds/x_net.o: ../h/tcpstat.h
+kmemcmds/x_net.o: ../h/types.h
+kmemcmds/x_net.o: ../h/udp.h
+kmemcmds/x_net.o: kmemcmds/x_net.c
+kmemcmds/x_nfs.o: ../h/a.out.h
+kmemcmds/x_nfs.o: ../h/arp.h
+kmemcmds/x_nfs.o: ../h/conf.h
+kmemcmds/x_nfs.o: ../h/daemon.h
+kmemcmds/x_nfs.o: ../h/dgram.h
+kmemcmds/x_nfs.o: ../h/domain.h
+kmemcmds/x_nfs.o: ../h/ether.h
+kmemcmds/x_nfs.o: ../h/file.h
+kmemcmds/x_nfs.o: ../h/fserver.h
+kmemcmds/x_nfs.o: ../h/icmp.h
+kmemcmds/x_nfs.o: ../h/ip.h
+kmemcmds/x_nfs.o: ../h/ipreass.h
+kmemcmds/x_nfs.o: ../h/kernel.h
+kmemcmds/x_nfs.o: ../h/kernel.sparc.h
+kmemcmds/x_nfs.o: ../h/mount.h
+kmemcmds/x_nfs.o: ../h/net.h
+kmemcmds/x_nfs.o: ../h/netconf.h
+kmemcmds/x_nfs.o: ../h/netif.h
+kmemcmds/x_nfs.o: ../h/network.h
+kmemcmds/x_nfs.o: ../h/nfs.h
+kmemcmds/x_nfs.o: ../h/portmapper.h
+kmemcmds/x_nfs.o: ../h/proc.h
+kmemcmds/x_nfs.o: ../h/rfile.h
+kmemcmds/x_nfs.o: ../h/rip.h
+kmemcmds/x_nfs.o: ../h/route.h
+kmemcmds/x_nfs.o: ../h/rpc.h
+kmemcmds/x_nfs.o: ../h/rpcprogs.h
+kmemcmds/x_nfs.o: ../h/select.h
+kmemcmds/x_nfs.o: ../h/snmpvars.h
+kmemcmds/x_nfs.o: ../h/types.h
+kmemcmds/x_nfs.o: ../h/udp.h
+kmemcmds/x_nfs.o: kmemcmds/x_nfs.c
+kmemcmds/x_nfsls.o: ../h/a.out.h
+kmemcmds/x_nfsls.o: ../h/arp.h
+kmemcmds/x_nfsls.o: ../h/conf.h
+kmemcmds/x_nfsls.o: ../h/daemon.h
+kmemcmds/x_nfsls.o: ../h/dgram.h
+kmemcmds/x_nfsls.o: ../h/domain.h
+kmemcmds/x_nfsls.o: ../h/ether.h
+kmemcmds/x_nfsls.o: ../h/file.h
+kmemcmds/x_nfsls.o: ../h/fserver.h
+kmemcmds/x_nfsls.o: ../h/icmp.h
+kmemcmds/x_nfsls.o: ../h/ip.h
+kmemcmds/x_nfsls.o: ../h/ipreass.h
+kmemcmds/x_nfsls.o: ../h/kernel.h
+kmemcmds/x_nfsls.o: ../h/kernel.sparc.h
+kmemcmds/x_nfsls.o: ../h/name.h
+kmemcmds/x_nfsls.o: ../h/net.h
+kmemcmds/x_nfsls.o: ../h/netconf.h
+kmemcmds/x_nfsls.o: ../h/netif.h
+kmemcmds/x_nfsls.o: ../h/network.h
+kmemcmds/x_nfsls.o: ../h/nfs.h
+kmemcmds/x_nfsls.o: ../h/proc.h
+kmemcmds/x_nfsls.o: ../h/rfile.h
+kmemcmds/x_nfsls.o: ../h/rip.h
+kmemcmds/x_nfsls.o: ../h/route.h
+kmemcmds/x_nfsls.o: ../h/rpc.h
+kmemcmds/x_nfsls.o: ../h/select.h
+kmemcmds/x_nfsls.o: ../h/snmpvars.h
+kmemcmds/x_nfsls.o: ../h/types.h
+kmemcmds/x_nfsls.o: ../h/udp.h
+kmemcmds/x_nfsls.o: kmemcmds/x_nfsls.c
+kmemcmds/x_ns.o: ../h/a.out.h
+kmemcmds/x_ns.o: ../h/arp.h
+kmemcmds/x_ns.o: ../h/conf.h
+kmemcmds/x_ns.o: ../h/daemon.h
+kmemcmds/x_ns.o: ../h/dgram.h
+kmemcmds/x_ns.o: ../h/domain.h
+kmemcmds/x_ns.o: ../h/ether.h
+kmemcmds/x_ns.o: ../h/file.h
+kmemcmds/x_ns.o: ../h/fserver.h
+kmemcmds/x_ns.o: ../h/icmp.h
+kmemcmds/x_ns.o: ../h/ip.h
+kmemcmds/x_ns.o: ../h/ipreass.h
+kmemcmds/x_ns.o: ../h/kernel.h
+kmemcmds/x_ns.o: ../h/kernel.sparc.h
+kmemcmds/x_ns.o: ../h/net.h
+kmemcmds/x_ns.o: ../h/netconf.h
+kmemcmds/x_ns.o: ../h/netif.h
+kmemcmds/x_ns.o: ../h/network.h
+kmemcmds/x_ns.o: ../h/proc.h
+kmemcmds/x_ns.o: ../h/rfile.h
+kmemcmds/x_ns.o: ../h/rip.h
+kmemcmds/x_ns.o: ../h/route.h
+kmemcmds/x_ns.o: ../h/select.h
+kmemcmds/x_ns.o: ../h/snmpvars.h
+kmemcmds/x_ns.o: ../h/types.h
+kmemcmds/x_ns.o: ../h/udp.h
+kmemcmds/x_ns.o: kmemcmds/x_ns.c
+kmemcmds/x_pgstats.o: ../h/a.out.h
+kmemcmds/x_pgstats.o: ../h/conf.h
+kmemcmds/x_pgstats.o: ../h/kernel.h
+kmemcmds/x_pgstats.o: ../h/kernel.sparc.h
+kmemcmds/x_pgstats.o: ../h/proc.h
+kmemcmds/x_pgstats.o: ../h/select.h
+kmemcmds/x_pgstats.o: ../h/types.h
+kmemcmds/x_pgstats.o: kmemcmds/x_pgstats.c
+kmemcmds/x_ping.o: ../h/arp.h
+kmemcmds/x_ping.o: ../h/conf.h
+kmemcmds/x_ping.o: ../h/daemon.h
+kmemcmds/x_ping.o: ../h/dgram.h
+kmemcmds/x_ping.o: ../h/domain.h
+kmemcmds/x_ping.o: ../h/ether.h
+kmemcmds/x_ping.o: ../h/file.h
+kmemcmds/x_ping.o: ../h/fserver.h
+kmemcmds/x_ping.o: ../h/icmp.h
+kmemcmds/x_ping.o: ../h/ip.h
+kmemcmds/x_ping.o: ../h/ipreass.h
+kmemcmds/x_ping.o: ../h/kernel.h
+kmemcmds/x_ping.o: ../h/kernel.sparc.h
+kmemcmds/x_ping.o: ../h/net.h
+kmemcmds/x_ping.o: ../h/netconf.h
+kmemcmds/x_ping.o: ../h/netif.h
+kmemcmds/x_ping.o: ../h/network.h
+kmemcmds/x_ping.o: ../h/rfile.h
+kmemcmds/x_ping.o: ../h/rip.h
+kmemcmds/x_ping.o: ../h/route.h
+kmemcmds/x_ping.o: ../h/snmpvars.h
+kmemcmds/x_ping.o: ../h/types.h
+kmemcmds/x_ping.o: ../h/udp.h
+kmemcmds/x_ping.o: kmemcmds/x_ping.c
+kmemcmds/x_pmeg.o: ../h/a.out.h
+kmemcmds/x_pmeg.o: ../h/conf.h
+kmemcmds/x_pmeg.o: ../h/kernel.h
+kmemcmds/x_pmeg.o: ../h/kernel.sparc.h
+kmemcmds/x_pmeg.o: ../h/proc.h
+kmemcmds/x_pmeg.o: ../h/select.h
+kmemcmds/x_pmeg.o: ../h/types.h
+kmemcmds/x_pmeg.o: kmemcmds/x_pmeg.c
+kmemcmds/x_pmem.o: ../h/a.out.h
+kmemcmds/x_pmem.o: ../h/conf.h
+kmemcmds/x_pmem.o: ../h/kernel.h
+kmemcmds/x_pmem.o: ../h/kernel.sparc.h
+kmemcmds/x_pmem.o: ../h/proc.h
+kmemcmds/x_pmem.o: ../h/select.h
+kmemcmds/x_pmem.o: ../h/types.h
+kmemcmds/x_pmem.o: ../h/vmem.h
+kmemcmds/x_pmem.o: ../h/vmem.sparc.h
+kmemcmds/x_pmem.o: kmemcmds/x_pmem.c
+kmemcmds/x_printpgtbl.o: ../h/a.out.h
+kmemcmds/x_printpgtbl.o: ../h/conf.h
+kmemcmds/x_printpgtbl.o: ../h/kernel.h
+kmemcmds/x_printpgtbl.o: ../h/kernel.sparc.h
+kmemcmds/x_printpgtbl.o: ../h/proc.h
+kmemcmds/x_printpgtbl.o: ../h/select.h
+kmemcmds/x_printpgtbl.o: ../h/types.h
+kmemcmds/x_printpgtbl.o: kmemcmds/x_printpgtbl.c
+kmemcmds/x_ps.o: ../h/a.out.h
+kmemcmds/x_ps.o: ../h/conf.h
+kmemcmds/x_ps.o: ../h/kernel.h
+kmemcmds/x_ps.o: ../h/kernel.sparc.h
+kmemcmds/x_ps.o: ../h/proc.h
+kmemcmds/x_ps.o: ../h/select.h
+kmemcmds/x_ps.o: ../h/types.h
+kmemcmds/x_ps.o: ../h/vmem.h
+kmemcmds/x_ps.o: ../h/vmem.sparc.h
+kmemcmds/x_ps.o: kmemcmds/x_ps.c
+kmemcmds/x_reboot.o: ../h/conf.h
+kmemcmds/x_reboot.o: ../h/kernel.h
+kmemcmds/x_reboot.o: ../h/kernel.sparc.h
+kmemcmds/x_reboot.o: ../h/types.h
+kmemcmds/x_reboot.o: ../h/vmem.h
+kmemcmds/x_reboot.o: ../h/vmem.sparc.h
+kmemcmds/x_reboot.o: kmemcmds/x_reboot.c
+kmemcmds/x_rf.o: ../h/conf.h
+kmemcmds/x_rf.o: ../h/file.h
+kmemcmds/x_rf.o: ../h/fserver.h
+kmemcmds/x_rf.o: ../h/kernel.h
+kmemcmds/x_rf.o: ../h/kernel.sparc.h
+kmemcmds/x_rf.o: ../h/rfile.h
+kmemcmds/x_rf.o: ../h/types.h
+kmemcmds/x_rf.o: kmemcmds/x_rf.c
+kmemcmds/x_route.o: ../h/arp.h
+kmemcmds/x_route.o: ../h/conf.h
+kmemcmds/x_route.o: ../h/daemon.h
+kmemcmds/x_route.o: ../h/dgram.h
+kmemcmds/x_route.o: ../h/domain.h
+kmemcmds/x_route.o: ../h/ether.h
+kmemcmds/x_route.o: ../h/file.h
+kmemcmds/x_route.o: ../h/fserver.h
+kmemcmds/x_route.o: ../h/icmp.h
+kmemcmds/x_route.o: ../h/ip.h
+kmemcmds/x_route.o: ../h/ipreass.h
+kmemcmds/x_route.o: ../h/kernel.h
+kmemcmds/x_route.o: ../h/kernel.sparc.h
+kmemcmds/x_route.o: ../h/net.h
+kmemcmds/x_route.o: ../h/netconf.h
+kmemcmds/x_route.o: ../h/netif.h
+kmemcmds/x_route.o: ../h/network.h
+kmemcmds/x_route.o: ../h/rfile.h
+kmemcmds/x_route.o: ../h/rip.h
+kmemcmds/x_route.o: ../h/route.h
+kmemcmds/x_route.o: ../h/snmpvars.h
+kmemcmds/x_route.o: ../h/types.h
+kmemcmds/x_route.o: ../h/udp.h
+kmemcmds/x_route.o: kmemcmds/x_route.c
+kmemcmds/x_routes.o: ../h/arp.h
+kmemcmds/x_routes.o: ../h/conf.h
+kmemcmds/x_routes.o: ../h/daemon.h
+kmemcmds/x_routes.o: ../h/dgram.h
+kmemcmds/x_routes.o: ../h/domain.h
+kmemcmds/x_routes.o: ../h/ether.h
+kmemcmds/x_routes.o: ../h/file.h
+kmemcmds/x_routes.o: ../h/fserver.h
+kmemcmds/x_routes.o: ../h/icmp.h
+kmemcmds/x_routes.o: ../h/ip.h
+kmemcmds/x_routes.o: ../h/ipreass.h
+kmemcmds/x_routes.o: ../h/kernel.h
+kmemcmds/x_routes.o: ../h/kernel.sparc.h
+kmemcmds/x_routes.o: ../h/net.h
+kmemcmds/x_routes.o: ../h/netconf.h
+kmemcmds/x_routes.o: ../h/netif.h
+kmemcmds/x_routes.o: ../h/network.h
+kmemcmds/x_routes.o: ../h/rfile.h
+kmemcmds/x_routes.o: ../h/rip.h
+kmemcmds/x_routes.o: ../h/route.h
+kmemcmds/x_routes.o: ../h/snmpvars.h
+kmemcmds/x_routes.o: ../h/types.h
+kmemcmds/x_routes.o: ../h/udp.h
+kmemcmds/x_routes.o: kmemcmds/x_routes.c
+kmemcmds/x_rpc.o: ../h/a.out.h
+kmemcmds/x_rpc.o: ../h/arp.h
+kmemcmds/x_rpc.o: ../h/conf.h
+kmemcmds/x_rpc.o: ../h/daemon.h
+kmemcmds/x_rpc.o: ../h/dgram.h
+kmemcmds/x_rpc.o: ../h/domain.h
+kmemcmds/x_rpc.o: ../h/ether.h
+kmemcmds/x_rpc.o: ../h/file.h
+kmemcmds/x_rpc.o: ../h/fserver.h
+kmemcmds/x_rpc.o: ../h/icmp.h
+kmemcmds/x_rpc.o: ../h/ip.h
+kmemcmds/x_rpc.o: ../h/ipreass.h
+kmemcmds/x_rpc.o: ../h/kernel.h
+kmemcmds/x_rpc.o: ../h/kernel.sparc.h
+kmemcmds/x_rpc.o: ../h/net.h
+kmemcmds/x_rpc.o: ../h/netconf.h
+kmemcmds/x_rpc.o: ../h/netif.h
+kmemcmds/x_rpc.o: ../h/network.h
+kmemcmds/x_rpc.o: ../h/portmapper.h
+kmemcmds/x_rpc.o: ../h/proc.h
+kmemcmds/x_rpc.o: ../h/rfile.h
+kmemcmds/x_rpc.o: ../h/rip.h
+kmemcmds/x_rpc.o: ../h/route.h
+kmemcmds/x_rpc.o: ../h/rpc.h
+kmemcmds/x_rpc.o: ../h/select.h
+kmemcmds/x_rpc.o: ../h/snmpvars.h
+kmemcmds/x_rpc.o: ../h/types.h
+kmemcmds/x_rpc.o: ../h/udp.h
+kmemcmds/x_rpc.o: kmemcmds/x_rpc.c
+kmemcmds/x_rpcinfo.o: ../h/a.out.h
+kmemcmds/x_rpcinfo.o: ../h/arp.h
+kmemcmds/x_rpcinfo.o: ../h/conf.h
+kmemcmds/x_rpcinfo.o: ../h/daemon.h
+kmemcmds/x_rpcinfo.o: ../h/dgram.h
+kmemcmds/x_rpcinfo.o: ../h/domain.h
+kmemcmds/x_rpcinfo.o: ../h/ether.h
+kmemcmds/x_rpcinfo.o: ../h/file.h
+kmemcmds/x_rpcinfo.o: ../h/fserver.h
+kmemcmds/x_rpcinfo.o: ../h/icmp.h
+kmemcmds/x_rpcinfo.o: ../h/ip.h
+kmemcmds/x_rpcinfo.o: ../h/ipreass.h
+kmemcmds/x_rpcinfo.o: ../h/kernel.h
+kmemcmds/x_rpcinfo.o: ../h/kernel.sparc.h
+kmemcmds/x_rpcinfo.o: ../h/net.h
+kmemcmds/x_rpcinfo.o: ../h/netconf.h
+kmemcmds/x_rpcinfo.o: ../h/netif.h
+kmemcmds/x_rpcinfo.o: ../h/network.h
+kmemcmds/x_rpcinfo.o: ../h/portmapper.h
+kmemcmds/x_rpcinfo.o: ../h/proc.h
+kmemcmds/x_rpcinfo.o: ../h/rfile.h
+kmemcmds/x_rpcinfo.o: ../h/rip.h
+kmemcmds/x_rpcinfo.o: ../h/route.h
+kmemcmds/x_rpcinfo.o: ../h/rpc.h
+kmemcmds/x_rpcinfo.o: ../h/rpcprogs.h
+kmemcmds/x_rpcinfo.o: ../h/select.h
+kmemcmds/x_rpcinfo.o: ../h/snmpvars.h
+kmemcmds/x_rpcinfo.o: ../h/types.h
+kmemcmds/x_rpcinfo.o: ../h/udp.h
+kmemcmds/x_rpcinfo.o: kmemcmds/x_rpcinfo.c
+kmemcmds/x_rtt.o: ../h/a.out.h
+kmemcmds/x_rtt.o: ../h/arp.h
+kmemcmds/x_rtt.o: ../h/conf.h
+kmemcmds/x_rtt.o: ../h/daemon.h
+kmemcmds/x_rtt.o: ../h/dgram.h
+kmemcmds/x_rtt.o: ../h/domain.h
+kmemcmds/x_rtt.o: ../h/ether.h
+kmemcmds/x_rtt.o: ../h/file.h
+kmemcmds/x_rtt.o: ../h/fserver.h
+kmemcmds/x_rtt.o: ../h/icmp.h
+kmemcmds/x_rtt.o: ../h/ip.h
+kmemcmds/x_rtt.o: ../h/ipreass.h
+kmemcmds/x_rtt.o: ../h/kernel.h
+kmemcmds/x_rtt.o: ../h/kernel.sparc.h
+kmemcmds/x_rtt.o: ../h/net.h
+kmemcmds/x_rtt.o: ../h/netconf.h
+kmemcmds/x_rtt.o: ../h/netif.h
+kmemcmds/x_rtt.o: ../h/nettcp.h
+kmemcmds/x_rtt.o: ../h/network.h
+kmemcmds/x_rtt.o: ../h/proc.h
+kmemcmds/x_rtt.o: ../h/rfile.h
+kmemcmds/x_rtt.o: ../h/rip.h
+kmemcmds/x_rtt.o: ../h/route.h
+kmemcmds/x_rtt.o: ../h/select.h
+kmemcmds/x_rtt.o: ../h/snmpvars.h
+kmemcmds/x_rtt.o: ../h/tcb.h
+kmemcmds/x_rtt.o: ../h/tcp.h
+kmemcmds/x_rtt.o: ../h/tcpfsm.h
+kmemcmds/x_rtt.o: ../h/tcpstat.h
+kmemcmds/x_rtt.o: ../h/types.h
+kmemcmds/x_rtt.o: ../h/udp.h
+kmemcmds/x_rtt.o: kmemcmds/x_rtt.c
+kmemcmds/x_run.o: ../h/a.out.h
+kmemcmds/x_run.o: ../h/conf.h
+kmemcmds/x_run.o: ../h/kernel.h
+kmemcmds/x_run.o: ../h/kernel.sparc.h
+kmemcmds/x_run.o: ../h/mark.h
+kmemcmds/x_run.o: ../h/proc.h
+kmemcmds/x_run.o: ../h/select.h
+kmemcmds/x_run.o: ../h/shell.h
+kmemcmds/x_run.o: ../h/types.h
+kmemcmds/x_run.o: ../h/vmem.h
+kmemcmds/x_run.o: ../h/vmem.sparc.h
+kmemcmds/x_run.o: kmemcmds/x_run.c
+kmemcmds/x_rusers.o: ../h/a.out.h
+kmemcmds/x_rusers.o: ../h/arp.h
+kmemcmds/x_rusers.o: ../h/conf.h
+kmemcmds/x_rusers.o: ../h/daemon.h
+kmemcmds/x_rusers.o: ../h/dgram.h
+kmemcmds/x_rusers.o: ../h/domain.h
+kmemcmds/x_rusers.o: ../h/ether.h
+kmemcmds/x_rusers.o: ../h/file.h
+kmemcmds/x_rusers.o: ../h/fserver.h
+kmemcmds/x_rusers.o: ../h/icmp.h
+kmemcmds/x_rusers.o: ../h/ip.h
+kmemcmds/x_rusers.o: ../h/ipreass.h
+kmemcmds/x_rusers.o: ../h/kernel.h
+kmemcmds/x_rusers.o: ../h/kernel.sparc.h
+kmemcmds/x_rusers.o: ../h/net.h
+kmemcmds/x_rusers.o: ../h/netconf.h
+kmemcmds/x_rusers.o: ../h/netif.h
+kmemcmds/x_rusers.o: ../h/network.h
+kmemcmds/x_rusers.o: ../h/portmapper.h
+kmemcmds/x_rusers.o: ../h/proc.h
+kmemcmds/x_rusers.o: ../h/rfile.h
+kmemcmds/x_rusers.o: ../h/rip.h
+kmemcmds/x_rusers.o: ../h/route.h
+kmemcmds/x_rusers.o: ../h/rpc.h
+kmemcmds/x_rusers.o: ../h/rpcprogs.h
+kmemcmds/x_rusers.o: ../h/select.h
+kmemcmds/x_rusers.o: ../h/snmpvars.h
+kmemcmds/x_rusers.o: ../h/types.h
+kmemcmds/x_rusers.o: ../h/udp.h
+kmemcmds/x_rusers.o: kmemcmds/x_rusers.c
+kmemcmds/x_sem.o: ../h/arp.h
+kmemcmds/x_sem.o: ../h/conf.h
+kmemcmds/x_sem.o: ../h/daemon.h
+kmemcmds/x_sem.o: ../h/dgram.h
+kmemcmds/x_sem.o: ../h/domain.h
+kmemcmds/x_sem.o: ../h/ether.h
+kmemcmds/x_sem.o: ../h/file.h
+kmemcmds/x_sem.o: ../h/fserver.h
+kmemcmds/x_sem.o: ../h/icmp.h
+kmemcmds/x_sem.o: ../h/ip.h
+kmemcmds/x_sem.o: ../h/ipreass.h
+kmemcmds/x_sem.o: ../h/kernel.h
+kmemcmds/x_sem.o: ../h/kernel.sparc.h
+kmemcmds/x_sem.o: ../h/net.h
+kmemcmds/x_sem.o: ../h/netconf.h
+kmemcmds/x_sem.o: ../h/netif.h
+kmemcmds/x_sem.o: ../h/network.h
+kmemcmds/x_sem.o: ../h/rfile.h
+kmemcmds/x_sem.o: ../h/rip.h
+kmemcmds/x_sem.o: ../h/route.h
+kmemcmds/x_sem.o: ../h/snmpvars.h
+kmemcmds/x_sem.o: ../h/types.h
+kmemcmds/x_sem.o: ../h/udp.h
+kmemcmds/x_sem.o: kmemcmds/x_sem.c
+kmemcmds/x_sgmp.o: ../h/arp.h
+kmemcmds/x_sgmp.o: ../h/conf.h
+kmemcmds/x_sgmp.o: ../h/daemon.h
+kmemcmds/x_sgmp.o: ../h/dgram.h
+kmemcmds/x_sgmp.o: ../h/domain.h
+kmemcmds/x_sgmp.o: ../h/ether.h
+kmemcmds/x_sgmp.o: ../h/file.h
+kmemcmds/x_sgmp.o: ../h/fserver.h
+kmemcmds/x_sgmp.o: ../h/icmp.h
+kmemcmds/x_sgmp.o: ../h/ip.h
+kmemcmds/x_sgmp.o: ../h/ipreass.h
+kmemcmds/x_sgmp.o: ../h/kernel.h
+kmemcmds/x_sgmp.o: ../h/kernel.sparc.h
+kmemcmds/x_sgmp.o: ../h/net.h
+kmemcmds/x_sgmp.o: ../h/netconf.h
+kmemcmds/x_sgmp.o: ../h/netif.h
+kmemcmds/x_sgmp.o: ../h/network.h
+kmemcmds/x_sgmp.o: ../h/rfile.h
+kmemcmds/x_sgmp.o: ../h/rip.h
+kmemcmds/x_sgmp.o: ../h/route.h
+kmemcmds/x_sgmp.o: ../h/sgmp.h
+kmemcmds/x_sgmp.o: ../h/snmpvars.h
+kmemcmds/x_sgmp.o: ../h/types.h
+kmemcmds/x_sgmp.o: ../h/udp.h
+kmemcmds/x_sgmp.o: kmemcmds/x_sgmp.c
+kmemcmds/x_snmp.o: ../h/arp.h
+kmemcmds/x_snmp.o: ../h/asn1.h
+kmemcmds/x_snmp.o: ../h/conf.h
+kmemcmds/x_snmp.o: ../h/ctype.h
+kmemcmds/x_snmp.o: ../h/daemon.h
+kmemcmds/x_snmp.o: ../h/dgram.h
+kmemcmds/x_snmp.o: ../h/domain.h
+kmemcmds/x_snmp.o: ../h/ether.h
+kmemcmds/x_snmp.o: ../h/file.h
+kmemcmds/x_snmp.o: ../h/fserver.h
+kmemcmds/x_snmp.o: ../h/icmp.h
+kmemcmds/x_snmp.o: ../h/ip.h
+kmemcmds/x_snmp.o: ../h/ipreass.h
+kmemcmds/x_snmp.o: ../h/kernel.h
+kmemcmds/x_snmp.o: ../h/kernel.sparc.h
+kmemcmds/x_snmp.o: ../h/mib.h
+kmemcmds/x_snmp.o: ../h/net.h
+kmemcmds/x_snmp.o: ../h/netconf.h
+kmemcmds/x_snmp.o: ../h/netif.h
+kmemcmds/x_snmp.o: ../h/network.h
+kmemcmds/x_snmp.o: ../h/rfile.h
+kmemcmds/x_snmp.o: ../h/rip.h
+kmemcmds/x_snmp.o: ../h/route.h
+kmemcmds/x_snmp.o: ../h/snmp.h
+kmemcmds/x_snmp.o: ../h/snmpvars.h
+kmemcmds/x_snmp.o: ../h/tty.h
+kmemcmds/x_snmp.o: ../h/types.h
+kmemcmds/x_snmp.o: ../h/udp.h
+kmemcmds/x_snmp.o: kmemcmds/x_snmp.c
+kmemcmds/x_timerq.o: ../h/arp.h
+kmemcmds/x_timerq.o: ../h/conf.h
+kmemcmds/x_timerq.o: ../h/daemon.h
+kmemcmds/x_timerq.o: ../h/dgram.h
+kmemcmds/x_timerq.o: ../h/domain.h
+kmemcmds/x_timerq.o: ../h/ether.h
+kmemcmds/x_timerq.o: ../h/file.h
+kmemcmds/x_timerq.o: ../h/fserver.h
+kmemcmds/x_timerq.o: ../h/icmp.h
+kmemcmds/x_timerq.o: ../h/ip.h
+kmemcmds/x_timerq.o: ../h/ipreass.h
+kmemcmds/x_timerq.o: ../h/kernel.h
+kmemcmds/x_timerq.o: ../h/kernel.sparc.h
+kmemcmds/x_timerq.o: ../h/net.h
+kmemcmds/x_timerq.o: ../h/netconf.h
+kmemcmds/x_timerq.o: ../h/netif.h
+kmemcmds/x_timerq.o: ../h/network.h
+kmemcmds/x_timerq.o: ../h/rfile.h
+kmemcmds/x_timerq.o: ../h/rip.h
+kmemcmds/x_timerq.o: ../h/route.h
+kmemcmds/x_timerq.o: ../h/snmpvars.h
+kmemcmds/x_timerq.o: ../h/types.h
+kmemcmds/x_timerq.o: ../h/udp.h
+kmemcmds/x_timerq.o: kmemcmds/x_timerq.c
+kmemcmds/x_uptime.o: ../h/arp.h
+kmemcmds/x_uptime.o: ../h/conf.h
+kmemcmds/x_uptime.o: ../h/daemon.h
+kmemcmds/x_uptime.o: ../h/dgram.h
+kmemcmds/x_uptime.o: ../h/domain.h
+kmemcmds/x_uptime.o: ../h/ether.h
+kmemcmds/x_uptime.o: ../h/file.h
+kmemcmds/x_uptime.o: ../h/fserver.h
+kmemcmds/x_uptime.o: ../h/icmp.h
+kmemcmds/x_uptime.o: ../h/ip.h
+kmemcmds/x_uptime.o: ../h/ipreass.h
+kmemcmds/x_uptime.o: ../h/kernel.h
+kmemcmds/x_uptime.o: ../h/kernel.sparc.h
+kmemcmds/x_uptime.o: ../h/net.h
+kmemcmds/x_uptime.o: ../h/netconf.h
+kmemcmds/x_uptime.o: ../h/netif.h
+kmemcmds/x_uptime.o: ../h/network.h
+kmemcmds/x_uptime.o: ../h/rfile.h
+kmemcmds/x_uptime.o: ../h/rip.h
+kmemcmds/x_uptime.o: ../h/route.h
+kmemcmds/x_uptime.o: ../h/rwho.h
+kmemcmds/x_uptime.o: ../h/snmpvars.h
+kmemcmds/x_uptime.o: ../h/types.h
+kmemcmds/x_uptime.o: ../h/udp.h
+kmemcmds/x_uptime.o: kmemcmds/x_uptime.c
+kmemcmds/x_vmem.o: ../h/a.out.h
+kmemcmds/x_vmem.o: ../h/conf.h
+kmemcmds/x_vmem.o: ../h/kernel.h
+kmemcmds/x_vmem.o: ../h/kernel.sparc.h
+kmemcmds/x_vmem.o: ../h/mem.h
+kmemcmds/x_vmem.o: ../h/proc.h
+kmemcmds/x_vmem.o: ../h/select.h
+kmemcmds/x_vmem.o: ../h/types.h
+kmemcmds/x_vmem.o: ../h/vmem.h
+kmemcmds/x_vmem.o: ../h/vmem.sparc.h
+kmemcmds/x_vmem.o: kmemcmds/x_vmem.c
+kmemcmds/x_who.o: ../h/arp.h
+kmemcmds/x_who.o: ../h/conf.h
+kmemcmds/x_who.o: ../h/daemon.h
+kmemcmds/x_who.o: ../h/date.h
+kmemcmds/x_who.o: ../h/dgram.h
+kmemcmds/x_who.o: ../h/domain.h
+kmemcmds/x_who.o: ../h/ether.h
+kmemcmds/x_who.o: ../h/file.h
+kmemcmds/x_who.o: ../h/fserver.h
+kmemcmds/x_who.o: ../h/icmp.h
+kmemcmds/x_who.o: ../h/ip.h
+kmemcmds/x_who.o: ../h/ipreass.h
+kmemcmds/x_who.o: ../h/kernel.h
+kmemcmds/x_who.o: ../h/kernel.sparc.h
+kmemcmds/x_who.o: ../h/mark.h
+kmemcmds/x_who.o: ../h/net.h
+kmemcmds/x_who.o: ../h/netconf.h
+kmemcmds/x_who.o: ../h/netif.h
+kmemcmds/x_who.o: ../h/network.h
+kmemcmds/x_who.o: ../h/rfile.h
+kmemcmds/x_who.o: ../h/rip.h
+kmemcmds/x_who.o: ../h/route.h
+kmemcmds/x_who.o: ../h/shell.h
+kmemcmds/x_who.o: ../h/snmpvars.h
+kmemcmds/x_who.o: ../h/types.h
+kmemcmds/x_who.o: ../h/udp.h
+kmemcmds/x_who.o: kmemcmds/x_who.c
+usercmds/ascdate.o: ../h/conf.h
+usercmds/ascdate.o: ../h/date.h
+usercmds/ascdate.o: ../h/kernel.h
+usercmds/ascdate.o: ../h/kernel.sparc.h
+usercmds/ascdate.o: ../h/types.h
+usercmds/ascdate.o: usercmds/ascdate.c
+usercmds/x_X.o: ../h/a.out.h
+usercmds/x_X.o: ../h/conf.h
+usercmds/x_X.o: ../h/kernel.h
+usercmds/x_X.o: ../h/kernel.sparc.h
+usercmds/x_X.o: ../h/proc.h
+usercmds/x_X.o: ../h/select.h
+usercmds/x_X.o: ../h/types.h
+usercmds/x_X.o: usercmds/x_X.c
+usercmds/x_cat.o: ../h/conf.h
+usercmds/x_cat.o: ../h/kernel.h
+usercmds/x_cat.o: ../h/kernel.sparc.h
+usercmds/x_cat.o: ../h/types.h
+usercmds/x_cat.o: usercmds/x_cat.c
+usercmds/x_cp.o: ../h/conf.h
+usercmds/x_cp.o: ../h/kernel.h
+usercmds/x_cp.o: ../h/kernel.sparc.h
+usercmds/x_cp.o: ../h/types.h
+usercmds/x_cp.o: usercmds/x_cp.c
+usercmds/x_date.o: ../h/clock.h
+usercmds/x_date.o: ../h/conf.h
+usercmds/x_date.o: ../h/date.h
+usercmds/x_date.o: ../h/kernel.h
+usercmds/x_date.o: ../h/kernel.sparc.h
+usercmds/x_date.o: ../h/sleep.h
+usercmds/x_date.o: ../h/types.h
+usercmds/x_date.o: usercmds/x_date.c
+usercmds/x_echo.o: ../h/conf.h
+usercmds/x_echo.o: ../h/kernel.h
+usercmds/x_echo.o: ../h/kernel.sparc.h
+usercmds/x_echo.o: ../h/types.h
+usercmds/x_echo.o: usercmds/x_echo.c
+usercmds/x_mount.o: ../h/conf.h
+usercmds/x_mount.o: ../h/io.h
+usercmds/x_mount.o: ../h/kernel.h
+usercmds/x_mount.o: ../h/kernel.sparc.h
+usercmds/x_mount.o: ../h/name.h
+usercmds/x_mount.o: ../h/types.h
+usercmds/x_mount.o: usercmds/x_mount.c
+usercmds/x_mv.o: ../h/conf.h
+usercmds/x_mv.o: ../h/file.h
+usercmds/x_mv.o: ../h/kernel.h
+usercmds/x_mv.o: ../h/kernel.sparc.h
+usercmds/x_mv.o: ../h/types.h
+usercmds/x_mv.o: usercmds/x_mv.c
+usercmds/x_rls.o: ../h/arp.h
+usercmds/x_rls.o: ../h/conf.h
+usercmds/x_rls.o: ../h/daemon.h
+usercmds/x_rls.o: ../h/dgram.h
+usercmds/x_rls.o: ../h/domain.h
+usercmds/x_rls.o: ../h/ether.h
+usercmds/x_rls.o: ../h/file.h
+usercmds/x_rls.o: ../h/fserver.h
+usercmds/x_rls.o: ../h/icmp.h
+usercmds/x_rls.o: ../h/ip.h
+usercmds/x_rls.o: ../h/ipreass.h
+usercmds/x_rls.o: ../h/kernel.h
+usercmds/x_rls.o: ../h/kernel.sparc.h
+usercmds/x_rls.o: ../h/mark.h
+usercmds/x_rls.o: ../h/net.h
+usercmds/x_rls.o: ../h/netconf.h
+usercmds/x_rls.o: ../h/netif.h
+usercmds/x_rls.o: ../h/network.h
+usercmds/x_rls.o: ../h/rfile.h
+usercmds/x_rls.o: ../h/rip.h
+usercmds/x_rls.o: ../h/route.h
+usercmds/x_rls.o: ../h/shell.h
+usercmds/x_rls.o: ../h/snmpvars.h
+usercmds/x_rls.o: ../h/types.h
+usercmds/x_rls.o: ../h/udp.h
+usercmds/x_rls.o: usercmds/x_rls.c
+usercmds/x_rm.o: ../h/conf.h
+usercmds/x_rm.o: ../h/file.h
+usercmds/x_rm.o: ../h/kernel.h
+usercmds/x_rm.o: ../h/kernel.sparc.h
+usercmds/x_rm.o: ../h/types.h
+usercmds/x_rm.o: usercmds/x_rm.c
+usercmds/x_sleep.o: ../h/conf.h
+usercmds/x_sleep.o: ../h/kernel.h
+usercmds/x_sleep.o: ../h/kernel.sparc.h
+usercmds/x_sleep.o: ../h/types.h
+usercmds/x_sleep.o: usercmds/x_sleep.c
+usercmds/x_unmou.o: ../h/conf.h
+usercmds/x_unmou.o: ../h/io.h
+usercmds/x_unmou.o: ../h/kernel.h
+usercmds/x_unmou.o: ../h/kernel.sparc.h
+usercmds/x_unmou.o: ../h/name.h
+usercmds/x_unmou.o: ../h/types.h
+usercmds/x_unmou.o: usercmds/x_unmou.c
+#	DEPENDENCIES MUST END AT END OF	FILE
+#	IF YOU PUT STUFF HERE IT WILL GO AWAY
+#	see make depend	above

@@ -1,0 +1,9 @@
+: ' makeall  --  make all of src/sys for Xinu (the kernel)'
+
+PATH=/bin:/usr/bin
+echo
+echo '*** Making everthing in {Xinu-directory}/src/sys'
+cd conf; make; cd ..
+make complete
+make
+

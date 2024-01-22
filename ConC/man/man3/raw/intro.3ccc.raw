@@ -1,0 +1,83 @@
+.TH INTRO 3CCC
+.UC 4
+.de en
+.HP
+\\$1  \\$2  \\$3
+.br
+..
+.SH NAME
+intro \- introduction to ConcurrenC library routines and restrictions to
+UNIX library routines
+.SH DESCRIPTION
+This section describes all of the ConcurrenC library routines along with
+restrictions for the use of UNIX library routines.
+.SH CONCURRENC LIBRARY ROUTINES
+The ConcurrenC library routines manage buffer pool allocation.
+The routines for this are
+.I poolinit,
+.I mkpool,
+.I getbuf,
+and
+.I freebuf.
+Refer to BUFFER(3CCC) for more information.
+.SH XINU COMPATIBILITY
+The library routine
+.I eis
+from XINU is not available in ConcurrenC, seeing that it is an
+LSI\-11 instruction.
+.PP
+The following is a list of the other XINU library routines with
+a pointer of where to look for information:
+.nf
+.I "Name                 Reference"
+.sp
+fgetc   -    getc(3S) of the UNIX man pages
+fputc   -    putc(3S) of the UNIX man pages
+gets    -    gets(3S) of the UNIX man pages
+printf  -    printf(3S) of the UNIX man pages
+puts    -    puts(3S) of the UNIX man pages
+qsort   -    qsort(3) of the UNIX man pages
+rand    -    rand(3C) of the UNIX man pages
+scanf   -    scanf(3S) of the UNIX man pages
+string  -    string(3) of the UNIX man pages
+swab    -    swab(3) of the UNIX man pages
+.SH RESTRICTIONS TO UNIX SYSTEM CALLS
+The following UNIX library routines are not available in ConcurrenC:
+.sp
+.in 1.0i
+alarm, execl, and pause
+.in 0.5i
+.PP
+The
+.I signal
+library routine is changed in that the
+signals SIGALRM, AIGVTALRM, SIGIO, and SIGILL are reserved for ConcurrenC
+and are not allowed by the user.
+.PP
+Care must be taken when using the routines in the following man pages:
+.sp
+.in 1.0i
+crypt, getfsent, getgrent, gethostent, getnetent, getopt, getprotoent, getpwent,
+getservent, getusershell, initgroups, random, regex, ruserpass, and syslog
+.in 0.5i
+.sp
+Incorrect results may occur if the routines
+.I within one manual page
+are called interspersly from
+.I two or more
+tasks.  The problem lies in the use of a sequence of calls to perform
+a function.  For example, suppose two tasks use
+.I re_comp
+and
+.I re_exec
+from the REGEX(3) man page
+at the same time.  The first task may compile its regular expression (R.E.)
+using re_comp,
+then the second task compiles a different R.E..  The second task just wiped out
+the work that the first task did.  When the first task checks a string
+with re_exec, it will be checking the string against the second task's R.E.,
+not its own.  Hence, we get incorrect results.
+.SH SEE ALSO
+intro(2), intro(3) of the UNIX man pages
+.br
+buffer(3CCC), intro(2CCC) of the ConcurrenC man pages

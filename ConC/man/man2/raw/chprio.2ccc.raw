@@ -1,0 +1,45 @@
+.TH CHPRIO 2CCC
+.SH NAME
+chprio \- change the priority of a task
+.SH SYNOPSIS
+.B oldprio = chprio(tid,newprio)
+.nf
+.B int oldprio;
+.B int tid;
+.B int newprio;
+.fi
+.SH DESCRIPTION
+.I Chprio
+changes the scheduling priority of task
+.I tid
+to
+.I newprio.
+Priorities are positive integers.
+At any instant, the highest priority task  that is ready
+will be running.
+A set of tasks with equal priority is scheduled round-robin.
+It is forbidden to change the priority of the null task, which
+always remains zero.
+.SH RETURN VALUE
+If successful,
+.I chprio
+returns the old task priority for task
+.I tid.
+Otherwise, it returns -1 and errno is set to indicate the error.
+.SH ERRORS
+.TP 15
+[EINVAL]
+Invalid argument (
+.I newprio
+).
+.TP 15
+[CEBADTID]
+Invalid task id.
+.SH SEE ALSO
+create(2CCC), getprio(2CCC), resume(2CCC), tstart(2CCC)
+.SH BUGS
+Because
+.I chprio
+changes priorities without rearranging tasks on the ready list,
+it should only be used on waiting, sleeping, suspended, or current
+tasks.

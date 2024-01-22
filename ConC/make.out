@@ -1,0 +1,678 @@
+***  Making src/ccclib.a  ...
+cd src		; make  ccclib.a
+cd ConC_sys          ; make 
+cc -c -O -I../../include chprio.c
+cc -c -O -I../../include create.c
+cc -c -O -I../../include freebuf.c
+cc -c -O -I../../include getbuf.c
+cc -c -O -I../../include getitem.c
+cc -c -O -I../../include getprio.c
+cc -c -O -I../../include getstk.c
+cc -c -O -I../../include gettid.c
+cc -c -O -I../../include initialize.c
+cc -c -O -I../../include insert.c
+cc -c -O -I../../include insertd.c
+cc -c -O -I../../include interrupt.c
+cc -c -O -I../../include io_server.c
+cc -c -O -I../../include mkpool.c
+cc -c -O -I../../include newqueue.c
+cc -c -O -I../../include panic.c
+cc -c -O -I../../include pcount.c
+cc -c -O -I../../include pcreate.c
+cc -c -O -I../../include pdelete.c
+cc -c -O -I../../include pinit.c
+cc -c -O -I../../include poolinit.c
+cc -c -O -I../../include preceive.c
+cc -c -O -I../../include preset.c
+cc -c -O -I../../include psend.c
+cc -c -O -I../../include ptclear.c
+cc -c -O -I../../include qdump.c
+cc -c -O -I../../include queue.c
+cc -c -O -I../../include ready.c
+cc -c -O -I../../include resched.c
+cc -c -O -I../../include resume.c
+cc -c -O -I../../include scount.c
+cc -c -O -I../../include screate.c
+cc -c -O -I../../include sdelete.c
+cc -c -O -I../../include serv_create.c
+cc -c -O -I../../include sleep.c
+cc -c -O -I../../include sleep10.c
+cc -c -O -I../../include sreset.c
+cc -c -O -I../../include ssignal.c
+cc -c -O -I../../include ssignaln.c
+cc -c -O -I../../include stdump.c
+cc -c -O -I../../include suspend.c
+cc -c -O -I../../include swait.c
+cc -c -O -I../../include tdump.c
+cc -c -O -I../../include tkill.c
+cc -c -O -I../../include treceive.c
+cc -c -O -I../../include trecvclr.c
+cc -c -O -I../../include tsend.c
+cc -c -O -I../../include tsendf.c
+cc -c -O -I../../include userret.c
+cc -c -O -I../../include wakeup.c
+cc -c -O -I../../include xdone.c
+/lib/cpp -E -I../../include ctxsw.s | as -o ctxsw.o
+/lib/cpp -E -I../../include stdump_getap.s | as -o stdump_getap.o
+/lib/cpp -E -I../../include stdump_getfp.s | as -o stdump_getfp.o
+/lib/cpp -E -I../../include stdump_getsp.s | as -o stdump_getsp.o
+touch lib_flag
+cd compat-4.1        ; make 
+cc -c -O -I../../include ftime.c
+cc -c -O -I../../include getpw.c
+cc -c -O -I../../include gtty.c
+cc -c -O -I../../include nice.c
+cc -c -O -I../../include pause.c
+cc -c -O -I../../include rand.c
+cc -c -O -I../../include stty.c
+cc -c -O -I../../include tell.c
+cc -c -O -I../../include times.c
+cc -c -O -I../../include utime.c
+cc -c -O -I../../include vlimit.c
+cc -c -O -I../../include vtimes.c
+touch lib_flag
+cd compat-sys5       ; make 
+cc -c -O -I../../include getopt.c
+cc -c -O -I../../include memccpy.c
+cc -c -O -I../../include memchr.c
+cc -c -O -I../../include memcmp.c
+cc -c -O -I../../include memcpy.c
+cc -c -O -I../../include memset.c
+cc -c -O -I../../include strcatn.c
+cc -c -O -I../../include strchr.c
+cc -c -O -I../../include strcmpn.c
+cc -c -O -I../../include strcpyn.c
+cc -c -O -I../../include strcspn.c
+cc -c -O -I../../include strpbrk.c
+cc -c -O -I../../include strrchr.c
+cc -c -O -I../../include strspn.c
+cc -c -O -I../../include strtok.c
+cc -c -O -I../../include tmpnam.c
+touch lib_flag
+cd gen               ; make 
+cc -c -O -I../../include SYS_.c
+cc -c -O -I../../include abort.c
+cc -c -O -I../../include alarm.c
+cc -c -O -I../../include atoi.c
+cc -c -O -I../../include atol.c
+cc -c -O -I../../include calloc.c
+cc -c -O -I../../include closedir.c
+cc -c -O -I../../include crypt.c
+cc -c -O -I../../include ctime.c
+cc -c -O -I../../include ctype_.c
+cc -S -I../../include errlst.c
+ed - <:errfix errlst.s
+_sys_nerr:
+as -o errlst.o errlst.s
+/bin/rm -f errlst.s
+cc -c -O -I../../include execvp.c
+cc -c -O -I../../include fakcu.c
+cc -c -O -I../../include frexp.c
+cc -c -O -I../../include fstab.c
+cc -c -O -I../../include gcvt.c
+cc -c -O -I../../include getenv.c
+cc -c -O -I../../include getgrent.c
+cc -c -O -I../../include getgrgid.c
+cc -c -O -I../../include getgrnam.c
+cc -c -O -I../../include getlogin.c
+cc -c -O -I../../include getpass.c
+cc -c -O -I../../include getpwent.c
+cc -c -O -I../../include getpwnamuid.c
+cc -c -O -I../../include getttyent.c
+cc -c -O -I../../include getttynam.c
+cc -c -O -I../../include getusershell.c
+cc -c -O -I../../include getwd.c
+cc -c -O -I../../include index.c
+cc -c -O -I../../include initgroups.c
+cc -c -O -I../../include isatty.c
+cc -c -O -I../../include malloc.c
+cc -c -O -I../../include mkstemp.c
+cc -c -O -I../../include mktemp.c
+cc -c -O -I../../include ndbm.c
+cc -c -O -I../../include nlist.c
+cc -c -O -I../../include opendir.c
+cc -c -O -I../../include perror.c
+cc -c -O -I../../include popen.c
+cc -c -O -I../../include psignal.c
+cc -c -O -I../../include qsort.c
+cc -c -O -I../../include random.c
+cc -c -O -I../../include readdir.c
+cc -c -O -I../../include regex.c
+cc -c -O -I../../include rindex.c
+cc -c -O -I../../include scandir.c
+cc -c -O -I../../include seekdir.c
+cc -c -O -I../../include setegid.c
+cc -c -O -I../../include seteuid.c
+cc -c -O -I../../include setgid.c
+cc -c -O -I../../include setrgid.c
+cc -c -O -I../../include setruid.c
+cc -c -O -I../../include setuid.c
+cc -c -O -I../../include siginterrupt.c
+cc -c -O -I../../include siglist.c
+cc -c -O -I../../include signal.c
+cc -c -O -I../../include sleep.c
+cc -c -O -I../../include strcat.c
+cc -c -O -I../../include strcmp.c
+cc -c -O -I../../include strcpy.c
+cc -c -O -I../../include strlen.c
+cc -c -O -I../../include strncat.c
+cc -c -O -I../../include strncmp.c
+cc -c -O -I../../include strncpy.c
+cc -c -O -I../../include swab.c
+cc -c -O -I../../include syslog.c
+cc -c -O -I../../include system.c
+cc -c -O -I../../include telldir.c
+cc -c -O -I../../include time.c
+cc -c -O -I../../include timezone.c
+cc -c -O -I../../include ttyname.c
+cc -c -O -I../../include ttyslot.c
+cc -c -O -I../../include ualarm.c
+cc -c -O -I../../include usleep.c
+cc -c -O -I../../include valloc.c
+touch lib_flag
+cd inet              ; make 
+cc -c -O -I../../include inet_addr.c
+cc -c -O -I../../include inet_lnaof.c
+cc -c -O -I../../include inet_makeaddr.c
+cc -c -O -I../../include inet_netof.c
+cc -c -O -I../../include inet_network.c
+cc -c -O -I../../include inet_ntoa.c
+touch lib_flag
+cd net               ; make 
+cc -c -O -I../../include getnetbyaddr.c
+cc -c -O -I../../include getnetbyname.c
+cc -c -O -I../../include getnetent.c
+cc -c -O -I../../include getproto.c
+cc -c -O -I../../include getprotoent.c
+cc -c -O -I../../include getprotoname.c
+cc -c -O -I../../include getservbyname.c
+cc -c -O -I../../include getservbyport.c
+cc -c -O -I../../include getservent.c
+cc -c -O -I../../include rcmd.c
+cc -c -O -I../../include res_comp.c
+cc -c -O -I../../include res_debug.c
+cc -c -O -I../../include res_init.c
+cc -c -O -I../../include res_mkquery.c
+cc -c -O -I../../include res_send.c
+cc -c -O -I../../include rexec.c
+cc -c -O -I../../include ruserpass.c
+touch lib_flag
+cd net/named ; make 
+cc -c -O -I../../../include gethostnamadr.c
+cc -c -O -I../../../include sethostent.c
+touch lib_flag
+cd ns                ; make 
+cc -c -O -I../../include ns_addr.c
+cc -c -O -I../../include ns_ntoa.c
+touch lib_flag
+cd stdio             ; make 
+cc -c -O -I../../include clrerr.c
+cc -c -O -I../../include doscan.c
+cc -c -O -I../../include exit.c
+cc -c -O -I../../include fdopen.c
+cc -c -O -I../../include feof.c
+cc -c -O -I../../include ferror.c
+cc -c -O -I../../include fgetc.c
+cc -c -O -I../../include fgets.c
+cc -c -O -I../../include filbuf.c
+cc -c -O -I../../include fileno.c
+cc -c -O -I../../include findiop.c
+cc -c -O -I../../include flsbuf.c
+cc -c -O -I../../include fopen.c
+cc -c -O -I../../include fprintf.c
+cc -c -O -I../../include fputc.c
+cc -c -O -I../../include fputs.c
+cc -c -O -I../../include fread.c
+cc -c -O -I../../include freopen.c
+cc -c -O -I../../include fseek.c
+cc -c -O -I../../include ftell.c
+cc -c -O -I../../include fwrite.c
+cc -c -O -I../../include getc.c
+cc -c -O -I../../include getchar.c
+cc -c -O -I../../include gets.c
+cc -c -O -I../../include getw.c
+cc -c -O -I../../include printf.c
+cc -c -O -I../../include putc.c
+cc -c -O -I../../include putchar.c
+cc -c -O -I../../include puts.c
+cc -c -O -I../../include putw.c
+cc -c -O -I../../include rew.c
+cc -c -O -I../../include scanf.c
+cc -c -O -I../../include setbuf.c
+cc -c -O -I../../include setbuffer.c
+cc -c -O -I../../include sibuf.c
+cc -c -O -I../../include sobuf.c
+cc -c -O -I../../include sprintf.c
+cc -c -O -I../../include stdio_.c
+cc -c -O -I../../include strout.c
+cc -c -O -I../../include ungetc.c
+touch lib_flag
+cd sys_interface     ; make 
+cc -c -O -I../../include Flush_IO_Pending.c
+cc -c -O -I../../include Ovadvise.c
+cc -c -O -I../../include Ovfork.c
+cc -c -O -I../../include _exit.c
+cc -c -O -I../../include accept.c
+cc -c -O -I../../include access.c
+cc -c -O -I../../include acct.c
+cc -c -O -I../../include adjtime.c
+cc -c -O -I../../include bind.c
+cc -c -O -I../../include brk.c
+cc -c -O -I../../include cerror.c
+cc -c -O -I../../include chdir.c
+cc -c -O -I../../include chmod.c
+cc -c -O -I../../include chown.c
+cc -c -O -I../../include chroot.c
+cc -c -O -I../../include close.c
+cc -c -O -I../../include connect.c
+cc -c -O -I../../include creat.c
+cc -c -O -I../../include dup.c
+cc -c -O -I../../include dup2.c
+cc -c -O -I../../include execl.c
+cc -c -O -I../../include execle.c
+cc -c -O -I../../include exect.c
+cc -c -O -I../../include execv.c
+cc -c -O -I../../include execve.c
+cc -c -O -I../../include fchmod.c
+cc -c -O -I../../include fchown.c
+cc -c -O -I../../include fcntl.c
+cc -c -O -I../../include flock.c
+cc -c -O -I../../include fork.c
+cc -c -O -I../../include fstat.c
+cc -c -O -I../../include fsync.c
+cc -c -O -I../../include ftruncate.c
+cc -c -O -I../../include getdtablesize.c
+cc -c -O -I../../include getegid.c
+cc -c -O -I../../include geteuid.c
+cc -c -O -I../../include getgid.c
+cc -c -O -I../../include getgroups.c
+cc -c -O -I../../include gethostid.c
+cc -c -O -I../../include gethostname.c
+cc -c -O -I../../include getitimer.c
+cc -c -O -I../../include getpagesize.c
+cc -c -O -I../../include getpeername.c
+cc -c -O -I../../include getpgrp.c
+cc -c -O -I../../include getpid.c
+cc -c -O -I../../include getppid.c
+cc -c -O -I../../include getpriority.c
+cc -c -O -I../../include getrlimit.c
+cc -c -O -I../../include getrusage.c
+cc -c -O -I../../include getsockname.c
+cc -c -O -I../../include getsockopt.c
+cc -c -O -I../../include gettimeofday.c
+cc -c -O -I../../include getuid.c
+cc -c -O -I../../include ioctl.c
+cc -c -O -I../../include kill.c
+cc -c -O -I../../include killpg.c
+cc -c -O -I../../include link.c
+cc -c -O -I../../include listen.c
+cc -c -O -I../../include lseek.c
+cc -c -O -I../../include lstat.c
+cc -c -O -I../../include mkdir.c
+cc -c -O -I../../include mknod.c
+cc -c -O -I../../include mount.c
+cc -c -O -I../../include open.c
+cc -c -O -I../../include pipe.c
+cc -c -O -I../../include profil.c
+cc -c -O -I../../include ptrace.c
+cc -c -O -I../../include quota.c
+cc -c -O -I../../include read.c
+cc -c -O -I../../include readlink.c
+cc -c -O -I../../include readv.c
+cc -c -O -I../../include reboot.c
+cc -c -O -I../../include recv.c
+cc -c -O -I../../include recvfrom.c
+cc -c -O -I../../include recvmsg.c
+cc -c -O -I../../include rename.c
+cc -c -O -I../../include rmdir.c
+cc -c -O -I../../include sbrk.c
+cc -c -O -I../../include select.c
+cc -c -O -I../../include send.c
+cc -c -O -I../../include sendmsg.c
+cc -c -O -I../../include sendto.c
+cc -c -O -I../../include setgroups.c
+cc -c -O -I../../include sethostid.c
+cc -c -O -I../../include sethostname.c
+cc -c -O -I../../include setitimer.c
+cc -c -O -I../../include setpgrp.c
+cc -c -O -I../../include setpriority.c
+cc -c -O -I../../include setquota.c
+cc -c -O -I../../include setregid.c
+cc -c -O -I../../include setreuid.c
+cc -c -O -I../../include setrlimit.c
+cc -c -O -I../../include setsockopt.c
+cc -c -O -I../../include settimeofday.c
+cc -c -O -I../../include shutdown.c
+cc -c -O -I../../include sigblock.c
+cc -c -O -I../../include sigpause.c
+cc -c -O -I../../include sigreturn.c
+cc -c -O -I../../include sigsetmask.c
+cc -c -O -I../../include sigstack.c
+cc -c -O -I../../include sigvec.c
+cc -c -O -I../../include socket.c
+cc -c -O -I../../include socketpair.c
+cc -c -O -I../../include stat.c
+cc -c -O -I../../include swapon.c
+cc -c -O -I../../include symlink.c
+cc -c -O -I../../include sync.c
+cc -c -O -I../../include syscall.c
+cc -c -O -I../../include truncate.c
+cc -c -O -I../../include umask.c
+cc -c -O -I../../include umount.c
+cc -c -O -I../../include unlink.c
+cc -c -O -I../../include utimes.c
+cc -c -O -I../../include vhangup.c
+cc -c -O -I../../include wait.c
+cc -c -O -I../../include wait3.c
+cc -c -O -I../../include write.c
+cc -c -O -I../../include writev.c
+touch lib_flag
+cd vax/compat-4.1    ; make 
+cc -c -O -I../../../include reset.c
+touch lib_flag
+cd vax/csu           ; make 
+cc -c -O -I../../../include crt0.c
+cc -c -O -I../../../include gmon.c
+cc -c -O -I../../../include mon.c
+touch lib_flag
+cd vax/gen           ; make 
+cc -c -O -I../../../include _setjmp.c
+/lib/cpp -E -I../../../include abs.s | as -o abs.o
+/lib/cpp -E -I../../../include alloca.s | as -o alloca.o
+/lib/cpp -E -I../../../include atof.s | as -o atof.o
+/lib/cpp -E -I../../../include bcmp.s | as -o bcmp.o
+/lib/cpp -E -I../../../include bcopy.s | as -o bcopy.o
+/lib/cpp -E -I../../../include bzero.s | as -o bzero.o
+cc -c -O -I../../../include ecvt.c
+/lib/cpp -E -I../../../include fabs.s | as -o fabs.o
+/lib/cpp -E -I../../../include ffs.s | as -o ffs.o
+/lib/cpp -E -I../../../include frexp.s | as -o frexp.o
+/lib/cpp -E -I../../../include index.s | as -o index.o
+/lib/cpp -E -I../../../include insque.s | as -o insque.o
+/lib/cpp -E -I../../../include ldexp.s | as -o ldexp.o
+/lib/cpp -E -I../../../include modf.s | as -o modf.o
+/lib/cpp -E -I../../../include nargs.s | as -o nargs.o
+/lib/cpp -E -I../../../include remque.s | as -o remque.o
+/lib/cpp -E -I../../../include rindex.s | as -o rindex.o
+cc -c -O -I../../../include setjmp.c
+cc -c -O -I../../../include setjmperr.c
+/lib/cpp -E -I../../../include strcat.s | as -o strcat.o
+/lib/cpp -E -I../../../include strcmp.s | as -o strcmp.o
+/lib/cpp -E -I../../../include strcpy.s | as -o strcpy.o
+/lib/cpp -E -I../../../include strlen.s | as -o strlen.o
+/lib/cpp -E -I../../../include strncat.s | as -o strncat.o
+/lib/cpp -E -I../../../include strncmp.s | as -o strncmp.o
+/lib/cpp -E -I../../../include strncpy.s | as -o strncpy.o
+/lib/cpp -E -I../../../include udiv.s | as -o udiv.o
+/lib/cpp -E -I../../../include urem.s | as -o urem.o
+touch lib_flag
+cd vax/net           ; make 
+cc -c -O -I../../../include htonl.c
+cc -c -O -I../../../include htons.c
+cc -c -O -I../../../include ntohl.c
+cc -c -O -I../../../include ntohs.c
+touch lib_flag
+cd vax/stdio         ; make 
+cc -c -O -I../../../include doprnt.c
+cc -c -O -I../../../include fgets.c
+cc -c -O -I../../../include fputs.c
+cc -c -O -I../../../include gets.c
+/lib/cpp -E -I../../../include kprintf.s | as -o kprintf.o
+/lib/cpp -E -I../../../include kprintf_serv.s | as -o kprintf_serv.o
+cc -c -O -I../../../include puts.c
+touch lib_flag
+cd vax/sys           ; make 
+/lib/cpp -E -I../../../include sys_Ovadvise.c | as -o sys_Ovadvise.o
+/lib/cpp -E -I../../../include sys_Ovfork.c | as -o sys_Ovfork.o
+/lib/cpp -E -I../../../include sys__exit.c | as -o sys__exit.o
+/lib/cpp -E -I../../../include sys_accept.c | as -o sys_accept.o
+/lib/cpp -E -I../../../include sys_access.c | as -o sys_access.o
+/lib/cpp -E -I../../../include sys_acct.c | as -o sys_acct.o
+/lib/cpp -E -I../../../include sys_adjtime.c | as -o sys_adjtime.o
+/lib/cpp -E -I../../../include sys_bind.c | as -o sys_bind.o
+/lib/cpp -E -I../../../include sys_brk.c | as -o sys_brk.o
+/lib/cpp -E -I../../../include sys_cerror.c | as -o sys_cerror.o
+/lib/cpp -E -I../../../include sys_chdir.c | as -o sys_chdir.o
+/lib/cpp -E -I../../../include sys_chmod.c | as -o sys_chmod.o
+/lib/cpp -E -I../../../include sys_chown.c | as -o sys_chown.o
+/lib/cpp -E -I../../../include sys_chroot.c | as -o sys_chroot.o
+/lib/cpp -E -I../../../include sys_close.c | as -o sys_close.o
+/lib/cpp -E -I../../../include sys_connect.c | as -o sys_connect.o
+/lib/cpp -E -I../../../include sys_creat.c | as -o sys_creat.o
+/lib/cpp -E -I../../../include sys_dup.c | as -o sys_dup.o
+/lib/cpp -E -I../../../include sys_dup2.c | as -o sys_dup2.o
+/lib/cpp -E -I../../../include sys_execl.c | as -o sys_execl.o
+/lib/cpp -E -I../../../include sys_execle.c | as -o sys_execle.o
+/lib/cpp -E -I../../../include sys_exect.c | as -o sys_exect.o
+/lib/cpp -E -I../../../include sys_execv.c | as -o sys_execv.o
+/lib/cpp -E -I../../../include sys_execve.c | as -o sys_execve.o
+/lib/cpp -E -I../../../include sys_fchmod.c | as -o sys_fchmod.o
+/lib/cpp -E -I../../../include sys_fchown.c | as -o sys_fchown.o
+/lib/cpp -E -I../../../include sys_fcntl.c | as -o sys_fcntl.o
+/lib/cpp -E -I../../../include sys_flock.c | as -o sys_flock.o
+/lib/cpp -E -I../../../include sys_fork.c | as -o sys_fork.o
+/lib/cpp -E -I../../../include sys_fstat.c | as -o sys_fstat.o
+/lib/cpp -E -I../../../include sys_fsync.c | as -o sys_fsync.o
+/lib/cpp -E -I../../../include sys_ftruncate.c | as -o sys_ftruncate.o
+/lib/cpp -E -I../../../include sys_getdtablesize.c | as -o sys_getdtablesize.o
+/lib/cpp -E -I../../../include sys_getegid.c | as -o sys_getegid.o
+/lib/cpp -E -I../../../include sys_geteuid.c | as -o sys_geteuid.o
+/lib/cpp -E -I../../../include sys_getgid.c | as -o sys_getgid.o
+/lib/cpp -E -I../../../include sys_getgroups.c | as -o sys_getgroups.o
+/lib/cpp -E -I../../../include sys_gethostid.c | as -o sys_gethostid.o
+/lib/cpp -E -I../../../include sys_gethostname.c | as -o sys_gethostname.o
+/lib/cpp -E -I../../../include sys_getitimer.c | as -o sys_getitimer.o
+/lib/cpp -E -I../../../include sys_getpagesize.c | as -o sys_getpagesize.o
+/lib/cpp -E -I../../../include sys_getpeername.c | as -o sys_getpeername.o
+/lib/cpp -E -I../../../include sys_getpgrp.c | as -o sys_getpgrp.o
+/lib/cpp -E -I../../../include sys_getpid.c | as -o sys_getpid.o
+/lib/cpp -E -I../../../include sys_getppid.c | as -o sys_getppid.o
+/lib/cpp -E -I../../../include sys_getpriority.c | as -o sys_getpriority.o
+/lib/cpp -E -I../../../include sys_getrlimit.c | as -o sys_getrlimit.o
+/lib/cpp -E -I../../../include sys_getrusage.c | as -o sys_getrusage.o
+/lib/cpp -E -I../../../include sys_getsockname.c | as -o sys_getsockname.o
+/lib/cpp -E -I../../../include sys_getsockopt.c | as -o sys_getsockopt.o
+/lib/cpp -E -I../../../include sys_gettimeofday.c | as -o sys_gettimeofday.o
+/lib/cpp -E -I../../../include sys_getuid.c | as -o sys_getuid.o
+/lib/cpp -E -I../../../include sys_ioctl.c | as -o sys_ioctl.o
+/lib/cpp -E -I../../../include sys_kill.c | as -o sys_kill.o
+/lib/cpp -E -I../../../include sys_killpg.c | as -o sys_killpg.o
+/lib/cpp -E -I../../../include sys_link.c | as -o sys_link.o
+/lib/cpp -E -I../../../include sys_listen.c | as -o sys_listen.o
+/lib/cpp -E -I../../../include sys_lseek.c | as -o sys_lseek.o
+/lib/cpp -E -I../../../include sys_lstat.c | as -o sys_lstat.o
+/lib/cpp -E -I../../../include sys_mkdir.c | as -o sys_mkdir.o
+/lib/cpp -E -I../../../include sys_mknod.c | as -o sys_mknod.o
+/lib/cpp -E -I../../../include sys_mount.c | as -o sys_mount.o
+/lib/cpp -E -I../../../include sys_open.c | as -o sys_open.o
+/lib/cpp -E -I../../../include sys_pipe.c | as -o sys_pipe.o
+/lib/cpp -E -I../../../include sys_profil.c | as -o sys_profil.o
+/lib/cpp -E -I../../../include sys_ptrace.c | as -o sys_ptrace.o
+/lib/cpp -E -I../../../include sys_quota.c | as -o sys_quota.o
+/lib/cpp -E -I../../../include sys_read.c | as -o sys_read.o
+/lib/cpp -E -I../../../include sys_readlink.c | as -o sys_readlink.o
+/lib/cpp -E -I../../../include sys_readv.c | as -o sys_readv.o
+/lib/cpp -E -I../../../include sys_reboot.c | as -o sys_reboot.o
+/lib/cpp -E -I../../../include sys_recv.c | as -o sys_recv.o
+/lib/cpp -E -I../../../include sys_recvfrom.c | as -o sys_recvfrom.o
+/lib/cpp -E -I../../../include sys_recvmsg.c | as -o sys_recvmsg.o
+/lib/cpp -E -I../../../include sys_rename.c | as -o sys_rename.o
+/lib/cpp -E -I../../../include sys_rmdir.c | as -o sys_rmdir.o
+/lib/cpp -E -I../../../include sys_sbrk.c | as -o sys_sbrk.o
+/lib/cpp -E -I../../../include sys_select.c | as -o sys_select.o
+/lib/cpp -E -I../../../include sys_send.c | as -o sys_send.o
+/lib/cpp -E -I../../../include sys_sendmsg.c | as -o sys_sendmsg.o
+/lib/cpp -E -I../../../include sys_sendto.c | as -o sys_sendto.o
+/lib/cpp -E -I../../../include sys_setgroups.c | as -o sys_setgroups.o
+/lib/cpp -E -I../../../include sys_sethostid.c | as -o sys_sethostid.o
+/lib/cpp -E -I../../../include sys_sethostname.c | as -o sys_sethostname.o
+/lib/cpp -E -I../../../include sys_setitimer.c | as -o sys_setitimer.o
+/lib/cpp -E -I../../../include sys_setpgrp.c | as -o sys_setpgrp.o
+/lib/cpp -E -I../../../include sys_setpriority.c | as -o sys_setpriority.o
+/lib/cpp -E -I../../../include sys_setquota.c | as -o sys_setquota.o
+/lib/cpp -E -I../../../include sys_setregid.c | as -o sys_setregid.o
+/lib/cpp -E -I../../../include sys_setreuid.c | as -o sys_setreuid.o
+/lib/cpp -E -I../../../include sys_setrlimit.c | as -o sys_setrlimit.o
+/lib/cpp -E -I../../../include sys_setsockopt.c | as -o sys_setsockopt.o
+/lib/cpp -E -I../../../include sys_settimeofday.c | as -o sys_settimeofday.o
+/lib/cpp -E -I../../../include sys_shutdown.c | as -o sys_shutdown.o
+/lib/cpp -E -I../../../include sys_sigblock.c | as -o sys_sigblock.o
+/lib/cpp -E -I../../../include sys_sigpause.c | as -o sys_sigpause.o
+/lib/cpp -E -I../../../include sys_sigreturn.c | as -o sys_sigreturn.o
+/lib/cpp -E -I../../../include sys_sigsetmask.c | as -o sys_sigsetmask.o
+/lib/cpp -E -I../../../include sys_sigstack.c | as -o sys_sigstack.o
+/lib/cpp -E -I../../../include sys_sigvec.c | as -o sys_sigvec.o
+/lib/cpp -E -I../../../include sys_socket.c | as -o sys_socket.o
+/lib/cpp -E -I../../../include sys_socketpair.c | as -o sys_socketpair.o
+/lib/cpp -E -I../../../include sys_stat.c | as -o sys_stat.o
+/lib/cpp -E -I../../../include sys_swapon.c | as -o sys_swapon.o
+/lib/cpp -E -I../../../include sys_symlink.c | as -o sys_symlink.o
+/lib/cpp -E -I../../../include sys_sync.c | as -o sys_sync.o
+/lib/cpp -E -I../../../include sys_syscall.c | as -o sys_syscall.o
+/lib/cpp -E -I../../../include sys_truncate.c | as -o sys_truncate.o
+/lib/cpp -E -I../../../include sys_umask.c | as -o sys_umask.o
+/lib/cpp -E -I../../../include sys_umount.c | as -o sys_umount.o
+/lib/cpp -E -I../../../include sys_unlink.c | as -o sys_unlink.o
+/lib/cpp -E -I../../../include sys_utimes.c | as -o sys_utimes.o
+/lib/cpp -E -I../../../include sys_vhangup.c | as -o sys_vhangup.o
+/lib/cpp -E -I../../../include sys_wait.c | as -o sys_wait.o
+/lib/cpp -E -I../../../include sys_wait3.c | as -o sys_wait3.o
+/lib/cpp -E -I../../../include sys_write.c | as -o sys_write.o
+/lib/cpp -E -I../../../include sys_writev.c | as -o sys_writev.o
+touch lib_flag
+***  Building src/ccclib.a  ...
+***  Installing system ccclib.a  ...
+cd src		; make  install_ccclib.a
+***  Building system ccclib.a  ...
+***  Making bin directory  ...
+***  Making example directory  ...
+cd example	; make 
+../bin/ccc  ex1.c -o ex1.a
+../bin/ccc  ex2.c -o ex2.a
+../bin/ccc  ex3.c -o ex3.a
+../bin/ccc  ex4.c -o ex4.a
+../bin/ccc  ex5.c -o ex5.a
+***  Making man directory  ...
+cd man	; make 
+making all manual pages in man0 man1 man2 man3 mand
+cd INTRO	; make 
+nroff -ms INTRO.ms > INTRO
+cd man0		; make 
+nroff -ms ms/intro.0ccc.ms > intro.0ccc
+cd man1		; make 
+nroff ../tmac.an raw/intro.1ccc.raw > intro.1ccc
+nroff ../tmac.an raw/ccc.1ccc.raw > ccc.1ccc
+nroff ../tmac.an raw/ex1.1ccc.raw > ex1.1ccc
+nroff ../tmac.an raw/ex2.1ccc.raw > ex2.1ccc
+nroff ../tmac.an raw/ex3.1ccc.raw > ex3.1ccc
+nroff ../tmac.an raw/ex4.1ccc.raw > ex4.1ccc
+nroff ../tmac.an raw/ex5.1ccc.raw > ex5.1ccc
+cd man2		; make 
+nroff ../tmac.an raw/intro.2ccc.raw > intro.2ccc
+nroff ../tmac.an raw/chprio.2ccc.raw > chprio.2ccc
+nroff ../tmac.an raw/close.2ccc.raw > close.2ccc
+nroff ../tmac.an raw/control.2ccc.raw > control.2ccc
+nroff ../tmac.an raw/create.2ccc.raw > create.2ccc
+nroff ../tmac.an raw/freemem.2ccc.raw > freemem.2ccc
+nroff ../tmac.an raw/getc.2ccc.raw > getc.2ccc
+nroff ../tmac.an raw/getmem.2ccc.raw > getmem.2ccc
+nroff ../tmac.an raw/getpid.2ccc.raw > getpid.2ccc
+nroff ../tmac.an raw/getprio.2ccc.raw > getprio.2ccc
+nroff ../tmac.an raw/gettid.2ccc.raw > gettid.2ccc
+nroff ../tmac.an raw/kill.2ccc.raw > kill.2ccc
+nroff ../tmac.an raw/mark.2ccc.raw > mark.2ccc
+nroff ../tmac.an raw/open.2ccc.raw > open.2ccc
+nroff ../tmac.an raw/panic.2ccc.raw > panic.2ccc
+nroff ../tmac.an raw/pcount.2ccc.raw > pcount.2ccc
+nroff ../tmac.an raw/pcreate.2ccc.raw > pcreate.2ccc
+nroff ../tmac.an raw/pdelete.2ccc.raw > pdelete.2ccc
+nroff ../tmac.an raw/preceive.2ccc.raw > preceive.2ccc
+nroff ../tmac.an raw/preset.2ccc.raw > preset.2ccc
+nroff ../tmac.an raw/psend.2ccc.raw > psend.2ccc
+nroff ../tmac.an raw/putc.2ccc.raw > putc.2ccc
+nroff ../tmac.an raw/read.2ccc.raw > read.2ccc
+nroff ../tmac.an raw/receive.2ccc.raw > receive.2ccc
+nroff ../tmac.an raw/resume.2ccc.raw > resume.2ccc
+nroff ../tmac.an raw/scount.2ccc.raw > scount.2ccc
+nroff ../tmac.an raw/screate.2ccc.raw > screate.2ccc
+nroff ../tmac.an raw/sdelete.2ccc.raw > sdelete.2ccc
+nroff ../tmac.an raw/seek.2ccc.raw > seek.2ccc
+nroff ../tmac.an raw/send.2ccc.raw > send.2ccc
+nroff ../tmac.an raw/signal.2ccc.raw > signal.2ccc
+nroff ../tmac.an raw/sleep.2ccc.raw > sleep.2ccc
+nroff ../tmac.an raw/sreset.2ccc.raw > sreset.2ccc
+nroff ../tmac.an raw/ssignal.2ccc.raw > ssignal.2ccc
+nroff ../tmac.an raw/suspend.2ccc.raw > suspend.2ccc
+nroff ../tmac.an raw/swait.2ccc.raw > swait.2ccc
+nroff ../tmac.an raw/tkill.2ccc.raw > tkill.2ccc
+nroff ../tmac.an raw/treceive.2ccc.raw > treceive.2ccc
+nroff ../tmac.an raw/tsend.2ccc.raw > tsend.2ccc
+nroff ../tmac.an raw/tstart.2ccc.raw > tstart.2ccc
+nroff ../tmac.an raw/wait.2ccc.raw > wait.2ccc
+nroff ../tmac.an raw/write.2ccc.raw > write.2ccc
+nroff ../tmac.an raw/Oadvise.2.raw > Oadvise.2
+nroff ../tmac.an raw/Ovfork.2.raw > Ovfork.2
+nroff ../tmac.an raw/execve.2.raw > execve.2
+nroff ../tmac.an raw/fcntl.2.raw > fcntl.2
+nroff ../tmac.an raw/flock.2.raw > flock.2
+nroff ../tmac.an raw/fork.2.raw > fork.2
+nroff ../tmac.an raw/getdtablesize.2.raw > getdtablesize.2
+nroff ../tmac.an raw/getitimer.2.raw > getitimer.2
+nroff ../tmac.an raw/kill.2.raw > kill.2
+nroff ../tmac.an raw/killpg.2.raw > killpg.2
+nroff ../tmac.an raw/profil.2.raw > profil.2
+nroff ../tmac.an raw/ptrace.2.raw > ptrace.2
+nroff ../tmac.an raw/select.2.raw > select.2
+nroff ../tmac.an raw/sigblock.2.raw > sigblock.2
+nroff ../tmac.an raw/sigpause.2.raw > sigpause.2
+nroff ../tmac.an raw/sigsetmask.2.raw > sigsetmask.2
+nroff ../tmac.an raw/sigvec.2.raw > sigvec.2
+nroff ../tmac.an raw/syscall.2.raw > syscall.2
+nroff ../tmac.an raw/vhangup.2.raw > vhangup.2
+nroff ../tmac.an raw/wait.2.raw > wait.2
+cd man3		; make 
+nroff ../tmac.an raw/intro.3ccc.raw > intro.3ccc
+nroff ../tmac.an raw/buffer.3ccc.raw > buffer.3ccc
+nroff ../tmac.an raw/eis.3ccc.raw > eis.3ccc
+nroff ../tmac.an raw/fgetc.3ccc.raw > fgetc.3ccc
+nroff ../tmac.an raw/fputc.3ccc.raw > fputc.3ccc
+nroff ../tmac.an raw/gets.3ccc.raw > gets.3ccc
+nroff ../tmac.an raw/printf.3ccc.raw > printf.3ccc
+nroff ../tmac.an raw/puts.3ccc.raw > puts.3ccc
+nroff ../tmac.an raw/qsort.3ccc.raw > qsort.3ccc
+nroff ../tmac.an raw/rand.3ccc.raw > rand.3ccc
+nroff ../tmac.an raw/scanf.3ccc.raw > scanf.3ccc
+nroff ../tmac.an raw/string.3ccc.raw > string.3ccc
+nroff ../tmac.an raw/swab.3ccc.raw > swab.3ccc
+nroff ../tmac.an raw/alarm.3.raw > alarm.3
+nroff ../tmac.an raw/crypt.3.raw > crypt.3
+nroff ../tmac.an raw/execl.3.raw > execl.3
+nroff ../tmac.an raw/getfsent.3.raw > getfsent.3
+nroff ../tmac.an raw/getgrent.3.raw > getgrent.3
+nroff ../tmac.an raw/gethostent.3.raw > gethostent.3
+nroff ../tmac.an raw/getnetent.3.raw > getnetent.3
+nroff ../tmac.an raw/getopt.3.raw > getopt.3
+nroff ../tmac.an raw/getprotoent.3.raw > getprotoent.3
+nroff ../tmac.an raw/getpwent.3.raw > getpwent.3
+nroff ../tmac.an raw/getservent.3.raw > getservent.3
+nroff ../tmac.an raw/getusershell.3.raw > getusershell.3
+nroff ../tmac.an raw/initgroups.3.raw > initgroups.3
+nroff ../tmac.an raw/pause.3.raw > pause.3
+nroff ../tmac.an raw/random.3.raw > random.3
+nroff ../tmac.an raw/regex.3.raw > regex.3
+nroff ../tmac.an raw/ruserpass.3.raw > ruserpass.3
+nroff ../tmac.an raw/setexit.3.raw > setexit.3
+nroff ../tmac.an raw/setjmp.3.raw > setjmp.3
+nroff ../tmac.an raw/signal.3.raw > signal.3
+nroff ../tmac.an raw/syslog.3.raw > syslog.3
+nroff ../tmac.an raw/ualarm.3.raw > ualarm.3
+nroff ../tmac.an raw/usleep.3.raw > usleep.3
+cd mand		; make 
+nroff ../tmac.an raw/intro.d.raw > intro.d
+nroff ../tmac.an raw/kprintf.d.raw > kprintf.d
+nroff ../tmac.an raw/qdump.d.raw > qdump.d
+nroff ../tmac.an raw/stdump.d.raw > stdump.d
+nroff ../tmac.an raw/tdump.d.raw > tdump.d
+  
+  
+Your ConcurrenC system is now installed.

@@ -1,0 +1,612 @@
+head	1.2;
+access;
+symbols;
+locks
+	lin:1.2; strict;
+comment	@ * @;
+
+
+1.2
+date	95.02.11.18.18.36;	author lin;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	95.02.09.21.13.42;	author lin;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@/* ee_init.c - ee_init */
+
+#include <conf.h>
+#include <kernel.h>
+#include <network.h>
+#include <i386.h>
+#include <ee.h>
+#include <q.h>
+
+static unsigned char	eeirq[] = {255, 9, 3, 4, 5, 10, 11, 255 };
+
+unsigned short eecf[] = {
+    0x080c,	/* byte  7-6: FIFO LIM: 8, BYTE CNT: 12 bytes of parameters */
+    0x2e00,	/* byte  9-8: PREM LEN: 8, AT LOC: 1, ADDR LEN: 6	    */
+    0x2000,	/* byte11-10: InterFrame Spacing: 32			    */
+    0xf200,	/* byte13-12: RETRY NUM: 15, SLOT TIME: 0x200		    */
+    0x0000,	/* byte15-14: 0						    */
+    0x0040,	/* byte17-16: MIN FRAME LEN: 64				    */
+};
+
+#define DEBUG
+
+/*------------------------------------------------------------------------
+ * ee_init - startup initialization of Intel EtherExpress device
+ *------------------------------------------------------------------------
+ */
+int ee_init(pdev)
+struct devsw	*pdev;
+{
+    struct etdev	*ped;
+    unsigned short	iobase, eedat, rom[64];
+    int			i, irq, ee_int();
+
+    pdev->dvioblk = (char *) ped = &ee[pdev->dvminor];
+    ped->ed_mcset = 0;	/* no multicast */
+    ped->ed_pdev = pdev;
+    ped->ed_outq = newq(ETOUTQSZ, QF_NOWAIT);
+    ped->ed_ifnum = -1;
+    ped->ed_descr = "Intel EtherExpress";
+    ped->ed_xpending = 0;
+    ped->ed_mcc = 0;
+
+    iobase = ped->ed_pdev->dvcsr;
+#ifdef DEBUG
+    kprintf("iobase=0x%x\n", iobase);
+#endif
+    
+    /* read ROM data */
+    for (i=0; i<EE_ROMSIZE; ++i) {
+	rom[i] = ee_romread(iobase, i);
+    }
+    kprintf("rom[0]=%X, [1]=%X, [2]=%X, [6]=%X\n", rom[0], rom[1], rom[2],
+	    rom[6]);
+
+    for (i=0; i<16; ++i)
+	if ((inb(iobase + AID) & 0xf) != i)
+	    break;
+    
+    if (i < 16) {
+	kprintf("ee_init: no EtherExpress at 0x%03x\n", iobase);
+	return SYSERR;
+    }
+	
+    /* set IRQ */
+    irq = pdev->dvivec - IRQBASE;
+    for (i=0; i<sizeof(eeirq); ++i)
+	if (eeirq[i] == irq) {
+	    ped->ed_irq = i;
+	    break;
+	}
+    if (i == sizeof(eeirq)) {
+	kprintf("ee%d: invalid IRQ (%d)\n", irq);
+	return SYSERR;
+    } else {
+	eedat = rom[EE_BOARD];
+	eedat >>= 13;
+	if (eeirq[eedat] != irq)
+	    kprintf("ee%d: WARNING ROM IRQ (%d) differs\n",
+		    pdev->dvminor, eeirq[eedat]);
+	ped->ed_irq = eedat;
+	irq = eeirq[eedat];
+    }
+
+    
+    for (i=0; i<EP_ALEN/2 ; ++i) {
+	eedat = rom[EE_EADDR + i];
+
+	ped->ed_paddr[EP_ALEN - 2*i -1] = eedat & 0xff;
+	ped->ed_paddr[EP_ALEN - 2*i -2] = eedat >> 8;
+	ped->ed_bcast[2*i] = ~0;
+	ped->ed_bcast[2*i+1] = ~0;
+    }
+    
+#ifdef DEBUG
+    kprintf("ee%d: etheraddr %02x:%02x:%02x:%02x:%02x:%02x ",
+	    pdev->dvminor,
+	    ped->ed_paddr[0] & 0xff,
+	    ped->ed_paddr[1] & 0xff,
+	    ped->ed_paddr[2] & 0xff,
+	    ped->ed_paddr[3] & 0xff,
+	    ped->ed_paddr[4] & 0xff,
+	    ped->ed_paddr[5] & 0xff);
+    kprintf("irq %d\n", irq);
+#endif
+    
+    set_evec(pdev->dvivec, ee_int);
+    
+    init_82586(ped);
+}
+
+
+/*-------------------------------------------------------------------------
+ * init_82586 - 
+ *-------------------------------------------------------------------------
+ */
+int init_82586(ped)
+    struct etdev	*ped;
+{
+    unsigned short	iobase, status;
+    unsigned char	tmp;
+    int i;
+
+#ifdef DEBUG
+    kprintf("init_82586.....\n");
+#endif
+    
+    iobase = ped->ed_pdev->dvcsr;
+
+    outb(iobase + EEC, EEC_586R);  	/* reset 82586          */
+    outb(iobase + EEC, 0);		/* clear reset          */
+    
+    /* "warm up" DRAMS-- requires 16 bytes buf access */
+    outb(iobase + RDPTR, 0);
+    for (i=0; i<16; ++i)
+	inw(iobase);
+
+    /* init 82586 on-board memory */
+    ee_init_mem(iobase, ped);
+
+#ifdef DEBUG
+    kprintf("init on-board DRAM data structures...\n");
+#endif
+    
+    outb(iobase + CAC, 0);	/* Channel attention */
+    
+#ifdef DEBUG
+    status = inw(iobase + SCB_STATUS);
+    kprintf("82586 started, status = 0x%X\n", status);
+    tmp = inb(iobase + EEC);
+    kprintf("EEC = %X\n", tmp);
+    tmp = inb(iobase + CONFIG);
+    kprintf("CONFIG=%X\n", tmp);
+#endif
+
+    /* check the busy bit in ISCP */
+    for (i = 2000; i > 0; --i) {
+	outw(iobase + RDPTR, RAM_ISCP_OFFSET);
+	tmp = inb(iobase);
+	if (tmp == 0)
+	    break;
+	DELAY(1);
+    }
+	
+    if (i <= 0) {
+	status = inw(iobase + SCB_STATUS);
+	kprintf("ee: failed initialization, status = %X\n", status);
+	return SYSERR;
+    }
+	
+    for (i = 2000; i > 0; --i) {
+	status = inw(iobase + SCB_STATUS);
+	if (status == SCBSTAT_CX|SCBSTAT_CNA)
+	    break;
+	DELAY(1);
+    }
+    
+    if (i <= 0) {
+	kprintf("ee: failed status check (status %X)\n", status);
+	return SYSERR;
+    }
+
+#ifdef DEBUG
+    kprintf("Diag...\n");
+#endif
+    /* DIAG */
+    i = ee_cmd(ped, CUCMD_DIAG);
+    kprintf("i82586 Diag %s.\n", (i == OK) ? "ok" : "failed");
+    
+#ifdef DEBUG
+    kprintf("Configure...\n");
+#endif    
+    /* configure */
+    i = ee_cmd(ped, CUCMD_CONFIG, eecf);
+    kprintf("Configure i82586 %s.\n", (i == OK) ? "ok" : "failed");
+
+#ifdef DEBUG
+    kprintf("Set station address...\n");
+#endif    
+    /* set station address */
+    i = ee_cmd(ped, CUCMD_IASET, ped->ed_paddr);
+    kprintf("Set host Ethernet address %s.\n", (i == OK) ? "ok" : "failed");
+    
+    /* start 82586 Receive Unit */
+    outw(iobase + SCB_COMMAND, SCBCMD_RUS);
+    outw(iobase + SCB_STATUS, 0);
+    outb(iobase + CAC, 0);
+    ee_wait(iobase);
+    ee_ack(iobase);
+    
+#ifdef DEBUG
+    kprintf("RU started\n");
+    status = inw(iobase + SCB_STATUS);
+    kprintf("status=%X\n", status);
+#endif
+    
+    /*
+     * start 82586 Command Unit
+     * NOTE: don't execute any commnd after starting the CU
+     */
+    outw(iobase + SCB_COMMAND, SCBCMD_CUS);
+    outw(iobase + SCB_STATUS, 0);
+    outw(iobase + SCB_CBL, ped->ed_nopcbl[0]);
+    outb(iobase + CAC, 0);	
+    ee_wait(iobase);
+    ee_ack(iobase);
+    
+#ifdef DEBUG
+    kprintf("CU started\n");
+    status = inw(iobase + SCB_STATUS);
+    kprintf("status=%X\n", status);
+#endif
+    
+    /* enable interrupt */
+    outb(iobase+SIRQ, ped->ed_irq | SIRQ_IEN);
+
+    return OK;
+}
+
+/*#define INIT_MEM_DEBUG*/
+
+/*-------------------------------------------------------------------------
+ * ee_init_mem - 
+ *-------------------------------------------------------------------------
+ */
+int ee_init_mem(iobase, ped)
+    unsigned short iobase;
+    struct etdev   *ped;
+{
+    unsigned short offset, buf_off, rfd, rbd;
+    int i;
+
+    /* clear it */
+    outw(iobase+WRPTR, 0);
+    for (i = 0; i < EE_DRAM_SIZE; i++)
+	outb(iobase, 0);
+    
+    /* set up SCP */
+    outw(iobase+WRPTR, SCP);
+    outw(iobase, SYSBUS_16); /* 16-bit bus */
+    outw(iobase, 0); 	/* skip unused words */
+    outw(iobase, 0);
+    outw(iobase, ISCP & 0xffff);
+    outw(iobase, ISCP >> 16);
+
+    /* setup ISCP */
+    outw(iobase+WRPTR, ISCP);
+    outw(iobase, 0x01); 	/* 82586 busy	*/
+    outw(iobase, SCB_OFFSET);
+    outw(iobase, 0);	/* SCB base	*/
+    outw(iobase, 0);
+
+    /* setup SCB at the end */
+    ped->ed_scb = offset = SCB_OFFSET;
+
+#ifdef INIT_MEM_DEBUG
+    kprintf("SCB=%x (%x)\n", offset, RAM_SCB_OFFSET);
+#endif
+
+    offset += sizeof(struct scb);
+    /* allocate a NOP command block */
+    ped->ed_curr_nop = 0;
+    ped->ed_nopcbl[0] = offset;
+    outw(iobase+WRPTR, offset);
+    outw(iobase, 0x0); 		/* status 	*/
+    outw(iobase, CUCMD_NOP);	/* command 	*/
+    outw(iobase, offset);		/* next, point to self		*/
+#ifdef INIT_MEM_DEBUG
+    kprintf("NOP1=%x (%x)\n", offset, RAM_NOP1);
+#endif
+    
+    offset += sizeof(struct nopcbl);
+    /* another NOP */
+    ped->ed_nopcbl[1] = offset;
+    outw(iobase+WRPTR, offset);
+    outw(iobase, 0x0); 		/* status 	*/
+    outw(iobase, CUCMD_NOP);	/* command 	*/
+    outw(iobase, offset);		/* next, point to self		*/
+#ifdef INIT_MEM_DEBUG
+    kprintf("NOP2=%x (%x)\n", offset, RAM_NOP2);
+#endif
+
+    offset += sizeof(struct nopcbl);
+    /* allocate a generat command block */
+    ped->ed_cbl = offset;
+    outw(iobase+WRPTR, offset);
+    outw(iobase, 0x0); 		/* status 	*/
+    outw(iobase, (CUCMD_EL | CUCMD_NOP));	/* command 	*/
+    outw(iobase, 0xffff);		/* null next command */
+#ifdef INIT_MEM_DEBUG
+    kprintf("CBL=%x (%x)\n", offset, RAM_CBL);
+#endif
+    
+    offset += sizeof(struct cbl);
+#ifdef INIT_MEM_DEBUG
+    kprintf("TX_BUF=%x (%x)\n", offset, RAM_TX_BUF);
+#endif
+
+    /* a TX buffer */
+    ped->ed_txbuf = offset;
+    offset += EDLEN;
+#ifdef INIT_MEM_DEBUG
+    kprintf("TX_BFD=%x (%x)\n", offset, RAM_TXBFD);
+#endif
+
+    /* a TX buffer descriptor */
+    ped->ed_tbd = offset;
+    outw(iobase+WRPTR, offset);
+    outw(iobase, 0x0); 			/* status 	*/
+    outw(iobase, 0xffff);		/* null next tbd */
+    outw(iobase, ped->ed_txbuf);	/* tx buffer addrress - Low 	*/
+    outw(iobase, 0x0);			/* tx buffer addrress - High 	*/
+
+    offset += sizeof(struct tbd);
+#ifdef INIT_MEM_DEBUG
+    kprintf("TX_CBL=%x (%x)\n", offset, RAM_TXCBL);
+#endif
+    
+    /* a TX cmmand block */
+    ped->ed_txcbl = offset;
+    outw(iobase+WRPTR, offset);
+    outw(iobase, 0x0); 			/* status 	*/
+    outw(iobase, (CUCMD_I | CUCMD_TX));	/* command 	*/
+    outw(iobase, 0xffff);		/* null next command */
+    outw(iobase, ped->ed_tbd);		/* TX buffer descriptor */
+
+    offset += sizeof(struct txcbl);
+
+    /*
+     * allocate receive frame area:
+     * receive frame descriptors, receive buffer descriptors, receive buffers
+     */
+    rfd = ped->ed_rfd = offset;
+    offset += EE_NRX * sizeof(struct rfd);
+    rbd = ped->ed_rbd = offset;
+    offset += EE_NRX * sizeof(struct rbd);
+    buf_off = offset;
+    
+#ifdef INIT_MEM_DEBUG
+    kprintf("RX_RFD=%x (%x)\n", rfd, RAM_RFD);
+    kprintf("RX_RBD=%x (%x)\n", rbd, RAM_RBD);
+    kprintf("RX_RXBUF=%x (%x)\n", buf_off, RAM_RX_BUF);
+#endif
+
+    for (i = 1; i <= EE_NRX; i++) {
+	/* frame descriptor */
+	outw(iobase+WRPTR, rfd);
+	outw(iobase, 0x0); 			/* status 	*/
+	if (i == EE_NRX) {
+	    outw(iobase, RFD_EL);		/* command 	*/
+	    outw(iobase, ped->ed_rfd);		/* make it circular */
+	}
+	else {
+	    outw(iobase, 0x0);			/* command 	*/
+	    outw(iobase, rfd+sizeof(struct rfd));	/* next rfd 	*/
+	}
+	outw(iobase, rbd);			/* rbd		*/
+
+	/* buffer descriptor */
+	outw(iobase+WRPTR, rbd);
+	outw(iobase, 0x0); 			/* status 	*/
+	outw(iobase, 0xffff);			/* next rfd 	*/
+	outw(iobase, buf_off);			/* buf addr- LO	*/
+	outw(iobase, 0x0);			/* buf addr- HI	*/
+	outw(iobase, (RBD_EL | EDLEN));		/* buf size	*/
+
+	/* next one */
+	rfd += sizeof(struct rfd);
+	rbd += sizeof(struct rbd);
+	buf_off += EDLEN;
+    }
+
+    ped->ed_rfdend = rfd - sizeof(struct rfd);
+    ped->ed_rbdend = rbd - sizeof(struct rbd);
+#ifdef INIT_MEM_DEBUG
+    kprintf("ped->ed_rfdend=%x, ped->ed_rbdend=%x\n", ped->ed_rfdend,
+	    ped->ed_rbdend);
+#endif
+    
+    /* setup SCB */
+    outw(iobase+WRPTR, SCB_OFFSET);
+    outw(iobase, 0x0); 				/* status 	*/
+    outw(iobase, 0xf000 | SCBCMD_CUS | SCBCMD_RUS); /* command	*/
+    outw(iobase, ped->ed_cbl);			/* cmd block	*/
+    outw(iobase, ped->ed_rfd);			/* rx frame area*/
+    outw(iobase, 0x0);				/* CRC errs	*/
+    outw(iobase, 0x0);				/* align errs	*/
+    outw(iobase, 0x0);				/* resource errs*/
+    outw(iobase, 0x0);				/* overrun errs */
+}
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d31 2
+a32 5
+    unsigned short	iobase = ped->ed_pdev->dvcsr, eedat, status, *pw;
+    unsigned short	rom[64];
+    unsigned char	*pdbuf, irq;
+    unsigned char	tmp;
+    int			i, ee_int();
+d43 5
+d58 1
+a82 2
+	
+    set_evec(pdev->dvivec, ee_int);
+a83 7
+    /* "warm up" DRAMS-- requires 16 bytes buf access */
+    outb(iobase + RDPTR, 0);
+    for (i=0; i<16; ++i)
+	inw(iobase + DXREG);
+
+    /* init 82586 on-board memory */
+    ee_init_mem(iobase, ped);
+a84 3
+    outb(iobase + EEC, EEC_586R);  /* reset 82586          */
+    outb(iobase + EEC, 0);         /* clear reset          */
+
+d105 23
+d129 9
+a137 1
+    /* init on-board DRAM data structures */
+d139 4
+d144 1
+a144 2
+    /* Channel attention */
+    outb(iobase + CAC, 0);
+d158 2
+a159 2
+	tmp = inb(iobase + DXREG);
+	if (!tmp)
+d166 1
+a166 2
+	kprintf("ee%d: failed initialization, status = %X\n",
+		pdev->dvminor, status);
+d178 1
+a178 2
+	kprintf("ee%d: failed status check (status %X)\n",
+		pdev->dvminor, status);
+d182 3
+d186 2
+a187 1
+    ee_cmd(ped, CUCMD_DIAG);
+d189 3
+d193 2
+a194 1
+    ee_cmd(ped, CUCMD_CONFIG, eecf);
+d196 3
+d200 3
+a202 5
+    ee_cmd(ped, CUCMD_IASET, ped->ed_paddr);
+
+    /* enable interrupt */
+    outb(iobase+SIRQ, ped->ed_irq | SIRQ_IEN);
+	
+d208 1
+d216 4
+a219 1
+    /* start 82586 Command Unit */
+d225 1
+d232 3
+a235 1
+    panic("exit");
+d239 1
+d251 5
+d259 5
+a263 5
+    outw(iobase+DXREG, SYSBUS_16); /* 16-bit bus */
+    outw(iobase+DXREG, 0); 	/* skip unused words */
+    outw(iobase+DXREG, 0);
+    outw(iobase+DXREG, ISCP & 0xffff);
+    outw(iobase+DXREG, ISCP >> 16);
+d267 4
+a270 4
+    outw(iobase+DXREG, 0x01); 	/* 82586 busy	*/
+    outw(iobase+DXREG, SCB_OFFSET);
+    outw(iobase+DXREG, 0);	/* SCB base	*/
+    outw(iobase+DXREG, 0);
+d275 1
+a275 1
+#ifdef DEBUG
+d284 4
+a287 4
+    outw(iobase+DXREG, 0x0); 		/* status 	*/
+    outw(iobase+DXREG, CUCMD_NOP);	/* command 	*/
+    outw(iobase+DXREG, offset);		/* next, point to self		*/
+#ifdef DEBUG
+d295 4
+a298 4
+    outw(iobase+DXREG, 0x0); 		/* status 	*/
+    outw(iobase+DXREG, CUCMD_NOP);	/* command 	*/
+    outw(iobase+DXREG, offset);		/* next, point to self		*/
+#ifdef DEBUG
+d306 4
+a309 4
+    outw(iobase+DXREG, 0x0); 		/* status 	*/
+    outw(iobase+DXREG, (CUCMD_EL | CUCMD_NOP));	/* command 	*/
+    outw(iobase+DXREG, 0xffff);		/* null next command */
+#ifdef DEBUG
+d314 1
+a314 1
+#ifdef DEBUG
+d321 1
+a321 1
+#ifdef DEBUG
+d328 4
+a331 4
+    outw(iobase+DXREG, 0x0); 		/* status 	*/
+    outw(iobase+DXREG, 0xffff);		/* null next tbd */
+    outw(iobase+DXREG, ped->ed_txbuf);	/* tx buffer addrress - Low 	*/
+    outw(iobase+DXREG, 0x0);		/* tx buffer addrress - High 	*/
+d334 1
+a334 1
+#ifdef DEBUG
+d341 4
+a344 4
+    outw(iobase+DXREG, 0x0); 		/* status 	*/
+    outw(iobase+DXREG, (CUCMD_I | CUCMD_TX));	/* command 	*/
+    outw(iobase+DXREG, 0xffff);		/* null next command */
+    outw(iobase+DXREG, ped->ed_tbd);	/* TX buffer descriptor */
+d358 1
+a358 1
+#ifdef DEBUG
+d367 1
+a367 1
+	outw(iobase+DXREG, 0x0); 			/* status 	*/
+d369 2
+a370 2
+	    outw(iobase+DXREG, RFD_EL);			/* command 	*/
+	    outw(iobase+DXREG, ped->ed_rfd);		/* make it circular */
+d373 2
+a374 2
+	    outw(iobase+DXREG, 0x0);			/* command 	*/
+	    outw(iobase+DXREG, rfd+sizeof(struct rfd));	/* next rfd 	*/
+d376 1
+a376 1
+	outw(iobase+DXREG, rbd);			/* rbd		*/
+d380 5
+a384 5
+	outw(iobase+DXREG, 0x0); 			/* status 	*/
+	outw(iobase+DXREG, 0xffff);			/* next rfd 	*/
+	outw(iobase+DXREG, buf_off);			/* buf addr- LO	*/
+	outw(iobase+DXREG, 0x0);			/* buf addr- HI	*/
+	outw(iobase+DXREG, (RBD_EL | EDLEN));		/* buf size	*/
+d394 1
+a394 1
+#ifdef DEBUG
+d399 1
+a399 1
+    /* setup SCB at the end */
+d401 8
+a408 8
+    outw(iobase+DXREG, 0x0); 				/* status 	*/
+    outw(iobase+DXREG, 0xf000 | SCBCMD_CUS | SCBCMD_RUS); /* command	*/
+    outw(iobase+DXREG, ped->ed_cbl);			/* cmd block	*/
+    outw(iobase+DXREG, ped->ed_rfd);			/* rx frame area*/
+    outw(iobase+DXREG, 0x0);				/* CRC errs	*/
+    outw(iobase+DXREG, 0x0);				/* align errs	*/
+    outw(iobase+DXREG, 0x0);				/* resource errs*/
+    outw(iobase+DXREG, 0x0);				/* overrun errs */
+@

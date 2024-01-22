@@ -1,0 +1,4 @@
+.TH SIGSETMASK 2
+.SH NOTE
+.I Sigsetmask
+is not available in ConcurrenC.

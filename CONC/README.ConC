@@ -1,0 +1,249 @@
+Copyright (c) 1985 -- can be distributed for research purposes.
+
+This is file {ConC-dir}/src/README
+
+NOTE
+----
+
+There are two possible methods for doing host name lookup.
+Refer to {ConC-dir}/src/Makefile to set up ConcurrenC using
+the correct routines for your system.
+
+Outline
+-------
+
+There are four classification of routines contained in the sub-directories:
+
+	(1)  ./ConC_sys contains the ConcurrenC system calls, the runtime
+	     support routines for context switching and sleeping, and
+	     the io server routines.
+
+	(2)  ./sys_interface contains the ConcurrenC-to-UNIX system call
+	     interface routines (the user calls these routines as though
+	     they were the actual UNIX system calls.  For the most part,
+	     this should be transparent to the user).
+
+	(3)  ./vax/sys contains the actual UNIX system calls used by
+	     ConcurrenC.  They are called using the form 'sys_<system call>'.
+
+	(4)  The rest of the sub-directories contain UNIX library
+	     sources modified so they could be used in ConcurrenC.
+	     The UNIX sources not modified are also included so they
+	     will be linked to the ConCurrenC-to-UNIX interface routines
+	     instead of directly to the UNIX system calls.
+
+
+Modifying and testing your ConcurrenC system
+--------------------------------------------
+
+   The sources in the sub-directories can be modified to suit your needs.
+After modifying some sources, you will want to test those sources.  A make
+file is supplied that allow you to do the following:
+
+	make clean	- clean object files from all sub-directories
+
+	make depend	- create a new Makefile in each of the sub-
+			  directories which includes all dependencies needed
+
+	make ccclib.a	- create a new version of the TESTING ConcurrenC
+			  library (used by the command tccc)
+
+	make lib_only	- create a new version of the TESTING ConcurrenC
+			  library from the current object files
+			  (used when you are sure all sub-directories
+			  are up to date)
+
+	make install_ccclib.a - create a new version of the SYSTEM
+			  ConcurrenC library (used by the command ccc)
+
+
+Some implementation details
+---------------------------
+
+TASK CREATION:
+
+When the user calls either create or tstart, a new task is created.
+An empty slot in the task table is initialized, and the task is
+allocated its own stack space.  The creation routine places two
+stack frames onto the stack: the first frame encountered does a 'return'
+to the beginning of the procedure specified by the user; the second
+one 'return's to the beginning of the routine userret, which tkills
+(terminates) the task when the procedure returns.  The term 'return'
+is used here because the frame looks like a VAX 'calls' frame.
+When a context switch is done, the context switch does a return, which
+pops a frame from the stack and jumps to the place referred to by the
+frame, which happens to be the beginning of the user's routines.
+The source for create and tstart are found in the file ./ConC_sys/create.c.
+
+
+STACK SIZE:
+
+Each task is allocated a stack when it is created.  If tstart is used,
+the size of this stack is INITSTK, as defined in the file
+{ConC-dir}/include/kernel.h.  If create is used, the user supplies the
+stack size.  The user's main task is given a stack size of INITSTK.
+These stacks are not protected areas of memory, so one task can
+over-write another tasks's stack (say THAT three times real fast).
+When this happens, an illegal instruction is likely to occur.  Use
+create to request a larger stack size.
+
+
+CONTEXT SWITCH:
+
+ConcurrenC preempts a task by calling the routine resched, which calls
+ctxsw to perform the actual context switch.  Ctxsw is a VAX assembly
+language  routine.  Its register save mask is set so that the VAX saves
+all registers R0 - R11 when a 'calls' instruction to ctxsw is executed.
+Ctxsw stores the old task's AP, FP, and SP registers into the task table
+and restores those for the new task.  Ctxsw then stores the old task's
+interrupt mask into the table while resoring the new task's mask.
+Finally ctxsw returns to the new task --  because the registers were
+switched to those of the new task.  Errno is switched and the preemption
+timer is set for another time quantum inside resched before ctxsw is called.
+Source for resched is in file ./ConC_sys/resched.c.  Source for ctxsw is
+found in file ./ConC_sys/ctxsw.s.
+
+
+SIGNALS:
+
+UNIX provides run-time support for each process in the form of signals,
+which can interrupt a process while it is executing (refer to
+{ConC-dir}/man/INTRO/INTRO for more information).  ConcurrenC assigns
+interrupt handlers for the signals SIGALRM, SIGVTALRM, SIGIO, SIGILL,
+SIGINT, and SIGQUIT.  SIGALRM is sent by the UNIX real-time clock, which
+the ConcurrenC system uses to wake up sleeping tasks.  SIGVTALRM is sent by
+the UNIX virtual clock, which the ConcurrenC system uses to preempt tasks.
+SIGIO is used in two ways:  The first is for the io_server (see IO SERVER
+below) to signal the ConcurrenC system signifying that an I/O request is
+complete, and the second is for the ConcurrenC system to signal the io_server
+signifying that the program halted abruptly, so exit without cleaning up.
+If the ConcurrenC system gets a SIGILL, it sends a SIGILL to the io_server,
+which prints out a message saying to try a larger stack size (see STACK
+SIZE above).  These four signals are reserved for the ConcurrenC system
+and are not available to the user.  Both SIGINT and SIGQUIT exit the
+program abruptly, sending SIGIO to io_server.  These two signals are
+available for the user to change.  The file ./ConC_sys/interrupt.c
+defines each of these interrupt routines.
+
+
+TASK PREEMPTION:
+
+A task can give up control of the CPU itself by calling a routine which
+calls resched, such as sleep or swait (if scount <= 0 for the semaphore).
+If a task does not give up control of the CPU of its own accord,
+ConcurrenC can preempt the task and force resched to be called.
+On every call to resched, the virtual clock is set to send a SIGVTALRM
+signal (see SIGNALS above) after 0.2 virtual seconds have elapsed.  When
+this signal is received, the ConcurrenC system calls resched automatically.
+This 0.2 seconds is a default time, as defined by S_TIME_QUANT and
+U_TIME_QUANT in {ConC-dir}/include/kernel.h.  An optional time quantum
+can be specified by having the desired time in seconds (float format) in a
+file called 'time_quant' in the current directory when executing the
+ConcurrenC program (NOT when compiling it).
+
+
+SLEEPING TASKS:
+
+A task can delay its execution for a specified (real) time by calling
+either sleep or sleep10.  When a tasks calls one of these routines with
+a positive integer, the task is put on the clock delta list and is put
+into hibernation.  The real-time clock is then set to send a SIGALRM
+signal (see SIGNALS above) for the smallest amount of time remaining
+among the sleeping tasks .  When this signal occurs, the routine wakeup
+is called.  Wakeup brings each task having zero time left out of
+hibernation, and resets the clock for the next wake up.  Source for
+sleep and sleep10 are found in ./ConC_sys/sleep.c and
+./ConC_sys/sleep10.c, respectively.  Source for wakeup is in
+./ConC_sys/wakeup.c.
+
+
+THE IO_SERVER AND CONCURRENC-TO-UNIX INTERFACE ROUTINES:
+
+The routine io_server handles the I/O in ConcurrenC.  It does this in
+an asynchronous manner so that tasks not doing I/O are not blocked.
+Creation of io_server is not done at system initialization, but deferred
+until the first call to either create or tstart by the user.
+If the user has not called either of these two routines, he only has
+one task executing, so blocking on I/O doesn't matter.  The source
+for creating the io_server is found in file ./ConC_sys/serv_create.c.
+Source for system initialization is in file ./ConC_sys/initialize.c.
+Io_server is given in ./ConC_sys/io_server.c.
+
+The ConcurrenC-to-UNIX interface routines which handle I/O send an encoding
+of the system call to io_server.  These calls are set up as follows:
+
+	if io_server is not created, then either this was called from
+		io_server or there is only one user task (no problem
+		with blocking) so:  do UNIX system call, reset ConcurrenC
+		I/O table if fd just created, and return value.
+	else:
+
+	set up structure to send to io_server
+	save addresses of result parameters
+	send the structure and variable-length arguments to io_server
+	swait on personal semaphore for results to get back
+
+	return value returned by io_server
+
+The structure sent to io_server is:
+
+	struct sys_hdr {
+		int	sys_pid;		/* task id #		*/
+		int	sys_command;		/* command code		*/
+		int	sys_ret_val;		/* value returned	*/
+		int	sys_errno;		/* errno after command	*/
+		int	sys_val_len[SN_VALS];	/* value for single-word*/
+						/* args or length for   */
+						/* variable length args	*/
+	};
+
+The io_server handles I/O asynchronously, using the UNIX select 
+system call.  This blocks the process until I/O is possible on any of
+the descriptors specified by io_server.  One of the descriptors is
+always specified -- the pipe communication link between io_server
+and the ConcurrenC system.  When the ConcurrenC system sends a request
+to io_server, the select in io_server returns with this information.
+Io_server reads the encoded system call from the pipe and tries the
+request immediately using non-blocking I/O.  Non-blocking I/O is used
+so that ConcurrenC doesn't have to distinguish between a call with
+valid arguments and one with invalid arguments.  The UNIX system call
+does this.  If the error returned by the UNIX call is EWOULDBLOCK,
+then the call cannot be completed at this time.  The arguments to
+select are changed to have select scan this descriptor, and the call
+information is saved on a list.  When this descriptor is ready for
+service, as indicated by select, the call is performed again, this
+time with correct result.
+
+A problem arises in C-shell when either STDIN or STDOUT are left
+non-blocking by a program.  Thus, when the io_server does non-blocking
+I/O, it disables interrupts, sets the descriptor non-blocking, performs
+the call, sets the descriptor back to blocking, and enables interrupts.
+Interrupts must be disabled so the io_server won't receive a signal causing
+it to exit while a descriptor is still in non-blocking mode.  To see what
+happens when STDIN is left in non-blocking mode, compile and run the
+following program:  main(){fcntl(0,4,4);}.  Make sure you don't have
+anything important in background, because you won't be logged on too
+much longer.
+
+When the io_server is ready to send back the results of a request,
+it writes the call structure (with return value and errno) to the pipe,
+sends a SIGIO signal to the ConcurrenC system, then writes any variable
+length result parameters.  When the ConcurrenC system gets the SIGIO
+interrupt, it executes the routine ioint() found in ./ConC_sys/interrupt.c.
+This routine reads the structure (with the call result) and result
+parameters from the io_server.  It stores the result in the task table,
+where the sys_interface routines know where to find it, and stores the
+result parameters in the addresses saved by the interface routines.
+It then ssignals the calling task's semaphore, making the task ready
+again for execution.
+
+
+MODIFIED UNIX ROUTINES
+----------------------
+
+Most of the modifications to UNIX routines are either to malloc
+a result space for those routines which return a pointer to a
+local static area (so subsequent calls wouldn't destroy the previous
+values, in case different tasks call the routine), or to make the
+routine mutually exclusive (possible with all other routines in the
+directory).

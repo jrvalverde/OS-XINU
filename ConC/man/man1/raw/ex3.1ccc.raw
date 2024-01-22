@@ -1,0 +1,67 @@
+.TH EX3 1CCC
+.SH NAME
+ex3 - example program 3
+.SH DESCRIPTION
+.I Ex3
+gives an example of three tasks executing the same code, sharing data,
+and writing to the same output stream (stdout).  
+.PP
+The variable
+.I shared
+is global to the program, and is thus a shared variable.  Each task
+has access to this variable, so some sort of mutual exclusion is needed.
+A semaphore will be used for this purpose.
+.PP
+Each of the three tasks will do basically the same thing -- 
+a loop 150 times of the following:
+.sp
+.in 1.0i
+.nf
+execute a NULL loop (to slow down the task so context
+                     switching can be observed)
+wait for mutual exclusion of 'shared' by waiting
+                     on the semaphore
+print its own unique character (from the parameter list),
+check to see if 30 characters combined between all the
+                     tasks have been printed on this line,
+                     and if so, print a chariage return
+then signal the semaphore.
+.fi
+.in 0.5i
+.sp
+Since the only thing that changes from one task to another
+is the character that the task prints out,  the tasks can
+execute the same routine, storing their character on their
+own stack in a local variable.
+.PP
+The main task creates the mutual exclusion semaphore and
+starts each task, passing the id of the semaphore and the
+character the task is to print out.
+If you look at the code, you can see different ways to
+get a task executing in ConcurrenC.  The first task is
+started using the nice interface
+.I tstart(2CCC).
+With this routine, there is no worry about stack size, priority, or name.
+Creation of the second task shows how to use the routines
+.I resume(2CCC)
+and
+.I create(2CCC),
+and what values tstart sets the above three entities to.
+Note that the second task will not start executing until resume is called.
+This is because tasks started with create are left in the suspended state.
+The user can specify a large stack size for those tasks which need
+it, as shown by the creation of the third task.
+.PP
+The output for this program should have A's, B's, and C's alternately
+printed.  Depending on timing conditions, there may be about 7 of
+the same character printed in a row, or strict alternation among
+the characters.  The strict alternation comes about when a context
+switch is performed when a task is in the critical section of
+the semaphore.
+.SH SEE ALSO
+create(2CCC), resume(2CCC), screate(2CCC), ssignal(2CCC),
+swait(2CCC), tstart(2CCC)
+.SH NOTE
+The calls to putc and other stdio routines need not be mutually
+excluded by the user.  The sources were modified so that a task
+gets mutual exclusion to system data, including the I/O structures.
